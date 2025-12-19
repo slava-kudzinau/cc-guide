@@ -7,6 +7,7 @@ nav_order: 1
 ## Master Index & Navigation
 
 **Author**: AI-Generated Technical Guide  
+**Maintainer**: [Viachaslau Kudzinau](viachaslau_kudzinau@epam.com)
 **Version**: 1.0  
 **Last Updated**: December 2025  
 **Based on**: Latest Claude Code, API, and Agent SDK documentation
