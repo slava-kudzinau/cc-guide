@@ -517,7 +517,7 @@ graph TB
 
 ---
 
-[← Back to Part 1 Index](README) | [Next: Environment & Project Setup →](02-environment-setup)
+[← Back to Part 1 Index](README.md) | [Next: Environment & Project Setup →](02-environment-setup.md)
 
 
 

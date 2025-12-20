@@ -730,7 +730,7 @@ claude "Hello! List the files in this project"
 
 ---
 
-[← Back: Mental Models](01-mental-models) | [Next: Core Workflows →](03-core-workflows)
+[← Back: Mental Models](01-mental-models.md) | [Next: CLAUDE.md Guide →](03-claude-md-guide.md)
 
 
 

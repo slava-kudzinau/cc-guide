@@ -1,12 +1,12 @@
 ---
-title: "Section 3b: Day-in-the-Life - Real Developer Workflows"
+title: "Section 5: Day-in-the-Life - Real Developer Workflows"
 parent: "Part 1: Fundamentals & Core Concepts"
 nav_order: 5
 ---
 
-# Section 3b: Day-in-the-Life - Real Developer Workflows
+# Section 5: Day-in-the-Life - Real Developer Workflows
 
-This guide shows you **exactly** how to use Claude Code throughout your workday, from morning stand-up to end-of-day cleanup. Every scenario is real, practical, and copy-paste ready.
+This guide shows you **exactly** how to use Claude Code throughout your workday. Every scenario is real, practical, and copy-paste ready.
 
 ---
 
@@ -19,7 +19,6 @@ This guide shows you **exactly** how to use Claude Code throughout your workday,
 ```bash
 # 1. Update local repository
 git pull origin main
-git status
 
 # 2. Understand what changed
 git log --since="Friday 5pm" --oneline --all | claude "
@@ -32,17 +31,6 @@ Summarize changes since Friday:
 @CLAUDE.md
 "
 
-# Claude output:
-# "3 major changes:
-# 1. PR #234: Added role-based access control (BE AWARE: new middleware)
-# 2. PR #235: Fixed payment timeout bug  
-# 3. PR #236: Updated database schema (migration required!)
-#
-# Action items for you:
-# - Run migrations: npm run migration:run
-# - Test RBAC with different roles
-# - Check if your feature branch needs rebase"
-
 # 3. Check your branch status
 git log main..feature/your-branch --oneline | claude "
 I'm working on [feature name].
@@ -50,14 +38,8 @@ Based on main branch changes, do I need to:
 - Rebase?
 - Resolve conflicts?
 - Update tests?
-- Anything else?
-"
 
-# 4. Check test status
-npm test 2>&1 | claude "
-Any test failures?
-If yes, are they related to weekend changes or my feature?
-Quick diagnosis + fix recommendation.
+@CLAUDE.md
 "
 ```
 
@@ -86,20 +68,6 @@ Format:
 
 Based on my commits and current branch status.
 "
-
-# Claude generates:
-# **Yesterday:**
-# - Implemented user profile edit functionality
-# - Added validation for profile fields
-# - Created unit tests for profile service
-#
-# **Today:**
-# - Add profile photo upload
-# - Integration tests for profile API
-# - Update documentation
-#
-# **Blockers:**
-# - Waiting on design feedback for photo upload UI
 ```
 
 **Time saved**: 5 minutes
@@ -108,7 +76,7 @@ Based on my commits and current branch status.
 
 ## Mid-Morning: Feature Development (9:00 AM - 12:00 PM)
 
-### Scenario 3: New Feature Request from PM
+### Scenario 3: New Feature Request
 
 **Situation**: PM on Slack: "We need user profile photos ASAP"
 
@@ -131,8 +99,6 @@ Current system analysis:
 @src/routes/
 "
 
-# Claude responds with current patterns
-
 # Step 3: Clarifying questions
 claude "
 For profile photo feature:
@@ -142,18 +108,12 @@ Questions:
 2. Allowed formats? (JPEG, PNG, GIF, WEBP?)
 3. Resize/crop needed?
 4. Default avatar if no photo?
-5. Where in UI? (multiple places?)
-6. Update existing user or new users only?
-7. Delete old photo when uploading new?
 
 Suggest technical approach based on our stack.
-
 @CLAUDE.md
 "
 
-# Claude suggests approach with pros/cons
-
-# Step 4: Create detailed plan
+# Step 4: Create implementation plan
 claude "
 Create implementation plan for profile photos:
 
@@ -168,8 +128,6 @@ Checklist format:
 - [ ] Documentation
 
 Break down into small, testable steps.
-Show estimated time for each.
-
 @CLAUDE.md
 "
 
@@ -182,21 +140,7 @@ Generate migration file following our pattern:
 
 Don't run it yet, show me first.
 "
-
-# Review migration
-# Approve
-
-claude "
-Step 2: Update User model with photo_url field.
-
-Follow pattern: @src/models/User.js
-Include:
-- Validation (URL format)
-- Default value (null)
-- Getter/setter if needed
-"
-
-# Continue step-by-step...
+# Review, then continue step-by-step...
 ```
 
 **Time saved**: 30 minutes (vs figuring out patterns yourself)
@@ -234,31 +178,7 @@ Steps:
 Don't implement everything at once.
 "
 
-# Claude shows route
-# You review: "Looks good, but add rate limiting"
-
-claude "
-Add rate limiting to photo upload:
-- Max 10 uploads per hour per user
-- Use our rate limiter: @src/middleware/rate-limit.js
-"
-
-# Claude updates route with rate limiting
-
-claude "
-Now show me the service logic for:
-1. Image validation
-2. Resize
-3. Cloudinary upload
-4. Database update
-5. Error handling
-
-@src/services/upload-service.js
-"
-
-# Review service logic
-# Approve
-
+# After reviewing route and service:
 claude "
 Now generate comprehensive tests:
 
@@ -305,9 +225,6 @@ Give me overview of this PR:
 @CLAUDE.md
 "
 
-# Claude: "Medium-sized PR, 8 files, refactoring payment service.
-# Estimated review: 15 minutes. No obvious red flags."
-
 # 3. Detailed review
 git diff main...HEAD | claude "
 Comprehensive code review:
@@ -334,34 +251,7 @@ For each issue:
 @CLAUDE.md code standards
 "
 
-# Claude finds issues:
-# - Critical: API key exposed in logs (line 45)
-# - High: No transaction handling (line 67)
-# - Medium: Missing error logging (line 89)
-
-# 4. Security-focused review
-git diff main...HEAD | claude "
-Security review for payment code:
-
-Focus on:
-- Secrets exposure
-- SQL injection (if any raw queries)
-- Input validation
-- Error messages (no sensitive data leaked?)
-- Logging (no card numbers/tokens?)
-- Rate limiting
-- Idempotency
-
-@src/services/payment-service.js
-@src/routes/payment.js
-
-For each issue, show:
-- Location
-- Problem
-- Specific code fix
-"
-
-# 5. Generate review comment
+# 4. Generate review comment
 claude "
 Generate PR review comment summarizing findings:
 
@@ -380,8 +270,6 @@ Format:
 
 Be constructive and specific.
 "
-
-# Copy review to GitHub PR
 ```
 
 **Time saved**: 10 minutes (deeper review in less time)
@@ -395,11 +283,7 @@ Be constructive and specific.
 **Situation**: User reports: "Checkout fails with Visa cards"
 
 ```bash
-# 1. Reproduce the issue
-npm start
-# Try checkout with Visa → ERROR
-
-# 2. Check error logs
+# 1. Check error logs
 tail -n 100 logs/error.log | claude "
 Production issue: Checkout fails with Visa cards
 
@@ -409,7 +293,6 @@ Error logs:
 Error: Invalid card number format
   at validateCard (src/utils/card-validator.js:23)
   at processPayment (src/services/payment.js:45)
-  ...
 
 Context:
 - Started 2 hours ago
@@ -427,27 +310,7 @@ Questions:
 @src/services/payment.js
 "
 
-# Claude identifies: "Visa regex was updated in commit abc123
-# (2 hours ago). New regex is too strict."
-
-# 3. Analyze the problematic code
-claude "
-Compare Visa validation with MasterCard validation:
-
-Show both regexes:
-@src/utils/card-validator.js
-
-Explain:
-- What's wrong with Visa regex?
-- Why does MasterCard work?
-- Correct regex for Visa (16 digits, starts with 4)
-
-@CLAUDE.md
-"
-
-# Claude explains the issue
-
-# 4. Fix the bug
+# 2. Fix the bug
 claude "
 Fix the Visa validation regex:
 
@@ -463,14 +326,11 @@ Requirements:
 Show fix + new tests.
 "
 
-# 5. Verify fix
+# 3. Verify fix
 npm test -- card-validator.test.js
 # ✅ All tests pass
 
-npm start
-# Manual test: Visa card → ✅ Works!
-
-# 6. Prevent future regressions
+# 4. Prevent future regressions
 claude "
 Generate comprehensive test cases for ALL card types:
 
@@ -480,22 +340,13 @@ Visa:
 - Invalid: 5555555555554444 (MasterCard number)
 - Invalid: 424242 (too short)
 
-MasterCard:
-- Valid: 5555555555554444
-- [more cases]
-
-Amex:
-- Valid: 378282246310005
-- [more cases]
-
-Discover:
-- Valid: 6011111111111117
-- [more cases]
+MasterCard, Amex, Discover:
+- [similar coverage]
 
 Pattern: @tests/card-validator.test.js
 "
 
-# 7. Quick deploy (hotfix)
+# 5. Quick deploy (hotfix)
 git add .
 git commit -m "fix(payment): correct Visa card validation regex
 
@@ -506,9 +357,6 @@ git commit -m "fix(payment): correct Visa card validation regex
 Fixes #789"
 
 git push origin hotfix/visa-validation
-
-# Create PR, mark as HOTFIX
-# Fast-track review and deploy
 ```
 
 **Time saved**: 20 minutes (vs debugging manually)
@@ -546,9 +394,6 @@ Show:
 3. Fix
 "
 
-# Claude identifies: "Missing await on database cleanup.
-# Test sometimes runs before previous test finishes cleanup."
-
 claude "
 Fix the flaky test:
 
@@ -570,7 +415,7 @@ Show fixed test + setup.
 
 ## Late Afternoon: Refactoring (3:00 PM - 5:00 PM)
 
-### Scenario 8: That Ugly File Finally Gets Refactored
+### Scenario 8: Safe Refactoring
 
 **Situation**: UserController.js has been bothering you for months
 
@@ -618,9 +463,6 @@ Show before/after structure (no implementation yet).
 @CLAUDE.md patterns
 "
 
-# Review plan
-# Approve
-
 # 3. Incremental refactoring
 claude "
 Step 1: Extract validation logic.
@@ -634,62 +476,14 @@ Keep controller exactly the same (just delegate to validator).
 @CLAUDE.md validation pattern
 "
 
-# Implement
-# Run tests: npm test -- user-controller.test.js
-# ✅ Still pass
-
-claude "
-Step 2: Extract business logic.
-
-Create: src/services/user-service.js
-
-Move business logic from controller.
-Controller just calls service.
-
-@src/controllers/UserController.js
-@CLAUDE.md service pattern
-"
-
-# Implement
-# Run tests: npm test -- user-controller.test.js
-# ✅ Still pass
-
-claude "
-Step 3: Extract database access.
-
-Create: src/repositories/user-repository.js
-
-Move all DB queries.
-Service calls repository.
-
-@CLAUDE.md repository pattern
-"
-
-# Implement
-# Run tests: npm test -- user-controller.test.js
+# Implement each step
+# Run tests after EACH step: npm test -- user-controller.test.js
 # ✅ Still pass
 
 # 4. Final verification
 npm test  # All tests
 git diff  # Review ALL changes
 npm run lint  # Code style
-
-# 5. Document the new pattern
-claude "
-Update @CLAUDE.md with this refactoring:
-
-Add to 'Code Patterns' section:
-
-### Controller → Service → Repository Pattern
-
-Explain:
-- When to use
-- How to structure
-- Show example from UserController
-- Benefits
-
-This is now our standard pattern.
-"
 ```
 
 **Time saved**: 2 hours (systematic refactoring with confidence)
@@ -729,9 +523,6 @@ Flag anything suspicious.
 @CLAUDE.md commit standards
 "
 
-# Claude: "Found 3 console.log statements in payment.js.
-# Remove before committing."
-
 # Fix issues
 git add -p  # Stage changes interactively
 
@@ -753,28 +544,6 @@ Max 72 chars for first line.
 @CLAUDE.md commit format
 "
 
-# Claude generates:
-# feat(profile): add user photo upload
-#
-# - Add photo upload endpoint
-# - Integrate with Cloudinary
-# - Add image validation and resize
-# - Include comprehensive tests
-#
-# Closes #456
-
-# Copy and commit
-git commit -F- << 'EOF'
-feat(profile): add user photo upload
-
-- Add photo upload endpoint
-- Integrate with Cloudinary
-- Add image validation and resize
-- Include comprehensive tests
-
-Closes #456
-EOF
-
 # 4. Generate PR description
 claude "
 Generate PR description for feature/user-profile-photos:
@@ -789,9 +558,6 @@ Template:
 ## How to Test
 [Step-by-step]
 
-## Screenshots
-[If applicable]
-
 ## Checklist
 - [ ] Tests pass
 - [ ] Linting passes
@@ -803,8 +569,6 @@ $(git log main..HEAD --oneline)
 
 @CLAUDE.md PR template
 "
-
-# Copy to GitHub PR
 
 # 5. Plan for tomorrow
 claude "
@@ -822,261 +586,9 @@ Priority order with time estimates.
 
 @CLAUDE.md
 "
-
-# Claude suggests:
-# Tomorrow (Dec 20):
-# 1. Integration tests for photo upload (1h)
-# 2. Update API documentation (30min)
-# 3. Start profile edit UI (2h)
-# 4. Code review for PR #245 (30min)
-
-# Save to notes
-echo "PLAN-2025-12-20.md" > notes/
 ```
 
 **Time saved**: 15 minutes (organized wrap-up)
-
----
-
-## "Oh Crap" Moments
-
-### Scenario 10: Accidentally Committed Secret
-
-**Situation**: You committed an API key 😱
-
-```bash
-# PANIC MODE
-
-claude "
-URGENT: I committed an API key!
-
-Commit: abc123def456
-File: config/api-keys.js
-Key: STRIPE_SECRET_KEY
-
-I need to:
-1. Remove from git history (ALL branches)
-2. Revoke the key
-3. Prevent this in future
-
-How do I fix this safely?
-Don't make it worse!
-
-@.gitignore
-@CLAUDE.md
-"
-
-# Claude provides step-by-step:
-# 1. Revoke key FIRST (show where)
-# 2. Remove from history (BFG or filter-branch)
-# 3. Force push (coordinate with team)
-# 4. Add .env to .gitignore
-# 5. Set up pre-commit hook
-
-# Follow instructions carefully
-```
-
----
-
-### Scenario 11: Broke Tests on Main
-
-**Situation**: Your PR was merged, now main is broken 😨
-
-```bash
-npm test 2>&1 | claude "
-URGENT: Main branch broken after my PR merge.
-
-PR: #456 (profile photos)
-Tests failing:
-[paste test output]
-
-Options:
-1. Revert my PR?
-2. Fix forward?
-3. Something else?
-
-Need to unblock team ASAP.
-Show:
-- Quickest fix (time estimate)
-- Safest fix (risk assessment)
-- Recommendation
-
-@CLAUDE.md incident response
-"
-
-# Claude analyzes and recommends fastest safe fix
-```
-
----
-
-### Scenario 12: Production Down
-
-**Situation**: Production is down, on-call paging you
-
-```bash
-# Check production logs
-kubectl logs -n production pod/app-xyz --tail=200 | claude "
-🚨 PRODUCTION DOWN 🚨
-
-Error logs:
-[paste last 200 lines]
-
-Context:
-- Happened 5 minutes ago
-- All requests failing
-- Last deploy: 1 hour ago (PR #458)
-
-URGENT questions:
-1. What's failing?
-2. Related to recent deploy?
-3. Quick fix or rollback?
-4. ETA to resolve?
-
-I need answer in <2 minutes.
-
-@CLAUDE.md production runbook
-"
-
-# Claude provides fast diagnosis:
-# "Database connection pool exhausted.
-# Caused by: Missing connection.release() in PR #458
-# Quick fix: Rollback deploy
-# Proper fix: Add connection.release() + redeploy
-# ETA: Rollback in 2 min, proper fix in 30 min"
-
-# Execute rollback
-# Follow up with proper fix
-```
-
----
-
-## Weekly Workflows
-
-### Scenario 13: Weekly Planning
-
-**Every Monday morning:**
-
-```bash
-# Review last week
-git log --since="1 week ago" --author="your-email" --oneline | claude "
-Last week summary:
-
-Metrics:
-- Features completed
-- Bugs fixed
-- PRs reviewed
-- Lines of code
-
-Insights:
-- What went well
-- What was blocked
-- What took longer than expected
-
-@CLAUDE.md
-"
-
-# Plan this week
-claude "
-This week's sprint plan:
-
-Tickets assigned to me:
-- [List from Jira/Linear]
-
-For each:
-- Priority (High/Medium/Low)
-- Estimated time
-- Dependencies
-- Recommended order
-
-Generate day-by-day plan (Mon-Fri).
-"
-```
-
----
-
-### Scenario 14: Weekly Cleanup
-
-**Every Friday afternoon:**
-
-```bash
-# Cleanup branches
-git branch | claude "
-I have many local branches:
-[paste list]
-
-Current sprint branches:
-- feature/profile-photos (needs PR)
-- feature/notification-system (in progress)
-- fix/email-bug (merged to main)
-
-Which branches should I:
-- Keep (in progress)
-- Delete (merged)
-- Archive (not needed)
-
-Generate commands to clean up.
-"
-
-# Cleanup old files
-claude "
-Find and clean up:
-- .log files
-- .DS_Store
-- node_modules (if duplicated)
-- Temp files
-- Old screenshots
-
-Generate cleanup script.
-
-Don't delete:
-- .env files
-- Important docs
-- In-progress work
-"
-```
-
----
-
-## Tips for Maximum Efficiency
-
-### 🚀 Power User Tips
-
-1. **Alias Common Commands**
-```bash
-# .bashrc or .zshrc
-alias cr='git diff | claude "Code review: security, quality, performance"'
-alias analyze='npm test 2>&1 | claude "Analyze test results. Show failures + fixes."'
-alias standup='git log --since="yesterday" --author="me" | claude "Generate standup summary"'
-```
-
-2. **Pre-Commit Hook**
-```bash
-# .git/hooks/pre-commit
-#!/bin/bash
-git diff --cached | claude "
-Check for:
-- console.log
-- debugger
-- Secrets
-- TODOs without tickets
-
-Exit 1 if found.
-"
-```
-
-3. **Morning Routine Script**
-```bash
-#!/bin/bash
-# morning.sh
-
-echo "🌅 Good morning! Catching up..."
-
-git pull origin main
-git log --since="yesterday" --oneline | claude "What's new?"
-npm test | claude "Any test issues?"
-
-echo "✅ Ready to code!"
-```
 
 ---
 
@@ -1096,13 +608,55 @@ echo "✅ Ready to code!"
 
 ---
 
-## Next Steps
+## Power User Tips
 
-- **Master Prompting**: [Prompt Engineering Patterns](../05-prompt-context-mastery/14-prompt-engineering)
-- **Learn Interactive Features**: [Plan Mode & Context Rewind](../02-cli-mastery/04c-interactive-features)
-- **Optimize Context**: [Context Management](../05-prompt-context-mastery/15-context-management)
+### Alias Common Commands
+
+```bash
+# .bashrc or .zshrc
+alias cr='git diff | claude "Code review: security, quality, performance"'
+alias analyze='npm test 2>&1 | claude "Analyze test results. Show failures + fixes."'
+alias standup='git log --since="yesterday" --author="me" | claude "Generate standup summary"'
+```
+
+### Pre-Commit Hook
+
+```bash
+# .git/hooks/pre-commit
+#!/bin/bash
+git diff --cached | claude "
+Check for:
+- console.log / debugger
+- Secrets
+- TODOs without tickets
+
+Exit 1 if found.
+"
+```
+
+### Morning Routine Script
+
+```bash
+#!/bin/bash
+# morning.sh
+
+echo "🌅 Good morning! Catching up..."
+
+git pull origin main
+git log --since="yesterday" --oneline | claude "What's new?"
+npm test | claude "Any test issues?"
+
+echo "✅ Ready to code!"
+```
 
 ---
 
-[← Back: Core Workflows](03-core-workflows) | [Next: Part 2 CLI Mastery →](../../docs/02-cli-mastery)
+## Next Steps
 
+- **Master Prompting**: [Part 5: Prompt & Context Mastery](../../docs/05-prompt-context-mastery)
+- **Learn Interactive Features**: [Part 2: CLI Mastery](../../docs/02-cli-mastery)
+- **Understand Core Workflows**: [Core Workflows](04-core-workflows.md)
+
+---
+
+[← Back: Core Workflows](04-core-workflows.md) | [Next: Part 2 CLI Mastery →](../../docs/02-cli-mastery)

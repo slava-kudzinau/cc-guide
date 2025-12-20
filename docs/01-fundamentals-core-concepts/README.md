@@ -35,7 +35,18 @@ Complete installation and configuration guide for all platforms, including CLI, 
 - Skills repository setup
 - Enterprise deployment options
 
-### [Section 3: Core Workflows](03-core-workflows.md)
+### [Section 3: CLAUDE.md - Your Project's Memory](03-claude-md-guide.md)
+Learn how to create and maintain CLAUDE.md, the most important configuration file for consistent AI-assisted development. Includes templates for minimal, production, and enterprise projects.
+
+**Key Topics:**
+- What is CLAUDE.md and why it matters
+- Level 1: Minimal template (5 min)
+- Level 2: Production template (15 min)
+- Level 3: Enterprise template (30 min)
+- Real-world examples (Express, React, Python, Go)
+- Maintenance and best practices
+
+### [Section 4: Core Workflows](04-core-workflows.md)
 Essential development patterns including the 7-phase feature development workflow, debugging strategies, code navigation, automated task execution, and Git integration.
 
 **Key Topics:**
@@ -46,13 +57,26 @@ Essential development patterns including the 7-phase feature development workflo
 - Test-driven development patterns
 - Git workflow integration
 
+### [Section 5: Day-in-the-Life - Real Developer Workflows](05-daily-workflows.md)
+Practical, copy-paste ready workflows for your entire workday. From morning catch-up to end-of-day cleanup, see exactly how to use Claude Code in real scenarios.
+
+**Key Topics:**
+- Morning routines (catch-up, stand-up prep)
+- Feature development workflows
+- Code review patterns
+- Debugging production issues
+- Safe refactoring process
+- Daily wrap-up and planning
+
 ---
 
-## Quick Start (30 Minutes)
+## Quick Start (45 Minutes)
 
 1. **Read Section 1** (15 min) - Understand the landscape
 2. **Follow Section 2** (10 min) - Install and configure
-3. **Try Section 3** (5 min) - Run your first workflow
+3. **Create Section 3** (10 min) - Set up CLAUDE.md for your project
+4. **Try Section 4** (5 min) - Run your first workflow
+5. **Explore Section 5** (5 min) - See daily patterns in action
 
 ## Learning Objectives
 
