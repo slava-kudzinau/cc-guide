@@ -1,10 +1,10 @@
 ---
-title: "Section 5: CLI Automation & Scripting"
-parent: "Part 2: Claude Code CLI Mastery"
-nav_order: 4
+title: "Section 2: CLI Automation & Scripting"
+parent: "Part 2: Tools Mastery (CLI & VS Code Extension)"
+nav_order: 2
 ---
 
-# Section 5: CLI Automation & Scripting
+# Section 2: CLI Automation & Scripting
 
 ## Pre-Commit Hooks
 
@@ -26,9 +26,9 @@ Exit 1 if issues found"
 exit $?
 ```
 
-⚠️ **Anti-Pattern**: Committing changes without any review automation  
-✅ **Better**: Add pre-commit hooks that catch issues before they reach CI/CD  
-💡 **Why**: Issues caught in pre-commit hooks take seconds to fix. Same issues in CI take 5-10 minutes (pipeline run time) or worse - reach production.
+**Anti-Pattern**: Committing changes without any review automation  
+**Better**: Add pre-commit hooks that catch issues before they reach CI/CD  
+**Why**: Issues caught in pre-commit hooks take seconds to fix. Same issues in CI take 5-10 minutes or worse - reach production.
 
 ### Auto-Format & Fix
 ```bash
@@ -45,9 +45,9 @@ git add -u
 git diff --cached | claude "Quick review of auto-fixes"
 ```
 
-⚠️ **Anti-Pattern**: No error handling in automation scripts  
-✅ **Better**: Check exit codes, use `set -e`, add fallbacks  
-💡 **Why**: Scripts without error handling silently fail in CI/CD. Always handle errors: `claude "review" || echo "Review failed" && exit 1`
+**Anti-Pattern**: No error handling in automation scripts  
+**Better**: Check exit codes, use `set -e`, add fallbacks  
+**Why**: Scripts without error handling silently fail in CI/CD. Always handle errors.
 
 ## CI/CD Integration
 
@@ -70,9 +70,9 @@ jobs:
           claude "Review for: security, performance, best practices"
 ```
 
-⚠️ **Anti-Pattern**: Using expensive Opus model in CI/CD for all checks  
-✅ **Better**: Use Haiku for fast checks (linting, formatting), reserve Sonnet/Opus for security reviews  
-💡 **Why**: CI runs dozens of times per day. Haiku is 10x faster and 60x cheaper - perfect for quick checks. Use `--model haiku-4.5` for speed.
+**Anti-Pattern**: Using expensive Opus model in CI/CD for all checks  
+**Better**: Use Haiku for fast checks (linting, formatting), reserve Sonnet/Opus for security reviews  
+**Why**: CI runs dozens of times per day. Haiku is 10x faster and 60x cheaper. Use `--model haiku-4.5` for speed.
 
 ### GitLab CI
 ```yaml
@@ -95,9 +95,9 @@ find tests/ -name "*.test.js" | while read file; do
 done
 ```
 
-⚠️ **Anti-Pattern**: Sequential file operations (slow - waits for each file)  
-✅ **Better**: Use parallel processing: `xargs -P 4` or `GNU parallel` for batch operations  
-💡 **Why**: Processing 100 files sequentially takes 100x time. Parallel processing uses multiple cores, achieving 4-10x speedup.
+**Anti-Pattern**: Sequential file operations (slow - waits for each file)  
+**Better**: Use parallel processing: `xargs -P 4` or `GNU parallel` for batch operations  
+**Why**: Processing 100 files sequentially takes 100x time. Parallel processing achieves 4-10x speedup.
 
 ### Parallel Processing
 ```bash
@@ -145,7 +145,5 @@ claude_safe() {
 claude_safe "Review code" || exit 1
 ```
 
-[← Back: Terminal Workflows](04-terminal-workflows) | [Next: CLI vs VS Code →](06-cli-vs-vscode)
-
-
+[← Back: Terminal Workflows](01-terminal-workflows.md) | [Next: VS Code Extension →](03-vscode-extension.md)
 

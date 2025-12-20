@@ -1,10 +1,10 @@
 ---
-title: "Section 4: Terminal Workflows & Command Patterns"
-parent: "Part 2: Claude Code CLI Mastery"
+title: "Section 1: Terminal Workflows & Command Patterns"
+parent: "Part 2: Tools Mastery (CLI & VS Code Extension)"
 nav_order: 1
 ---
 
-# Section 4: Terminal Workflows & Command Patterns
+# Section 1: Terminal Workflows & Command Patterns
 
 ## CLI Basics
 
@@ -31,9 +31,9 @@ claude "@src/models/User.js explain this model"
 claude --thinking=5000 "Design microservices architecture"
 ```
 
-⚠️ **Anti-Pattern**: Using extended thinking for simple tasks (formatting, quick questions)  
-✅ **Better**: Reserve `--thinking` for complex reasoning tasks. Use default mode for simple queries.  
-💡 **Why**: Extended thinking adds 2-4x latency and cost. Simple tasks like "fix linting" or "format code" don't benefit from deep reasoning - they're pattern matching, not problem-solving.
+**Anti-Pattern**: Using extended thinking for simple tasks (formatting, quick questions)  
+**Better**: Reserve `--thinking` for complex reasoning tasks. Use default mode for simple queries.  
+**Why**: Extended thinking adds 2-4x latency and cost. Simple tasks like "fix linting" or "format code" don't benefit from deep reasoning.
 
 ### Piping (Unix Composition)
 ```bash
@@ -46,9 +46,9 @@ cat error.log | claude "Analyze this error"
 git log --oneline -10 | claude "Summarize these commits" > summary.txt
 ```
 
-⚠️ **Anti-Pattern**: Not using piping - copying/pasting command output manually  
-✅ **Better**: Pipe directly to Claude: `git diff | claude "review"`  
-💡 **Why**: Piping is faster, preserves formatting, and enables automation in scripts. Manual copy-paste loses formatting and wastes time.
+**Anti-Pattern**: Not using piping - copying/pasting command output manually  
+**Better**: Pipe directly to Claude: `git diff | claude "review"`  
+**Why**: Piping is faster, preserves formatting, and enables automation in scripts.
 
 ## Command Patterns
 
@@ -66,9 +66,9 @@ claude "Create React component for user profile"
 claude "Write database migration to add email_verified column"
 ```
 
-⚠️ **Anti-Pattern**: Vague prompts like "fix my code" or "improve this"  
-✅ **Better**: Specific requests with context: "Fix authentication timeout - 401 after OAuth refresh. Error: [paste]"  
-💡 **Why**: Vague prompts get generic advice. Specific prompts with error messages, file context, and desired outcome get targeted fixes.
+**Anti-Pattern**: Vague prompts like "fix my code" or "improve this"  
+**Better**: Specific requests with context: "Fix authentication timeout - 401 after OAuth refresh. Error: [paste]"  
+**Why**: Vague prompts get generic advice. Specific prompts with error messages, file context, and desired outcome get targeted fixes.
 
 ### Refactoring
 ```bash
@@ -95,9 +95,9 @@ claude
 # Claude generates tests for auth + rate limiting
 ```
 
-⚠️ **Anti-Pattern**: Starting new session for each question instead of continuing conversation  
-✅ **Better**: Use multi-turn conversations for related tasks - context accumulates and responses improve  
-💡 **Why**: Each new session loses context. Multi-turn conversations let Claude build on previous understanding, saving tokens (via caching) and providing more coherent solutions across related tasks.
+**Anti-Pattern**: Starting new session for each question instead of continuing conversation  
+**Better**: Use multi-turn conversations for related tasks - context accumulates and responses improve  
+**Why**: Each new session loses context. Multi-turn conversations let Claude build on previous understanding, saving tokens (via caching).
 
 ## CLI Configuration
 
@@ -121,7 +121,5 @@ auto_include:
   - "*.test.js"
 ```
 
-[← Back to Part 2 Index](README) | [Next: CLI Automation →](05-cli-automation)
-
-
+[← Back to Part 2 Index](README.md) | [Next: CLI Automation →](02-cli-automation.md)
 

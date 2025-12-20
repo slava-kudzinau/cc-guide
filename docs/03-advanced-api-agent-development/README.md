@@ -39,7 +39,7 @@ Master programmatic integration with Claude API and build custom autonomous agen
 **Agent SDK:** Build autonomous agents with full programmatic control.  
 **Skills:** Just-in-time knowledge loading for specialized domains.
 
-[← Part 2: CLI Mastery](../02-cli-mastery/) | [Next: Advanced API Features →](08-advanced-api-features.md)
+[← Part 2: Tools Mastery](../02-tools-mastery/) | [Next: Advanced API Features →](08-advanced-api-features.md)
 
 
 

@@ -1,10 +1,10 @@
 ---
-title: "Section 8: Commands & Plugins System"
-parent: "Part 2: Claude Code CLI Mastery"
-nav_order: 7
+title: "Section 6: Commands & Plugins System"
+parent: "Part 2: Tools Mastery (CLI & VS Code Extension)"
+nav_order: 6
 ---
 
-# Section 8: Commands & Plugins System
+# Section 6: Commands & Plugins System
 
 Claude Code includes a powerful extensibility system through custom commands and plugins. This allows you to create reusable workflows, add project-specific commands, and extend Claude's capabilities.
 
@@ -900,5 +900,5 @@ Use $ARGUMENTS for all arguments
 
 ---
 
-[← Back: Advanced CLI Patterns](07-advanced-cli-patterns) | [Next: Part 3 API & Agents →](../03-advanced-api-agent-development)
+[← Back: Advanced CLI Patterns](05-advanced-cli-patterns.md) | [Next: Part 3 API & Agents →](../03-advanced-api-agent-development)
 

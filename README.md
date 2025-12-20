@@ -397,11 +397,11 @@ claude "review file3.ts"
 
 ---
 
-### [Part 2: Claude Code CLI Mastery](docs/02-cli-mastery/)
-**Comprehensive terminal workflows and automation**
+### [Part 2: Tools Mastery (CLI & VS Code Extension)](docs/02-tools-mastery/)
+**Comprehensive coverage of CLI workflows and VS Code extension**
 
 **Sections Covered:**
-4. **Terminal Workflows & Command Patterns**
+1. **Terminal Workflows & Command Patterns**
    - CLI basics and command structure
    - Interactive vs command mode
    - Natural language commands
@@ -409,7 +409,7 @@ claude "review file3.ts"
    - Session management
    - CLI configuration (.clauderc)
 
-5. **CLI Automation & Scripting**
+2. **CLI Automation & Scripting**
    - Scripting in bash/zsh/PowerShell
    - Pre-commit hooks and automation
    - CI/CD integration patterns
@@ -417,14 +417,23 @@ claude "review file3.ts"
    - Error handling strategies
    - Non-interactive mode
 
-6. **CLI vs VS Code Extension**
+3. **VS Code Extension Guide**
+   - Installation and setup
+   - Interface overview and keyboard shortcuts
+   - Plan Mode (preview changes before applying)
+   - Context Rewind (undo conversation + code)
+   - Interactive features (inline chat, slash commands)
+   - Core workflows (development, debugging, review)
+   - Configuration and troubleshooting
+
+4. **CLI vs VS Code Extension**
    - Decision matrix for tool selection
    - CLI advantages (scriptability, CI/CD)
-   - VS Code advantages (GUI, visual feedback)
+   - VS Code advantages (GUI, visual feedback, Plan Mode)
    - Hybrid workflows
-   - Performance comparison
+   - Scenario-based recommendations
 
-7. **Advanced CLI Patterns**
+5. **Advanced CLI Patterns**
    - Multi-repository workflows
    - Monorepo navigation
    - Parallel execution patterns
@@ -432,8 +441,16 @@ claude "review file3.ts"
    - Terminal multiplexing
    - Remote execution (SSH, cloud shells)
 
+6. **Commands & Plugins System**
+   - Custom commands for project workflows
+   - Official and community plugins
+   - Skills system for domain expertise
+   - Creating and publishing plugins
+   - Team collaboration patterns
+
 **Key Takeaways:**
 - CLI enables scriptable, automatable workflows
+- VS Code Extension provides visual feedback and Plan Mode for safe refactoring
 - Pipe outputs directly to Claude for analysis
 - Use CLI in CI/CD for automated reviews, testing, documentation
 - VS Code extension offers GUI convenience but less automation
@@ -681,7 +698,7 @@ npm test 2>&1 | claude "explain failures and suggest fixes"
 - **Checkpoint**: Can explain when to use CLI vs Extension vs API
 
 **Hour 2: Tools & Automation** (60 min)
-- [Part 2, Sections 4-6](docs/02-cli-mastery/): CLI mastery, VS Code Extension guide
+- [Part 2, Sections 1-6](docs/02-tools-mastery/): CLI mastery, VS Code Extension guide
 - 🛠️ Workshop: Automate your git workflow
 - **Checkpoint**: Have working pre-commit hook with Claude
 
@@ -1511,7 +1528,7 @@ AWS/GCP hosting gives you data control without managing models.
 
 **All parts:**
 1. [Fundamentals & Core Concepts](docs/01-fundamentals-core-concepts/)
-2. [Claude Code CLI Mastery](docs/02-cli-mastery/)
+2. [Tools Mastery (CLI & VS Code Extension)](docs/02-tools-mastery/)
 3. [Advanced API & Agent Development](docs/03-advanced-api-agent-development/)
 4. [Enterprise & DevOps Integration](docs/04-enterprise-devops-patterns/)
 5. [Prompt Engineering & Context Mastery](docs/05-prompt-context-mastery/)

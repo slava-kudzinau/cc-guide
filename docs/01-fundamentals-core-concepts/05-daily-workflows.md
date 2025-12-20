@@ -654,9 +654,9 @@ echo "✅ Ready to code!"
 ## Next Steps
 
 - **Master Prompting**: [Part 5: Prompt & Context Mastery](../../docs/05-prompt-context-mastery)
-- **Learn Interactive Features**: [Part 2: CLI Mastery](../../docs/02-cli-mastery)
+- **Learn Interactive Features**: [Part 2: Tools Mastery](../../docs/02-tools-mastery)
 - **Understand Core Workflows**: [Core Workflows](04-core-workflows.md)
 
 ---
 
-[← Back: Core Workflows](04-core-workflows.md) | [Next: Part 2 CLI Mastery →](../../docs/02-cli-mastery)
+[← Back: Core Workflows](04-core-workflows.md) | [Next: Part 2 Tools Mastery →](../../docs/02-tools-mastery)

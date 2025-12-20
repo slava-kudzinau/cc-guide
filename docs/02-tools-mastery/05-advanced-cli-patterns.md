@@ -1,10 +1,10 @@
 ---
-title: "Section 7: Advanced CLI Patterns"
-parent: "Part 2: Claude Code CLI Mastery"
-nav_order: 6
+title: "Section 5: Advanced CLI Patterns"
+parent: "Part 2: Tools Mastery (CLI & VS Code Extension)"
+nav_order: 5
 ---
 
-# Section 7: Advanced CLI Patterns
+# Section 5: Advanced CLI Patterns
 
 ## Multi-Repository Workflows
 
@@ -138,7 +138,5 @@ npm run build 2>&1 >/dev/null | \
   tee build-fixes.md
 ```
 
-[← Back: CLI vs VS Code](06-cli-vs-vscode) | [Part 2 Complete! → Part 3: API & Agents](../../docs/03-advanced-api-agent-development)
-
-
+[← Back: CLI vs VS Code](04-cli-vs-vscode.md) | [Next: Commands & Plugins →](06-commands-plugins.md)
 

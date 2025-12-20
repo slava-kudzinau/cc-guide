@@ -516,7 +516,7 @@ Extension uses environment variable if setting is empty.
 - Update in VS Code settings
 - Reload window
 
-See [Section 6: VS Code Extension Guide](../02-cli-mastery/06-cli-vs-vscode) for comprehensive extension troubleshooting.
+See [Section 3: VS Code Extension Guide](../02-tools-mastery/03-vscode-extension.md) for comprehensive extension troubleshooting.
 
 ---
 
