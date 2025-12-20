@@ -224,7 +224,7 @@ Working with images? ───→ Use Vision API
 **Cost example**:
 - Using Opus for everything: **$85/month**
 - Using Haiku + Sonnet strategically: **$6/month**
-- **Savings: 93%** with better speed!
+- **14x cheaper** with better speed!
 
 ⚠️ **Anti-Pattern**: Using Opus 4.1 for all tasks (slow and 10x more expensive)  
 ✅ **Better**: Use Haiku for simple tasks, Sonnet for daily coding, Opus only for complex reasoning  
