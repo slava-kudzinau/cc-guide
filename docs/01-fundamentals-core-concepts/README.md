@@ -10,7 +10,7 @@ This part covers the essential foundations every Claude Code user needs to under
 
 ## Sections in This Part
 
-### [Section 1: Mental Models & Architecture](01-mental-models)
+### [Section 1: Mental Models & Architecture](01-mental-models.md)
 Understand Claude's ecosystem architecture, model family, tool selection, and core concepts like extended thinking, vision capabilities, MCP integration, and the Skills system.
 
 **Key Topics:**
@@ -22,7 +22,7 @@ Understand Claude's ecosystem architecture, model family, tool selection, and co
 - Skills system fundamentals
 - Context windows and token management
 
-### [Section 2: Environment & Project Setup](02-environment-setup)
+### [Section 2: Environment & Project Setup](02-environment-setup.md)
 Complete installation and configuration guide for all platforms, including CLI, VS Code extension, API authentication, project configuration files, and MCP server setup.
 
 **Key Topics:**
@@ -34,7 +34,7 @@ Complete installation and configuration guide for all platforms, including CLI, 
 - Skills repository setup
 - Enterprise deployment options
 
-### [Section 3: Core Workflows](03-core-workflows)
+### [Section 3: Core Workflows](03-core-workflows.md)
 Essential development patterns including the 7-phase feature development workflow, debugging strategies, code navigation, automated task execution, and Git integration.
 
 **Key Topics:**
@@ -67,7 +67,7 @@ After completing Part 1, you will:
 
 ---
 
-[← Back to Main Index](../../README) | [Next: Mental Models & Architecture →](01-mental-models)
+[← Back to Main Index](../../README.md) | [Next: Mental Models & Architecture →](01-mental-models.md)
 
 
 

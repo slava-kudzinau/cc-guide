@@ -33,7 +33,7 @@ This comprehensive guide covers everything senior developers need to master Clau
 
 ## 🗂️ Guide Structure
 
-### [Part 1: Fundamentals & Core Concepts](docs/01-fundamentals-core-concepts)
+### [Part 1: Fundamentals & Core Concepts](docs/01-fundamentals-core-concepts/)
 **Essential foundations for all users**
 
 **Sections Covered:**
@@ -71,7 +71,7 @@ This comprehensive guide covers everything senior developers need to master Clau
 
 ---
 
-### [Part 2: Claude Code CLI Mastery](docs/02-cli-mastery)
+### [Part 2: Claude Code CLI Mastery](docs/02-cli-mastery/)
 **Comprehensive terminal workflows and automation**
 
 **Sections Covered:**
@@ -114,7 +114,7 @@ This comprehensive guide covers everything senior developers need to master Clau
 
 ---
 
-### [Part 3: Advanced API & Agent Development](docs/03-advanced-api-agent-development)
+### [Part 3: Advanced API & Agent Development](docs/03-advanced-api-agent-development/)
 **Programmatic integration and custom agents**
 
 **Sections Covered:**
@@ -149,7 +149,7 @@ This comprehensive guide covers everything senior developers need to master Clau
 
 ---
 
-### [Part 4: Enterprise & DevOps Integration](docs/04-enterprise-devops-patterns)
+### [Part 4: Enterprise & DevOps Integration](docs/04-enterprise-devops-patterns/)
 **Production deployment and infrastructure automation**
 
 **Sections Covered:**
@@ -185,7 +185,7 @@ This comprehensive guide covers everything senior developers need to master Clau
 
 ---
 
-### [Part 5: Prompt Engineering & Context Mastery](docs/05-prompt-context-mastery)
+### [Part 5: Prompt Engineering & Context Mastery](docs/05-prompt-context-mastery/)
 **Advanced techniques for optimal results**
 
 **Sections Covered:**
@@ -220,7 +220,7 @@ This comprehensive guide covers everything senior developers need to master Clau
 
 ---
 
-### [Part 6: Domain-Specific & Team Collaboration](docs/06-domain-team-patterns)
+### [Part 6: Domain-Specific & Team Collaboration](docs/06-domain-team-patterns/)
 **Specialized workflows and team patterns**
 
 **Sections Covered:**
@@ -254,7 +254,7 @@ This comprehensive guide covers everything senior developers need to master Clau
 
 ---
 
-### [Part 7: Reference, Troubleshooting & Future](docs/07-reference-troubleshooting)
+### [Part 7: Reference, Troubleshooting & Future](docs/07-reference-troubleshooting/)
 **Complete reference and solutions**
 
 **Sections Covered:**
@@ -303,45 +303,45 @@ This comprehensive guide covers everything senior developers need to master Clau
 ## 🚀 Quick Start Paths
 
 ### For New Users (Start Here!)
-1. [Part 1: Fundamentals](docs/01-fundamentals-core-concepts) - Sections 1-3
-2. [Part 2: CLI Basics](docs/02-cli-mastery) - Section 4
-3. [Part 7: Reference](docs/07-reference-troubleshooting) - Section 20
+1. [Part 1: Fundamentals](docs/01-fundamentals-core-concepts/) - Sections 1-3
+2. [Part 2: CLI Basics](docs/02-cli-mastery/) - Section 4
+3. [Part 7: Reference](docs/07-reference-troubleshooting/) - Section 20
 
 **Time investment:** 45-60 minutes  
 **Outcome:** Install tools, understand basics, run first commands
 
 ### For Individual Contributors
-1. [Part 1: Core Workflows](docs/01-fundamentals-core-concepts) - Section 3
-2. [Part 2: CLI Mastery](docs/02-cli-mastery) - Sections 4-7
-3. [Part 3: API Basics](docs/03-advanced-api-agent-development) - Section 8
-4. [Part 5: Prompting](docs/05-prompt-context-mastery) - Sections 14-15
+1. [Part 1: Core Workflows](docs/01-fundamentals-core-concepts/) - Section 3
+2. [Part 2: CLI Mastery](docs/02-cli-mastery/) - Sections 4-7
+3. [Part 3: API Basics](docs/03-advanced-api-agent-development/) - Section 8
+4. [Part 5: Prompting](docs/05-prompt-context-mastery/) - Sections 14-15
 
 **Time investment:** 3-4 hours  
 **Outcome:** Daily workflow mastery, automation, advanced prompts
 
 ### For DevOps/Platform Engineers
-1. [Part 1: Fundamentals](docs/01-fundamentals-core-concepts) - Sections 1-2
-2. [Part 2: CLI Automation](docs/02-cli-mastery) - Sections 5, 7
-3. [Part 4: DevOps Integration](docs/04-enterprise-devops-patterns) - Sections 11-13
-4. [Part 7: Reference](docs/07-reference-troubleshooting) - Section 20
+1. [Part 1: Fundamentals](docs/01-fundamentals-core-concepts/) - Sections 1-2
+2. [Part 2: CLI Automation](docs/02-cli-mastery/) - Sections 5, 7
+3. [Part 4: DevOps Integration](docs/04-enterprise-devops-patterns/) - Sections 11-13
+4. [Part 7: Reference](docs/07-reference-troubleshooting/) - Section 20
 
 **Time investment:** 3-4 hours  
 **Outcome:** CI/CD automation, IaC generation, security scanning
 
 ### For Backend/API Developers
-1. [Part 1: Fundamentals](docs/01-fundamentals-core-concepts) - Sections 1-3
-2. [Part 3: API & Agents](docs/03-advanced-api-agent-development) - Sections 8-10
-3. [Part 4: Architecture](docs/04-enterprise-devops-patterns) - Section 12
-4. [Part 6: Backend Workflows](docs/06-domain-team-patterns) - Section 17
+1. [Part 1: Fundamentals](docs/01-fundamentals-core-concepts/) - Sections 1-3
+2. [Part 3: API & Agents](docs/03-advanced-api-agent-development/) - Sections 8-10
+3. [Part 4: Architecture](docs/04-enterprise-devops-patterns/) - Section 12
+4. [Part 6: Backend Workflows](docs/06-domain-team-patterns/) - Section 17
 
 **Time investment:** 3-4 hours  
 **Outcome:** API integration, agent development, system design automation
 
 ### For Team Leads
-1. [Part 1: Setup](docs/01-fundamentals-core-concepts) - Section 2
-2. [Part 5: Context Management](docs/05-prompt-context-mastery) - Section 15
-3. [Part 6: Team Collaboration](docs/06-domain-team-patterns) - Sections 18-19
-4. [Part 7: Benchmarks](docs/07-reference-troubleshooting) - Section 22
+1. [Part 1: Setup](docs/01-fundamentals-core-concepts/) - Section 2
+2. [Part 5: Context Management](docs/05-prompt-context-mastery/) - Section 15
+3. [Part 6: Team Collaboration](docs/06-domain-team-patterns/) - Sections 18-19
+4. [Part 7: Benchmarks](docs/07-reference-troubleshooting/) - Section 22
 
 **Time investment:** 3-4 hours  
 **Outcome:** Team setup, shared configs, ROI calculations, metrics
@@ -482,12 +482,12 @@ This comprehensive guide covers everything senior developers need to master Clau
 
 | Issue | Quick Fix | Full Details |
 |-------|-----------|--------------|
-| **CLI not found** | Add to PATH, restart shell | [Part 1, Section 2](docs/01-fundamentals-core-concepts#2-environment--project-setup) |
-| **API auth fails** | Verify ANTHROPIC_API_KEY env var | [Part 7, Section 21](docs/07-reference-troubleshooting#21-troubleshooting--common-issues) |
-| **Extended thinking slow** | Reduce budget_tokens, use streaming | [Part 3, Section 8](docs/03-advanced-api-agent-development#8-advanced-claude-api-features) |
-| **High API costs** | Enable prompt caching, use Haiku | [Part 5, Section 15](docs/05-prompt-context-mastery#15-context-management--optimization) |
-| **MCP not connecting** | Check server config, restart Claude | [Part 7, Section 21](docs/07-reference-troubleshooting#21-troubleshooting--common-issues) |
-| **Context window exceeded** | Use batch API or focused context | [Part 5, Section 15](docs/05-prompt-context-mastery#15-context-management--optimization) |
+| **CLI not found** | Add to PATH, restart shell | [Part 1, Section 2](docs/01-fundamentals-core-concepts/#2-environment--project-setup) |
+| **API auth fails** | Verify ANTHROPIC_API_KEY env var | [Part 7, Section 21](docs/07-reference-troubleshooting/#21-troubleshooting--common-issues) |
+| **Extended thinking slow** | Reduce budget_tokens, use streaming | [Part 3, Section 8](docs/03-advanced-api-agent-development/#8-advanced-claude-api-features) |
+| **High API costs** | Enable prompt caching, use Haiku | [Part 5, Section 15](docs/05-prompt-context-mastery/#15-context-management--optimization) |
+| **MCP not connecting** | Check server config, restart Claude | [Part 7, Section 21](docs/07-reference-troubleshooting/#21-troubleshooting--common-issues) |
+| **Context window exceeded** | Use batch API or focused context | [Part 5, Section 15](docs/05-prompt-context-mastery/#15-context-management--optimization) |
 
 ---
 
@@ -514,16 +514,16 @@ This comprehensive guide covers everything senior developers need to master Clau
 
 ## 🗺️ Navigation
 
-**Start reading:** [Part 1: Fundamentals & Core Concepts →](docs/01-fundamentals-core-concepts)
+**Start reading:** [Part 1: Fundamentals & Core Concepts →](docs/01-fundamentals-core-concepts/)
 
 **All parts:**
-1. [Fundamentals & Core Concepts](docs/01-fundamentals-core-concepts)
-2. [Claude Code CLI Mastery](docs/02-cli-mastery)
-3. [Advanced API & Agent Development](docs/03-advanced-api-agent-development)
-4. [Enterprise & DevOps Integration](docs/04-enterprise-devops-patterns)
-5. [Prompt Engineering & Context Mastery](docs/05-prompt-context-mastery)
-6. [Domain-Specific & Team Collaboration](docs/06-domain-team-patterns)
-7. [Reference, Troubleshooting & Future](docs/07-reference-troubleshooting)
+1. [Fundamentals & Core Concepts](docs/01-fundamentals-core-concepts/)
+2. [Claude Code CLI Mastery](docs/02-cli-mastery/)
+3. [Advanced API & Agent Development](docs/03-advanced-api-agent-development/)
+4. [Enterprise & DevOps Integration](docs/04-enterprise-devops-patterns/)
+5. [Prompt Engineering & Context Mastery](docs/05-prompt-context-mastery/)
+6. [Domain-Specific & Team Collaboration](docs/06-domain-team-patterns/)
+7. [Reference, Troubleshooting & Future](docs/07-reference-troubleshooting/)
 
 ---
 
@@ -543,7 +543,7 @@ This comprehensive guide covers everything senior developers need to master Clau
 
 *This guide is built from the latest Anthropic documentation via Context7 MCP. Bookmark and share!*
 
-**Master Index** | [Begin with Part 1 →](docs/01-fundamentals-core-concepts)
+**Master Index** | [Begin with Part 1 →](docs/01-fundamentals-core-concepts/)
 
 
 
