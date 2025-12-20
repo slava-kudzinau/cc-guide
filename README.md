@@ -38,7 +38,7 @@ This comprehensive guide covers everything senior developers need to master Clau
 
 **Sections Covered:**
 1. **Mental Models & Architecture** - Understanding Claude's ecosystem
-   - Model family (Claude 4, Sonnet 3.7, Haiku 4, Opus 4)
+   - Model family (Claude 4 family: Opus 4/4.1, Sonnet 4/4.5, Haiku 4.5, plus legacy Sonnet 3.7)
    - Tool selection matrix (CLI vs API vs Agent SDK vs VS Code)
    - Extended thinking architecture
    - Vision capabilities for code
@@ -206,17 +206,17 @@ This comprehensive guide covers everything senior developers need to master Clau
     - CLAUDE.md best practices
 
 16. **Multi-Model Strategies**
-    - Claude 4 vs Sonnet 3.7 vs Haiku 4
+    - Choosing between Claude Opus 4.1, Claude Sonnet 4.5, Claude Haiku 4.5, and legacy models
     - Model ensemble patterns
     - Cost vs performance trade-offs
     - Latency optimization
     - Fallback strategies
 
 **Key Takeaways:**
-- Extended thinking for planning, Haiku 4 for speed
+- Extended thinking for planning, Claude Haiku 4.5 for speed
 - Prompt caching reduces repeated context costs by 90%
 - CLAUDE.md provides persistent project context
-- Chain models: Opus for architecture, Sonnet for implementation
+- Chain models: Claude Opus 4.1 for architecture, Claude Sonnet 4.5 for implementation
 
 ---
 
@@ -367,12 +367,14 @@ This comprehensive guide covers everything senior developers need to master Clau
 
 | Task Type | Model | Why |
 |-----------|-------|-----|
-| **Complex architecture** | Claude 4 / Opus 4 | Most capable, deepest reasoning |
-| **Daily coding** | Sonnet 3.7 / Sonnet 4.5 | Best balance: speed + intelligence |
-| **Speed + cost** | Haiku 4.5 | Near-instant, 10x cheaper |
-| **Extended thinking** | Sonnet 4.5 / Claude 4 | Interleaved thinking support |
+| **Complex architecture** | Claude Opus 4/4.1 | Most capable, deepest reasoning |
+| **Daily coding** | Claude Sonnet 4.5 / Claude Sonnet 3.7 | Best balance: speed + intelligence |
+| **Speed + cost** | Claude Haiku 4.5 | Near-instant, 10x cheaper |
+| **Extended thinking** | Claude Sonnet 4.5 / Claude Opus 4.1 | Interleaved thinking support |
 | **Batch processing** | Any active model | All models support batches |
-| **Vision tasks** | Sonnet 4.5+ | Text + image input |
+| **Vision tasks** | Claude Sonnet 4.5+ | Text + image input |
+
+> **Note on Model Naming:** "Claude 4" refers to the model family, not a single model. The Claude 4 family includes: Claude Opus 4/4.1 (most powerful), Claude Sonnet 4/4.5 (balanced), and Claude Haiku 4.5 (fastest/cheapest). Always specify the complete model name (e.g., "Claude Opus 4.1" not just "Claude 4") when referencing specific models.
 
 ### Extended Thinking Budget Guide
 
@@ -450,7 +452,7 @@ This comprehensive guide covers everything senior developers need to master Clau
 - [ ] Configure API key and authentication
 - [ ] Create first CLAUDE.md file
 - [ ] Run first 10 CLI commands successfully
-- [ ] Understand model selection (Sonnet vs Haiku)
+- [ ] Understand model selection (Claude Sonnet 4.5 vs Claude Haiku 4.5)
 
 **Checkpoint:** Can complete simple tasks 2-3x faster
 
