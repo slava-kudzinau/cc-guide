@@ -1,10 +1,10 @@
 ---
-title: "Section 12: Architecture & System Design"
+title: "Section 02: Architecture & System Design"
 parent: "Part 4: Enterprise & DevOps Integration"
 nav_order: 2
 ---
 
-# Section 12: Architecture & System Design
+# Section 02: Architecture & System Design
 
 ## Microservices Architecture
 
@@ -82,7 +82,5 @@ claude "Analyze technical debt in @src/:
 Prioritize by: impact and effort to fix"
 ```
 
-[← Back: DevOps & CI/CD](11-devops-cicd) | [Next: Security & Compliance →](13-security-compliance)
-
-
+[← Back: DevOps & CI/CD](01-devops-cicd.md) | [Next: Security & Compliance →](03-security-compliance.md)
 

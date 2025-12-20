@@ -11,24 +11,21 @@ Production deployment patterns, infrastructure automation, and enterprise securi
 
 ## Sections
 
-### [Section 11: DevOps & CI/CD Integration](11-devops-cicd.md)
+### [Section 01: DevOps & CI/CD Integration](01-devops-cicd.md)
 - GitHub Actions / GitLab CI workflows
-- Automated code reviews in PRs
-- Release automation
-- Infrastructure as Code (Terraform, CDK)
+- Automated code reviews and releases
+- Infrastructure as Code (Terraform, Kubernetes)
 - Container optimization
 
-### [Section 12: Architecture & System Design](12-architecture-design.md)
+### [Section 02: Architecture & System Design](02-architecture-design.md)
 - Microservices consistency
 - API design automation
 - Database schema design
-- Event-driven architectures
 - Technical debt analysis
 
-### [Section 13: Security & Compliance](13-security-compliance.md)
-- Secure coding practices
+### [Section 03: Security & Compliance](03-security-compliance.md)
 - Vulnerability detection
-- Compliance checking (PCI, HIPAA, SOC2)
+- Compliance checking (PCI, HIPAA, GDPR)
 - Secrets management
 - Audit logging
 
@@ -39,7 +36,7 @@ Production deployment patterns, infrastructure automation, and enterprise securi
 **Security Scanning:** Automated vulnerability detection in PRs.  
 **Compliance:** Auto-check code against compliance requirements.
 
-[← Part 3: API & Agents](../03-advanced-api-agent-development/) | [Next: DevOps & CI/CD →](11-devops-cicd.md)
+[← Part 3: API & Agents](../03-advanced-api-agent-development/) | [Next: DevOps & CI/CD →](01-devops-cicd.md)
 
 
 

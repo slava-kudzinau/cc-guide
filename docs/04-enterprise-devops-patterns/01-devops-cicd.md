@@ -1,14 +1,14 @@
 ---
-title: "Section 11: DevOps & CI/CD Integration"
+title: "Section 01: DevOps & CI/CD Integration"
 parent: "Part 4: Enterprise & DevOps Integration"
 nav_order: 1
 ---
 
-# Section 11: DevOps & CI/CD Integration
+# Section 01: DevOps & CI/CD Integration
 
 ## GitHub Actions Integration
 
-### Automated PR Review
+### Automated PR Review & Release
 ```yaml
 name: Claude Code Review
 on:
@@ -52,35 +52,16 @@ jobs:
             });
 ```
 
-### Release Automation
-```yaml
-name: Release
-on:
-  push:
-    tags: ['v*']
-
-jobs:
-  release:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Generate Release Notes
-        env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: |
-          git log $(git describe --tags --abbrev=0 HEAD^)..HEAD --oneline | \
-          claude "Generate release notes:
-          ## New Features
-          ## Bug Fixes
-          ## Breaking Changes
-          ## Improvements
-          Use conventional commit format" > RELEASE_NOTES.md
-      
-      - name: Create Release
-        uses: actions/create-release@v1
-        with:
-          tag_name: ${{ github.ref }}
-          body_path: RELEASE_NOTES.md
+### Release Notes Generation
+```bash
+# Generate release notes from commits
+git log $(git describe --tags --abbrev=0 HEAD^)..HEAD --oneline | \
+claude "Generate release notes:
+## New Features
+## Bug Fixes
+## Breaking Changes
+## Improvements
+Use conventional commit format"
 ```
 
 ## Infrastructure as Code
@@ -110,11 +91,9 @@ claude "Generate Kubernetes manifests for Node.js API:
 Follow best practices for: security, resources, probes"
 ```
 
-## Docker Optimization
-
-### Multi-Stage Build
+### Docker Optimization
 ```bash
-# Optimize Dockerfile
+# Optimize Dockerfile with multi-stage builds
 claude "@Dockerfile Optimize for:
 - Smaller image size (use multi-stage)
 - Faster builds (layer caching)
@@ -122,7 +101,5 @@ claude "@Dockerfile Optimize for:
 - Best practices (COPY vs ADD, etc.)"
 ```
 
-[← Back to Part 4 Index](README) | [Next: Architecture Design →](12-architecture-design)
-
-
+[← Back to Part 4 Index](README.md) | [Next: Architecture Design →](02-architecture-design.md)
 
