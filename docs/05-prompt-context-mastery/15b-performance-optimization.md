@@ -1,3 +1,9 @@
+---
+title: "Section 15b: Performance & Speed Optimization"
+parent: "Part 5: Prompt Engineering & Context Mastery"
+nav_order: 2.5
+---
+
 # Section 15b: Performance & Speed Optimization
 
 **Goal**: Get 3-5x faster responses through smart optimization patterns  
