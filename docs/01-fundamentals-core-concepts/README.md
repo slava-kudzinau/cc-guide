@@ -14,7 +14,7 @@ This part covers the essential foundations every Claude Code user needs to under
 Understand Claude's ecosystem architecture, model family, tool selection, and core concepts like extended thinking, vision capabilities, MCP integration, and the Skills system.
 
 **Key Topics:**
-- Model family overview (Claude 4, Sonnet 4.5, Haiku 4.5, Opus 4.1)
+- Model family overview (Claude 4 family: Claude Opus 4.1, Claude Sonnet 4.5, Claude Haiku 4.5)
 - Tool selection matrix (CLI vs API vs Agent SDK vs VS Code)
 - Extended thinking architecture
 - Vision capabilities

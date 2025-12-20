@@ -50,7 +50,7 @@ npx @anthropics/mcp-server-gdrive --test
 - Start with 2K budget
 - Monitor token usage
 - Use thinking only for complex tasks
-- Consider Haiku for simple tasks
+- Consider Claude Haiku 4.5 for simple tasks
 
 ## Context Window Overflow
 
@@ -75,7 +75,7 @@ echo "dist/" >> .claudeignore
 **Problem:** Claude takes too long to respond
 
 **Solutions:**
-1. Use faster model (Haiku 4.5)
+1. Use faster model (Claude Haiku 4.5)
 2. Reduce context (fewer files)
 3. Disable extended thinking for simple tasks
 4. Use streaming for immediate feedback
@@ -85,7 +85,7 @@ echo "dist/" >> .claudeignore
 
 **Solutions:**
 1. Enable prompt caching (90% savings)
-2. Use Haiku for simple tasks
+2. Use Claude Haiku 4.5 for simple tasks
 3. Set monthly budget limits
 4. Monitor usage dashboard
 
