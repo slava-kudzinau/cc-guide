@@ -1,16 +1,18 @@
 ---
-title: "Section 23: Anti-Patterns & Common Mistakes"
+title: "Section 04: Anti-Patterns & Common Mistakes"
 parent: "Part 7: Reference, Troubleshooting & Future"
-nav_order: 3
+nav_order: 4
 ---
 
-# Section 23: Anti-Patterns & Common Mistakes
+# Section 04: Anti-Patterns & Common Mistakes
 
 Learn from others' mistakes! This guide shows you what **NOT** to do when working with Claude Code, and how to do it right instead.
 
 ---
 
 ## Prompting Anti-Patterns
+
+**Overview:** These are the most common mistakes when prompting Claude. The first 5 are critical - avoid these at all costs.
 
 ### ❌ Anti-Pattern 1: Vague Requests
 
@@ -621,233 +623,65 @@ router.post('/users',
 
 ---
 
-## Performance Anti-Patterns
+## Performance & Testing Anti-Patterns
 
-### ❌ Anti-Pattern 13: N+1 Query Problem
+**Quick Reference Table:**
 
-**The Mistake**:
+| Anti-Pattern | Bad Example | Good Approach | Impact |
+|--------------|-------------|---------------|---------|
+| **N+1 Queries** | Loop with 1 query per item | Use JOIN or batch query | 40x faster |
+| **No Caching** | Query DB every request | Cache with Redis/Memory | 100x+ faster |
+| **No Tests** | Ship without tests | Write tests first (TDD) | Catch bugs early |
+| **Test Implementation** | Test internal methods | Test public behavior | Refactor-safe tests |
+| **SELECT \*** | Query all columns | Select only needed fields | 5-10x faster |
+| **Missing Indexes** | Full table scan | Add indexes on foreign keys | 10-100x faster |
+
+### Detailed Examples
+
+#### ❌ Anti-Pattern: N+1 Query Problem
+
+**Bad:**
 ```javascript
-// ❌ BAD
-async function getUsersWithOrders() {
-  const users = await db.query('SELECT * FROM users');
-  
-  for (const user of users) {
-    // 1 query per user! 💀
-    user.orders = await db.query(
-      'SELECT * FROM orders WHERE user_id = ?',
-      [user.id]
-    );
-  }
-  
-  return users;
+// 100 users = 101 queries (1 + 100) 🐌
+for (const user of users) {
+  user.orders = await db.query('SELECT * FROM orders WHERE user_id = ?', [user.id]);
 }
-
-// 100 users = 101 queries (1 + 100)
-// Response time: 2000ms 🐌
 ```
 
-**Why It's Bad**:
-- Slow (1 query per item)
-- Scales terribly
-- Wastes database resources
-- Poor user experience
-
-**Do This Instead**:
+**Good:**
 ```javascript
-// ✅ GOOD - Use JOIN
-async function getUsersWithOrders() {
-  const result = await db.query(`
-    SELECT 
-      users.*,
-      orders.id as order_id,
-      orders.total as order_total,
-      orders.created_at as order_date
-    FROM users
-    LEFT JOIN orders ON users.id = orders.user_id
-  `);
-  
-  // Group orders by user
-  const users = groupOrdersByUser(result);
-  return users;
-}
-
-// 1 query total
-// Response time: 50ms ⚡
+// 1 query total ⚡
+const result = await db.query(`
+  SELECT users.*, orders.* FROM users
+  LEFT JOIN orders ON users.id = orders.user_id
+`);
 ```
-
-**Key Takeaway**: Use JOINs or batch queries, not loops.
 
 ---
 
-### ❌ Anti-Pattern 14: No Caching
+#### ❌ Anti-Pattern: No Tests
 
-**The Mistake**:
+**Bad:**
 ```javascript
-// ❌ BAD
-router.get('/products/:category', async (req, res) => {
-  // Query database every single request
-  const products = await db.query(
-    'SELECT * FROM products WHERE category = ?',
-    [req.params.category]
-  );
-  res.json(products);
-});
-
-// 1000 requests/second = 1000 DB queries/second
-// Database melts 🔥
-```
-
-**Why It's Bad**:
-- Database overload
-- Slow responses
-- High costs
-- Doesn't scale
-
-**Do This Instead**:
-```javascript
-// ✅ GOOD - Add caching
-const cache = new Redis();
-
-router.get('/products/:category', async (req, res) => {
-  const cacheKey = `products:${req.params.category}`;
-  
-  // Check cache first
-  let products = await cache.get(cacheKey);
-  
-  if (!products) {
-    // Cache miss - query database
-    products = await db.query(
-      'SELECT * FROM products WHERE category = ?',
-      [req.params.category]
-    );
-    
-    // Cache for 5 minutes
-    await cache.set(cacheKey, JSON.stringify(products), 'EX', 300);
-  } else {
-    products = JSON.parse(products);
-  }
-  
-  res.json(products);
-});
-
-// 1000 requests = maybe 1-2 DB queries (rest from cache)
-// Fast! ⚡
-```
-
-**Key Takeaway**: Cache frequently accessed data.
-
----
-
-## Testing Anti-Patterns
-
-### ❌ Anti-Pattern 15: No Tests
-
-**The Mistake**:
-```javascript
-// Implement feature
 function calculateDiscount(price, coupon) {
-  return price * coupon.percent / 100;
+  return price * coupon.percent / 100;  // Crashes if coupon is null!
 }
-
-// Ship it!
-// No tests...
-
-// Production: Crashes when coupon is null 💀
 ```
 
-**Why It's Bad**:
-- No confidence in changes
-- Bugs reach production
-- Refactoring is scary
-- Technical debt grows
-
-**Do This Instead**:
+**Good:**
 ```javascript
-// Write tests FIRST (TDD)
+// Write tests FIRST
 describe('calculateDiscount', () => {
-  it('calculates 10% discount', () => {
-    const price = 100;
-    const coupon = { percent: 10 };
-    expect(calculateDiscount(price, coupon)).toBe(10);
-  });
-  
-  it('handles null coupon', () => {
-    const price = 100;
-    expect(calculateDiscount(price, null)).toBe(0);
-  });
-  
-  it('handles 0% discount', () => {
-    const price = 100;
-    const coupon = { percent: 0 };
-    expect(calculateDiscount(price, coupon)).toBe(0);
-  });
+  it('handles null coupon', () => expect(calculateDiscount(100, null)).toBe(0));
+  it('calculates 10%', () => expect(calculateDiscount(100, {percent: 10})).toBe(10));
 });
 
 // THEN implement
 function calculateDiscount(price, coupon) {
-  if (!coupon || !coupon.percent) return 0;
+  if (!coupon?.percent) return 0;
   return price * coupon.percent / 100;
 }
-
-// All tests pass ✅
-// Confident to ship
 ```
-
-**Key Takeaway**: Write tests. Ideally before implementation (TDD).
-
----
-
-### ❌ Anti-Pattern 16: Testing Implementation, Not Behavior
-
-**The Mistake**:
-```javascript
-// ❌ BAD - Testing implementation details
-describe('UserService', () => {
-  it('calls repository.create with correct params', async () => {
-    const spy = jest.spyOn(repository, 'create');
-    
-    await userService.create({ name: 'John' });
-    
-    // Testing HOW it works (implementation)
-    expect(spy).toHaveBeenCalledWith({ name: 'John' });
-  });
-});
-
-// You refactor to use different method
-// Tests break even though behavior is same 💥
-```
-
-**Why It's Bad**:
-- Tests break on refactoring
-- Doesn't test user-facing behavior
-- False confidence
-- Maintenance nightmare
-
-**Do This Instead**:
-```javascript
-// ✅ GOOD - Test behavior
-describe('UserService', () => {
-  it('creates user with valid data', async () => {
-    const userData = { name: 'John', email: 'john@example.com' };
-    
-    const user = await userService.create(userData);
-    
-    // Test WHAT it does (behavior)
-    expect(user).toBeDefined();
-    expect(user.name).toBe('John');
-    expect(user.email).toBe('john@example.com');
-    
-    // Verify it's in database
-    const saved = await userRepository.findById(user.id);
-    expect(saved).toBeDefined();
-  });
-});
-
-// Refactor however you want
-// Test still passes as long as behavior is same ✅
-```
-
-**Key Takeaway**: Test public behavior, not internal implementation.
 
 ---
 
@@ -908,5 +742,5 @@ describe('UserService', () => {
 
 ---
 
-[← Back: Best Practices](22-best-practices) | [Next: Future Roadmap →](24-future-roadmap)
+[← Back: Productivity Metrics](03-productivity-metrics.md)
 

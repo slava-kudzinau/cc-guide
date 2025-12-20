@@ -1,77 +1,22 @@
 ---
-title: "Section 20: Complete Reference Guide"
+title: "Appendix: Comprehensive Prompt Library"
 parent: "Part 7: Reference, Troubleshooting & Future"
-nav_order: 1
+nav_order: 10
 ---
 
-# Section 20: Complete Reference Guide
-
-## CLI Command Reference
-
-### Basic Commands
-```bash
-# Interactive mode
-claude
-
-# One-shot command
-claude "your question"
-
-# With file context
-claude "@src/file.js explain this"
-
-# Extended thinking
-claude --thinking=5000 "complex task"
-
-# Specific model
-claude --model claude-opus-4-0 "task"
-
-# Output to file
-claude "generate code" > output.js
-```
-
-### Advanced CLI Options
-```bash
---api-key KEY          # Override API key
---model MODEL          # Specify model
---thinking BUDGET      # Extended thinking budget
---max-tokens N         # Max output tokens
---platform PLATFORM    # anthropic|bedrock|vertex
---debug                # Debug mode
---version              # Show version
---help                 # Show help
-```
-
-## API Parameter Reference
-
-### Messages API
-```typescript
-{
-  model: "claude-sonnet-4-5",
-  max_tokens: 4096,
-  thinking: {
-    type: "enabled",
-    budget_tokens: 5000
-  },
-  system: "You are a helpful assistant",
-  messages: [
-    { role: "user", content: "Hello" }
-  ],
-  temperature: 1.0,
-  top_p: 0.9
-}
-```
-
-## Prompt Templates Library
+# Appendix: Comprehensive Prompt Library
 
 **Copy-Paste Ready Prompts for Daily Development**
 
 All prompts below are production-ready - no placeholders to replace. Copy, paste, and use immediately.
 
+> **Quick Start:** Looking for the most common prompts? See [Section 01: Complete Reference](01-complete-reference.md#essential-prompts) for top 12 daily-use prompts.
+
 ---
 
-### 🔍 Code Review Prompts
+## 🔍 Code Review Prompts
 
-#### Comprehensive Security Review
+### Comprehensive Security Review
 
 ```bash
 git diff --cached | claude "Review for security vulnerabilities:
@@ -103,7 +48,7 @@ Include file:line references for each issue."
 
 ---
 
-#### Performance Review
+### Performance Review
 
 ```bash
 git diff main | claude "Analyze for performance issues:
@@ -134,7 +79,7 @@ Provide:
 
 ---
 
-#### Architecture Review
+### Architecture Review
 
 ```bash
 git diff main | claude "Review architecture decisions:
@@ -161,7 +106,7 @@ Be critical - challenge decisions constructively."
 
 ---
 
-#### Quick Lint Check
+### Quick Lint Check
 
 ```bash
 git diff --cached | claude "Quick review:
@@ -179,9 +124,9 @@ List issues only, no explanations needed."
 
 ---
 
-### ✅ Testing Prompts
+## ✅ Testing Prompts
 
-#### Generate Unit Tests
+### Generate Unit Tests
 
 ```bash
 claude "Generate Jest unit tests for src/utils/validation.ts:
@@ -206,7 +151,7 @@ describe('function name', () => {
 
 ---
 
-#### Generate Integration Tests
+### Generate Integration Tests
 
 ```bash
 claude "Generate integration tests for the user registration API:
@@ -230,7 +175,7 @@ Use supertest + Jest. Include setup/teardown for database."
 
 ---
 
-#### Generate E2E Tests
+### Generate E2E Tests
 
 ```bash
 claude "Generate Playwright E2E test for user login flow:
@@ -255,7 +200,7 @@ Include:
 
 ---
 
-#### Suggest Missing Tests
+### Suggest Missing Tests
 
 ```bash
 npm test -- --coverage | claude "Analyze test coverage report.
@@ -277,9 +222,9 @@ Suggest top 5 most important tests to add, prioritized by:
 
 ---
 
-### 🐛 Debugging Prompts
+## 🐛 Debugging Prompts
 
-#### Analyze Test Failures
+### Analyze Test Failures
 
 ```bash
 npm test 2>&1 | claude "Analyze test failures:
@@ -298,7 +243,7 @@ Focus on the actual logic error, not just making tests pass."
 
 ---
 
-#### Debug Production Error
+### Debug Production Error
 
 ```bash
 claude "Production error - help debug:
@@ -327,7 +272,7 @@ Find:
 
 ---
 
-#### Analyze Logs
+### Analyze Logs
 
 ```bash
 tail -n 200 /var/log/app.log | claude "Analyze logs:
@@ -347,7 +292,7 @@ Summarize top 3 issues to investigate."
 
 ---
 
-#### Debug React Re-Renders
+### Debug React Re-Renders
 
 ```bash
 claude "Component re-rendering too often:
@@ -373,9 +318,9 @@ Provide specific fixes with code."
 
 ---
 
-### 📚 Documentation Prompts
+## 📚 Documentation Prompts
 
-#### Generate API Documentation
+### Generate API Documentation
 
 ```bash
 claude "Generate API documentation for all routes in src/routes/
@@ -418,7 +363,7 @@ Include all endpoints."
 
 ---
 
-#### Update README
+### Update README
 
 ```bash
 git diff main src/routes/ | claude "Update README.md based on API changes:
@@ -436,7 +381,7 @@ Keep existing README structure and style."
 
 ---
 
-#### Generate Architecture Decision Record (ADR)
+### Generate Architecture Decision Record (ADR)
 
 ```bash
 claude "Create ADR for today's decision to migrate from REST to GraphQL:
@@ -468,7 +413,7 @@ Date: [today]"
 
 ---
 
-#### Generate Changelog
+### Generate Changelog
 
 ```bash
 git log --since='1 week ago' --pretty=format:'%s' | claude "Generate CHANGELOG.md entry:
@@ -497,9 +442,9 @@ Use user-friendly language, not git commit messages."
 
 ---
 
-### 🔨 Refactoring Prompts
+## 🔨 Refactoring Prompts
 
-#### Modernize Legacy Code
+### Modernize Legacy Code
 
 ```bash
 claude "Refactor src/utils/legacy.js to modern ES6+:
@@ -522,7 +467,7 @@ Show before/after diff for verification."
 
 ---
 
-#### Extract Reusable Component
+### Extract Reusable Component
 
 ```bash
 claude "Extract reusable component from UserProfile.tsx:
@@ -545,7 +490,7 @@ Make it flexible for different avatar sizes and styles."
 
 ---
 
-#### Improve Error Handling
+### Improve Error Handling
 
 ```bash
 git diff main | claude "Review new code and add comprehensive error handling:
@@ -566,7 +511,7 @@ Show updated code with error handling."
 
 ---
 
-#### Optimize Database Queries
+### Optimize Database Queries
 
 ```bash
 claude "Optimize database queries in src/services/users.ts:
@@ -593,9 +538,9 @@ Provide:
 
 ---
 
-### 🏗️ Architecture & Design Prompts
+## 🏗️ Architecture & Design Prompts
 
-#### Design New Feature
+### Design New Feature
 
 ```bash
 claude "Design architecture for real-time notifications feature:
@@ -623,7 +568,7 @@ Be specific with technologies and reasons."
 
 ---
 
-#### Database Schema Design
+### Database Schema Design
 
 ```bash
 claude "Design database schema for multi-tenant SaaS:
@@ -650,7 +595,7 @@ Provide:
 
 ---
 
-#### API Design
+### API Design
 
 ```bash
 claude "Design REST API for project management tool:
@@ -679,9 +624,9 @@ Follow REST best practices."
 
 ---
 
-### 🚀 DevOps & Deployment Prompts
+## 🚀 DevOps & Deployment Prompts
 
-#### Generate Terraform/IaC
+### Generate Terraform/IaC
 
 ```bash
 claude "Generate Terraform configuration for:
@@ -711,7 +656,7 @@ Include:
 
 ---
 
-#### Generate CI/CD Pipeline
+### Generate CI/CD Pipeline
 
 ```bash
 claude "Generate GitHub Actions workflow:
@@ -738,7 +683,7 @@ Include:
 
 ---
 
-#### Docker Optimization
+### Docker Optimization
 
 ```bash
 claude "Optimize this Dockerfile:
@@ -762,7 +707,7 @@ Show before/after with explanations."
 
 ---
 
-#### Generate Kubernetes Manifests
+### Generate Kubernetes Manifests
 
 ```bash
 claude "Generate Kubernetes manifests for Node.js API:
@@ -784,9 +729,9 @@ Include resource limits and monitoring labels."
 
 ---
 
-### 🔒 Security Prompts
+## 🔒 Security Prompts
 
-#### Security Audit
+### Security Audit
 
 ```bash
 git log -p --since='1 week ago' | claude "Security audit of recent changes:
@@ -811,7 +756,7 @@ Check for:
 
 ---
 
-#### Dependency Vulnerability Analysis
+### Dependency Vulnerability Analysis
 
 ```bash
 npm audit | claude "Analyze dependency vulnerabilities:
@@ -833,7 +778,7 @@ For top 5 vulnerabilities:
 
 ---
 
-#### Generate Security Headers
+### Generate Security Headers
 
 ```bash
 claude "Generate security headers for Express app:
@@ -863,9 +808,9 @@ Include explanations for each header."
 
 ---
 
-### 🎨 Frontend Development Prompts
+## 🎨 Frontend Development Prompts
 
-#### Convert Design to Code
+### Convert Design to Code
 
 ```bash
 # Attach screenshot first, then:
@@ -891,7 +836,7 @@ Component structure:
 
 ---
 
-#### Optimize React Performance
+### Optimize React Performance
 
 ```bash
 claude "Optimize React component performance:
@@ -918,7 +863,7 @@ Show before/after performance impact."
 
 ---
 
-#### Generate Form with Validation
+### Generate Form with Validation
 
 ```bash
 claude "Generate React form with validation:
@@ -946,9 +891,9 @@ Use:
 
 ---
 
-### 📊 Data Analysis Prompts
+## 📊 Data Analysis Prompts
 
-#### Analyze SQL Query Performance
+### Analyze SQL Query Performance
 
 ```bash
 EXPLAIN ANALYZE [your query here] | claude "Analyze query performance:
@@ -971,7 +916,7 @@ Provide:
 
 ---
 
-#### Generate SQL Queries
+### Generate SQL Queries
 
 ```bash
 claude "Generate SQL queries for analytics dashboard:
@@ -998,7 +943,7 @@ Use:
 
 ---
 
-#### Data Migration Script
+### Data Migration Script
 
 ```bash
 claude "Generate data migration script:
@@ -1027,9 +972,9 @@ Provide:
 
 ---
 
-### 🔄 Git & Version Control Prompts
+## 🔄 Git & Version Control Prompts
 
-#### Generate Commit Message
+### Generate Commit Message
 
 ```bash
 git diff --cached | claude "Generate conventional commit message:
@@ -1053,7 +998,7 @@ Include body if changes are complex."
 
 ---
 
-#### Generate PR Description
+### Generate PR Description
 
 ```bash
 git diff main | claude "Generate PR description:
@@ -1085,7 +1030,7 @@ git diff main | claude "Generate PR description:
 
 ---
 
-#### Resolve Merge Conflicts
+### Resolve Merge Conflicts
 
 ```bash
 git diff --name-only --diff-filter=U | xargs cat | claude "Help resolve merge conflicts:
@@ -1110,9 +1055,9 @@ Provide resolved code for each file."
 
 ---
 
-### 📈 Monitoring & Observability
+## 📈 Monitoring & Observability
 
-#### Generate Monitoring Alerts
+### Generate Monitoring Alerts
 
 ```bash
 claude "Generate monitoring alerts for Node.js API:
@@ -1140,7 +1085,7 @@ Use Prometheus + Alertmanager format."
 
 ---
 
-#### Analyze Application Logs
+### Analyze Application Logs
 
 ```bash
 tail -n 1000 /var/log/app.log | claude "Analyze application logs:
@@ -1220,189 +1165,7 @@ cm    # Commit message
 
 ---
 
-## Next-Level Prompt Engineering
+**Pro tip:** Copy this entire file to your local `.claude-prompts/` directory. Customize prompts for your team's specific needs and tech stack.
 
-### Chain Prompts
-
-```bash
-# Step 1: Generate code
-claude "create user API" > output.ts
-
-# Step 2: Generate tests
-claude "write tests for output.ts" > output.test.ts
-
-# Step 3: Review all
-git add output.*
-git diff --cached | claude "review generated code"
-```
-
-### Context7 Prompt Patterns
-
-Use Context7 to access up-to-date library documentation in your prompts.
-
-#### Basic Context7 Patterns
-
-```bash
-# Get latest documentation
-claude "Context7: [library] [version] [topic]"
-
-# Examples:
-claude "Context7: Next.js 15 app router authentication"
-claude "Context7: React 19 new hooks documentation"
-claude "Context7: Prisma 5 client extensions"
-```
-
-#### Context7 + Code Analysis
-
-```bash
-# Review code using latest patterns
-claude "Context7: Get latest Next.js 15 patterns, then review this code" \
-  --files="src/app/page.tsx"
-
-# Upgrade code to latest version
-claude "Context7: React 19 migration guide - apply to this component" \
-  --files="src/components/UserProfile.tsx"
-
-# Check for deprecated features
-claude "Context7: What's deprecated in Next.js 15 that this code uses?" \
-  --files="src/app/**/*.tsx"
-```
-
-#### Context7 for Feature Development
-
-```bash
-# Learn then build
-claude "Context7: Next.js 15 server actions best practices
-Then create user login endpoint using those patterns"
-
-# Compare approaches
-claude "Context7: Compare Next.js 15 server actions vs API routes for this use case"
-
-# Stay current
-claude "Context7: Latest React 19 performance optimization patterns - apply to my app" \
-  --files="src/components/Dashboard.tsx"
-```
-
-#### Context7 Prompt Library
-
-**Frontend Development:**
-```bash
-# React
-"Context7: React 19 [feature] - show examples"
-"Context7: Compare React 18 vs React 19 [concept]"
-
-# Next.js
-"Context7: Next.js 15 [pattern] best practices"
-"Context7: Next.js 15 migration from v14 breaking changes"
-
-# Styling
-"Context7: Tailwind CSS v4 [feature]"
-"Context7: CSS container queries browser support"
-```
-
-**Backend Development:**
-```bash
-# Node.js
-"Context7: Node.js 22 native TypeScript support setup"
-"Context7: Node.js performance best practices 2024"
-
-# Frameworks
-"Context7: NestJS 10 [feature] implementation"
-"Context7: Fastify v4 async hooks patterns"
-
-# Databases
-"Context7: Prisma 5 advanced queries"
-"Context7: PostgreSQL 16 new features"
-```
-
-**DevOps & Cloud:**
-```bash
-# Infrastructure
-"Context7: AWS CDK v3 [service] construct patterns"
-"Context7: Terraform 1.7 best practices"
-
-# Containers
-"Context7: Docker Compose v2.24 watch mode"
-"Context7: Kubernetes 1.29 deployment strategies"
-
-# CI/CD
-"Context7: GitHub Actions latest syntax"
-"Context7: GitLab CI pipeline optimization 2024"
-```
-
-#### When to Use Context7
-
-✅ **Use Context7 when:**
-- Framework released new version in last 6 months
-- Working with beta/preview features
-- Need version-specific guidance
-- Documentation recently updated
-- Best practices evolved
-
-❌ **Skip Context7 when:**
-- Stable, mature APIs (Node.js core, Express basics)
-- Internal/proprietary libraries
-- Claude's training data is current enough
-
-#### Context7 Troubleshooting Patterns
-
-```bash
-# Debug using latest patterns
-claude "Context7: Common [framework] [version] pitfalls - check my code" \
-  --files="src/app/api/route.ts"
-
-# Fix deprecated code
-claude "Context7: [library] deprecated features - find and fix in my code" \
-  --files="src/**/*.ts"
-
-# Performance issues
-claude "Context7: [framework] [version] performance anti-patterns - audit my code" \
-  --files="src/components/**/*.tsx"
-```
-
-#### Combining Context7 with Other Patterns
-
-```bash
-# Context7 + CLAUDE.md
-# Create CLAUDE.md with project context
-# Use Context7 for library-specific knowledge
-claude "Using project context from CLAUDE.md and Context7 Next.js 15 patterns, 
-implement user authentication"
-
-# Context7 + Prompt caching
-# First query creates cache
-claude "Context7: Next.js 15 comprehensive guide"
-# Subsequent queries use cache
-claude "Based on previous Context7 Next.js info, create login page"
-
-# Context7 + Skills
-claude "Use @company-standards skill for code structure, 
-Context7 Next.js 15 for framework patterns,
-implement user dashboard"
-```
-
-### Prompt Templates with Functions
-
-```bash
-# Save as ~/.claude-functions.sh
-
-code_review() {
-  git diff "$1" | claude "Review changes:
-  - Security issues
-  - Performance problems
-  - Best practices
-  Focus area: $2"
-}
-
-# Use:
-code_review main "authentication logic"
-```
-
----
-
-**Pro tip:** Copy this entire section to a local file for quick reference. Customize prompts for your team's specific needs and tech stack.
-
-[← Back to Part 7 Index](README) | [Next: Troubleshooting →](21-troubleshooting)
-
-
+[← Back to Section 01: Reference Guide](01-complete-reference.md)
 

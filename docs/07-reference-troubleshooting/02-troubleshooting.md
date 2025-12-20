@@ -1,10 +1,10 @@
 ---
-title: "Section 21: Troubleshooting & Common Issues"
+title: "Section 02: Troubleshooting & Common Issues"
 parent: "Part 7: Reference, Troubleshooting & Future"
 nav_order: 2
 ---
 
-# Section 21: Troubleshooting & Common Issues
+# Section 02: Troubleshooting & Common Issues
 
 **Quick Navigation:**
 - [Troubleshooting Decision Tree](#troubleshooting-decision-tree) ← **Start here when stuck**
@@ -21,41 +21,19 @@ nav_order: 2
 
 **Start here when something isn't working.**
 
-### Visual Decision Flow
+### Quick Decision Guide
 
-```
-┌─────────────────────────────────────────────────┐
-│    PROBLEM: Is Claude responding at all?        │
-└────────────────┬───────────────────────────────┘
-                 │
-        ┌────────┴────────┐
-        │                 │
-      NO │               │ YES
-        │                 │
-        ▼                 ▼
-┌──────────────┐  ┌──────────────────────┐
-│  Check Auth  │  │  Is response quality │
-│              │  │  good enough?        │
-│ See: Auth    │  └──────┬───────────────┘
-│ Issues ─────►│         │
-└──────────────┘  ┌──────┴────────┐
-                  │               │
-                YES │             │ NO
-                  │               │
-                  ▼               ▼
-          ┌────────────┐  ┌──────────────────┐
-          │  Is it     │  │ Is prompt        │
-          │  slow?     │  │ specific enough? │
-          └─────┬──────┘  └────────┬─────────┘
-                │                  │
-           YES  │  NO         YES  │  NO
-                │  │               │  │
-                ▼  ▼               ▼  ▼
-          Performance      Add Context/Examples
-          Issues           See: Prompt Quality
-```
+**Problem → Diagnosis → Solution**
 
-### Text-Based Decision Tree
+1. **Not responding?** → Check [API Key](#problem-1-claude-not-responding-at-all)
+2. **Poor quality?** → Add [Context](#problem-2-response-quality-poor)  
+3. **Too slow?** → Reduce [Context Size](#problem-3-too-slow)
+4. **High costs?** → Enable [Caching](#problem-4-costs-too-high)
+5. **Extension issues?** → Check [VS Code Version](#problem-5-vs-code-extension-issues)
+
+---
+
+### Decision Tree
 
 #### Problem 1: Claude Not Responding At All
 
@@ -65,72 +43,38 @@ nav_order: 2
 - Connection timeout
 - 401/403 errors
 
-**Step 1: Check API Key**
-```bash
-# Verify key is set
-echo $ANTHROPIC_API_KEY
+**Quick Fixes:**
 
-# Expected: sk-ant-...
-# If empty or wrong, fix:
-export ANTHROPIC_API_KEY="your-actual-key"
+1. **Check API Key**
+   ```bash
+   echo $ANTHROPIC_API_KEY  # Should start with sk-ant-
+   export ANTHROPIC_API_KEY="your-key"  # If missing
+   ```
 
-# Make permanent (add to ~/.bashrc or ~/.zshrc):
-echo 'export ANTHROPIC_API_KEY="your-key"' >> ~/.bashrc
-source ~/.bashrc
-```
+2. **Test Connection**
+   ```bash
+   curl -I https://api.anthropic.com  # Should return 200
+   ```
 
-**Test:** `claude "test" --verbose`
-- ✅ Works? → API key was the issue
-- ❌ Still fails? → Continue to Step 2
+3. **Check Service Status**
+   - Visit: https://status.anthropic.com/
 
-**Step 2: Check Network Connection**
-```bash
-# Test Anthropic API
-curl -v https://api.anthropic.com/v1/complete \
-  -H "x-api-key: $ANTHROPIC_API_KEY" \
-  -H "anthropic-version: 2023-06-01"
+4. **Verify Installation**
+   ```bash
+   claude --version  # Should show version
+   npm install -g @anthropic/claude-code  # If missing
+   ```
 
-# Check status
-curl https://status.anthropic.com/api/v2/status.json
-```
+5. **Debug Mode**
+   ```bash
+   claude "test" --debug --verbose
+   ```
 
-**Results:**
-- ✅ 200 response? → Connection OK, continue to Step 3
-- ❌ Connection refused? → Firewall/proxy issue
-- ❌ 401/403? → API key invalid
-- ❌ 429? → Rate limited (wait or upgrade plan)
-
-**Step 3: Check Service Status**
-- Visit: https://status.anthropic.com/
-- ✅ All systems operational? → Continue to Step 4
-- ❌ Outage reported? → Wait for resolution or use backup (AWS Bedrock/GCP Vertex)
-
-**Step 4: Check CLI/Extension Installation**
-```bash
-# Verify installation
-claude --version
-
-# If command not found:
-npm install -g @anthropic/claude-code
-
-# Verify again
-claude --version
-```
-
-**Step 5: Enable Debug Mode**
-```bash
-# Run with debug
-claude "test" --debug --verbose
-
-# Check logs
-cat ~/.claude/logs/latest.log
-```
-
-**Common fixes:**
-- Missing API key → Export ANTHROPIC_API_KEY
-- Expired key → Generate new key at console.anthropic.com
+**Common Fixes:**
+- Missing key → `export ANTHROPIC_API_KEY="sk-ant-..."`
+- Expired key → Generate new at console.anthropic.com
 - Network issue → Check firewall/proxy
-- Version conflict → Update CLI: `npm update -g @anthropic/claude-code`
+- Version conflict → `npm update -g @anthropic/claude-code`
 
 ---
 
@@ -729,7 +673,7 @@ chmod +x ~/.claude/bin/claude
 sudo npm install -g @anthropic-ai/claude-code
 ```
 
-[← Back: Reference Guide](20-complete-reference) | [Next: Productivity Benchmarks →](22-productivity-benchmarks)
+[← Back: Reference Guide](01-complete-reference.md) | [Next: Productivity Metrics →](03-productivity-metrics.md)
 
 
 
