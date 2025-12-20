@@ -165,6 +165,225 @@ git push
 claude /plugin marketplace add git@github.com:company/claude-skills.git
 ```
 
+---
+
+## Context7: Dynamic Alternative to Static Skills
+
+While skills provide static, packaged knowledge, **Context7** offers dynamic, always-up-to-date documentation access. Understanding when to use each is important.
+
+### Skills vs Context7: Comparison
+
+| Aspect | Static Skills | Context7 |
+|--------|--------------|----------|
+| **Update frequency** | Manual (when you update skill) | Automatic (real-time docs) |
+| **Content** | Custom patterns, internal tools | Public library documentation |
+| **Use case** | Company-specific patterns | Framework/library knowledge |
+| **Setup** | Create + package + distribute | Just mention in prompt |
+| **Version control** | Git repository | N/A (always latest) |
+| **Offline** | Works offline | Requires API access |
+| **Customization** | Full control | Uses official docs |
+| **Maintenance** | You maintain | Anthropic maintains |
+
+### When to Use Skills
+
+✅ **Create custom skills for:**
+- **Company-specific patterns**: "Use our API design skill"
+- **Internal tools**: "Use deployment-to-staging skill"
+- **Proprietary processes**: "Use security-review-checklist skill"
+- **Team conventions**: "Use code-style-guide skill"
+- **Complex multi-step workflows**: "Use feature-release skill"
+
+**Example: Internal API Skill**
+```bash
+# Your company's specific API patterns
+claude "Use company-api-patterns skill to create new user endpoint"
+
+# Skill includes:
+# - Your error handling conventions
+# - Your authentication patterns
+# - Your database transaction patterns
+# - Your logging standards
+```
+
+### When to Use Context7
+
+✅ **Use Context7 for:**
+- **Public framework documentation**: "Context7: Next.js 15 patterns"
+- **Library APIs**: "Context7: Prisma 5 advanced queries"
+- **Recently updated docs**: "Context7: React 19 new hooks"
+- **Version-specific guidance**: "Context7: AWS CDK v3 constructs"
+- **Official best practices**: "Context7: TypeScript 5.4 features"
+
+**Example: Framework Knowledge**
+```bash
+# Get latest Next.js patterns
+claude "Context7: Next.js 15 server actions authentication"
+
+# Context7 fetches:
+# - Official Next.js docs
+# - Current best practices
+# - Version-specific examples
+# - Latest API changes
+```
+
+### Hybrid Approach: Skills + Context7
+
+Combine both for maximum effectiveness:
+
+```bash
+# Use Context7 for framework knowledge + custom skill for company patterns
+
+claude "Using Context7 Next.js 15 patterns and our @company-api-patterns skill, 
+create user authentication endpoint in src/app/api/auth/"
+```
+
+**Example workflow:**
+1. **Context7** provides latest Next.js 15 server actions patterns
+2. **Company skill** provides your specific:
+   - Error handling conventions
+   - Database connection patterns
+   - Logging requirements
+   - Security checks
+
+### Creating Skills That Reference Context7
+
+You can create skills that explicitly use Context7 for staying current:
+
+````markdown
+---
+name: modern-react-components
+description: Create React components using latest patterns
+---
+
+# Modern React Component Skill
+
+When creating React components:
+
+1. Query Context7 for latest React version patterns
+2. Apply company styling conventions
+3. Include TypeScript types
+4. Add Storybook stories
+
+## Template
+
+```typescript
+// Query Context7 for latest React hooks
+// Use company @styles/theme
+// Follow @company-typescript-patterns
+
+export const ComponentName: React.FC<Props> = ({ ...props }) => {
+  // Implementation using latest React patterns from Context7
+};
+```
+````
+
+**Usage:**
+```bash
+claude "Use modern-react-components skill to create UserProfile component"
+
+# Skill will:
+# 1. Query Context7 for React 19 patterns
+# 2. Apply your company styles
+# 3. Generate TypeScript types
+# 4. Create Storybook file
+```
+
+### Best Practices: Combining Skills and Context7
+
+#### Pattern 1: Context7 for Foundation, Skills for Customization
+
+```bash
+# Context7 provides framework baseline
+# Skill provides your customizations
+
+claude "Context7: Next.js 15 app router setup
+Then apply @company-nextjs-config skill for our environment variables, 
+monitoring, and error tracking setup"
+```
+
+#### Pattern 2: Skills Reference Context7
+
+**Create adaptive skills** that query Context7:
+
+```markdown
+# In your skill SKILL.md
+
+When creating new features:
+1. Query Context7 for latest [framework] patterns
+2. Apply patterns from this skill
+3. Follow company conventions in references/conventions.md
+```
+
+#### Pattern 3: Regular Skill Updates from Context7
+
+Keep your skills current by periodically updating them with Context7 knowledge:
+
+```bash
+# Monthly: Update skills with latest patterns
+claude "Context7: Get latest Next.js 15 best practices for:
+- Data fetching
+- Authentication
+- Error handling
+
+Update our @company-nextjs skill with these patterns"
+```
+
+### Decision Matrix
+
+**Choose Static Skills when:**
+- ✅ Codifying company-specific knowledge
+- ✅ Complex multi-step workflows
+- ✅ Need offline access
+- ✅ Internal tools and processes
+- ✅ Custom patterns not in public docs
+
+**Choose Context7 when:**
+- ✅ Need latest public documentation
+- ✅ Working with recently updated frameworks
+- ✅ Version-specific library knowledge
+- ✅ Official best practices
+- ✅ Quick access without setup
+
+**Use Both Together when:**
+- ✅ Building with modern frameworks + company patterns
+- ✅ Need latest knowledge + internal conventions
+- ✅ Creating adaptive, future-proof skills
+- ✅ Onboarding to both public libs and internal tools
+
+### Example: Real-World Hybrid Usage
+
+**Scenario**: Building new Next.js 15 feature with company standards
+
+```bash
+# Step 1: Get latest framework patterns (Context7)
+claude "Context7: Next.js 15 app router server actions best practices"
+
+# Step 2: Apply company patterns (Skills)
+claude "Using Context7 Next.js 15 patterns and @company-standards skill:
+1. Create user registration endpoint
+2. Follow our error handling conventions
+3. Use our logging standards
+4. Add our monitoring hooks"
+
+# Result:
+# - Modern Next.js 15 code (via Context7)
+# - Your company's patterns (via skill)
+# - Best of both worlds
+```
+
+### Summary
+
+**Static Skills** = Your custom knowledge (internal, static, controlled)  
+**Context7** = Public documentation (external, dynamic, always current)  
+**Together** = Powerful combination of latest frameworks + your patterns
+
+**Rule of thumb:**
+- If it's on npm/public → use Context7
+- If it's internal/proprietary → create a skill
+- For best results → combine both
+
+---
+
 [← Back: Agent SDK](09-agent-sdk) | [Part 3 Complete! → Part 4](../../docs/04-enterprise-devops-patterns)
 
 

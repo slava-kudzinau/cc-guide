@@ -27,6 +27,10 @@ const architectureDesign = await client.messages.create({
 });
 ```
 
+⚠️ **Anti-Pattern**: Using extended thinking for simple tasks (code formatting, basic questions)  
+✅ **Better**: Reserve extended thinking for complex reasoning tasks only  
+💡 **Why**: Extended thinking adds 5-20 seconds latency and doubles costs. Simple tasks don't benefit from deep reasoning. Use Haiku without thinking for formatting/simple tasks.
+
 ## Vision API
 
 ### Screenshot to Code
@@ -91,6 +95,10 @@ results = client.messages.batches.results(batch.id)
 - 50% cost reduction
 - 2M token context window
 - Process up to 100K requests
+
+⚠️ **Anti-Pattern**: Using synchronous API for batch jobs (slow and expensive)  
+✅ **Better**: Use Batch API for non-urgent jobs (overnight processing, bulk analysis)  
+💡 **Why**: Batch API gives 50% cost reduction and handles large volumes efficiently. Perfect for processing 1000+ requests that don't need immediate results.
 
 ## Prompt Caching
 

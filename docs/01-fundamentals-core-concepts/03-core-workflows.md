@@ -48,6 +48,10 @@ claude "Explain the database layer architecture in this project"
 - Maps architectural relationships
 - Documents design patterns in use
 
+⚠️ **Anti-Pattern**: Starting implementation without exploring existing patterns  
+✅ **Better**: Always run Phase 1 exploration before coding new features  
+💡 **Why**: Your codebase already has established patterns. Following existing conventions ensures consistency and reduces technical debt. Building without exploration leads to inconsistent code styles.
+
 ### Phase 2: Requirements Clarification
 
 **Objective:** Identify ambiguities and edge cases before coding.
@@ -223,6 +227,10 @@ Claude analyzes:
 - Race conditions
 - Edge cases
 
+⚠️ **Anti-Pattern**: Giving Claude only the error message without code context  
+✅ **Better**: Include full stack trace + relevant files using `--files` or `@filename`  
+💡 **Why**: Claude needs to see the code to understand what went wrong. Just the error message forces Claude to guess, leading to generic advice instead of specific fixes.
+
 ### Step 4: Implement Fix
 
 ```bash
@@ -286,6 +294,10 @@ Trace the flow from login request to JWT generation"
 claude "What external services does this project depend on?
 List APIs, databases, and third-party integrations"
 ```
+
+⚠️ **Anti-Pattern**: Reading entire large files upfront (`--files="src/**/*.ts"`)  
+✅ **Better**: Use progressive disclosure - start with README/package.json, then narrow to specific areas  
+💡 **Why**: Loading 100+ files wastes time and tokens. Start broad (overview), then drill down to relevant sections. This is 5-10x faster and uses 90% fewer tokens.
 
 ### Tracing Code Flow
 
@@ -693,6 +705,220 @@ claude "Generate test that reproduces bug and verifies fix"
 # 5. Verify
 npm test
 ```
+
+---
+
+## 3.7 Using Context7 for Up-to-Date Library Knowledge
+
+When working with rapidly evolving frameworks and libraries, Context7 provides real-time access to current documentation.
+
+### What is Context7?
+
+**Context7** is a dynamic knowledge system that fetches current documentation for libraries and frameworks. Unlike Claude's training data (which has a cutoff date), Context7 provides up-to-date information.
+
+### When to Use Context7
+
+✅ **Use Context7 when:**
+- Working with recently released versions (last 6 months)
+- Framework just had major version update
+- Need version-specific patterns (e.g., "Next.js 15" not just "Next.js")
+- Official documentation changed recently
+- Using preview/beta features
+- Best practices evolved (e.g., new React hooks)
+
+❌ **Don't need Context7 when:**
+- Using stable, mature APIs (Node.js core, Express basics)
+- Claude's training data is current enough
+- Working with internal/proprietary libraries
+
+### Context7 in Development Workflows
+
+#### Workflow 1: Learning New Framework Features
+
+```bash
+# Scenario: Next.js 15 just released, you need latest patterns
+
+# Step 1: Get overview of new features
+claude "Context7: What are the major changes in Next.js 15?"
+
+# Step 2: Learn specific new feature
+claude "Context7: Next.js 15 server actions - show authentication example"
+
+# Step 3: Apply to your project
+claude "Using Context7 Next.js 15 patterns, refactor src/app/login to use server actions"
+```
+
+#### Workflow 2: Debugging with Current Documentation
+
+```bash
+# Scenario: Error with React 19's new `use` hook
+
+# Get current documentation
+claude "Context7: React 19 'use' hook - common pitfalls and error handling"
+
+# Apply fix with current patterns
+claude "Fix this React component using Context7 React 19 best practices" \
+  --files="src/components/UserProfile.tsx"
+```
+
+#### Workflow 3: Migration to New Version
+
+```bash
+# Scenario: Upgrading from React 18 to React 19
+
+# Step 1: Learn breaking changes
+claude "Context7: React 19 breaking changes from React 18"
+
+# Step 2: Identify impacted code
+claude "Scan src/components/ for React patterns that changed in React 19" \
+  --files="src/components/**/*.tsx"
+
+# Step 3: Migrate components
+claude "Using Context7 React 19 patterns, migrate these components" \
+  --files="src/components/UserProfile.tsx,src/components/Dashboard.tsx"
+```
+
+#### Workflow 4: Technology Selection
+
+```bash
+# Scenario: Choosing between libraries for a new feature
+
+# Compare current versions
+claude "Context7: Compare Tanstack Query v5 vs SWR v2 for data fetching - which is better for React 19?"
+
+# Get implementation guide
+claude "Context7: Show me Tanstack Query v5 setup with Next.js 15 app router"
+```
+
+### Context7 Best Practices
+
+#### Be Specific with Versions
+
+```bash
+# ❌ Vague - might return outdated patterns
+claude "How do I use Next.js API routes?"
+
+# ✅ Specific - gets current patterns
+claude "Context7: Next.js 15 app router route handlers (not pages router)"
+```
+
+#### Combine with Codebase Context
+
+```bash
+# Use Context7 for library knowledge + your project context
+claude "Using Context7 Next.js 15 patterns, implement authentication in my app" \
+  --files="src/app/login/page.tsx,CLAUDE.md"
+```
+
+#### Verify for Breaking Changes
+
+```bash
+# When upgrading, always check for breaking changes
+claude "Context7: Breaking changes from [library] v[old] to v[new] that affect my code" \
+  --files="src/**/*.ts"
+```
+
+### Common Use Cases for Context7
+
+#### Frontend Frameworks
+
+```bash
+# Next.js
+claude "Context7: Next.js 15 server components data fetching patterns"
+
+# React
+claude "Context7: React 19 useOptimistic hook examples"
+
+# Vue
+claude "Context7: Vue 3.4 defineModel macro usage"
+
+# Svelte
+claude "Context7: Svelte 5 runes API - state management"
+```
+
+#### Backend & APIs
+
+```bash
+# Node.js
+claude "Context7: Node.js 22 native TypeScript support setup"
+
+# NestJS
+claude "Context7: NestJS 10 standalone applications pattern"
+
+# Fastify
+claude "Context7: Fastify v4 async lifecycle hooks"
+```
+
+#### Databases & ORMs
+
+```bash
+# Prisma
+claude "Context7: Prisma 5 client extensions for custom methods"
+
+# TypeORM
+claude "Context7: TypeORM 0.3 DataSource configuration"
+
+# Drizzle
+claude "Context7: Drizzle ORM latest query syntax"
+```
+
+#### Cloud & Infrastructure
+
+```bash
+# AWS CDK
+claude "Context7: AWS CDK v3 Lambda function URL patterns"
+
+# Terraform
+claude "Context7: Terraform 1.7 removed blocks for state management"
+
+# Docker
+claude "Context7: Docker Compose v2.24 watch mode for development"
+```
+
+### Context7 vs Regular Claude Queries
+
+| Aspect | Regular Claude | With Context7 |
+|--------|---------------|---------------|
+| **Knowledge cutoff** | Training date | Real-time docs |
+| **Version specificity** | General patterns | Exact version |
+| **Breaking changes** | May miss recent ones | Current updates |
+| **Beta features** | Not available | Latest docs |
+| **Best practices** | As of training | Current recommendations |
+| **Speed** | Fast | Slightly slower (fetches docs) |
+| **Cost** | Standard | Standard (no extra cost) |
+
+### Integration with Daily Workflows
+
+Add Context7 to your daily routines when working with modern frameworks:
+
+```bash
+# Morning: Check for updates
+claude "Context7: What's new in [your framework] latest version?"
+
+# Before starting feature: Get current patterns
+claude "Context7: [framework] [version] - [feature] implementation guide"
+
+# During development: Verify approach
+claude "Is this the current best practice? Context7: [framework] [pattern]"
+
+# Before merging: Check deprecations
+claude "Context7: [framework] deprecated features in version [X]"
+```
+
+### Troubleshooting Context7
+
+If Context7 doesn't return expected results:
+
+1. **Be more specific with version numbers**:
+   - Instead of: "Context7: Next.js routing"
+   - Try: "Context7: Next.js 15.1 app router route groups"
+
+2. **Verify library is in Context7 index**:
+   - Popular libraries are indexed
+   - Very new or niche libraries may not be available yet
+
+3. **Fall back to regular queries for stable APIs**:
+   - For mature, stable APIs, Claude's training data is often sufficient
 
 ---
 

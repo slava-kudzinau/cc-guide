@@ -41,6 +41,10 @@ git add -u
 git diff --cached | claude "Quick review of auto-fixes"
 ```
 
+⚠️ **Anti-Pattern**: No error handling in automation scripts  
+✅ **Better**: Check exit codes, use `set -e`, add fallbacks  
+💡 **Why**: Scripts without error handling silently fail in CI/CD. Always handle errors: `claude "review" || echo "Review failed" && exit 1`
+
 ## CI/CD Integration
 
 ### GitHub Actions
@@ -82,6 +86,10 @@ find tests/ -name "*.test.js" | while read file; do
     --output "$file"
 done
 ```
+
+⚠️ **Anti-Pattern**: Sequential file operations (slow - waits for each file)  
+✅ **Better**: Use parallel processing: `xargs -P 4` or `GNU parallel` for batch operations  
+💡 **Why**: Processing 100 files sequentially takes 100x time. Parallel processing uses multiple cores, achieving 4-10x speedup.
 
 ### Parallel Processing
 ```bash

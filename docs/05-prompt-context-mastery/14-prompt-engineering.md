@@ -70,6 +70,10 @@ Actual: Application crashes
 @error.log"
 ```
 
+⚠️ **Anti-Pattern**: Vague prompts without examples or context  
+✅ **Better**: Include error messages, file context, and 2-3 examples of desired output  
+💡 **Why**: Claude needs context to give specific answers. "Fix my code" gets generic advice. "Fix this error [paste] in this file [attach]" gets targeted fixes.
+
 ### 3. Specify Constraints
 
 ```bash
@@ -115,6 +119,10 @@ describe('UserService', () => {
 
 Generate similar tests for all UserService methods."
 ```
+
+⚠️ **Anti-Pattern**: No examples in prompts (forces Claude to guess your style)  
+✅ **Better**: Include 2-3 examples of desired output format/style  
+💡 **Why**: Few-shot prompting (with examples) produces consistent, on-brand results. Without examples, output style varies wildly.
 
 ---
 

@@ -14,8 +14,11 @@ Master advanced prompting techniques and context optimization for maximum effect
 ### [Section 14: Advanced Prompt Engineering](14-prompt-engineering.md)
 Chain-of-thought, multishot examples, XML tags, role-based prompting, constraint specification
 
-### [Section 15: Context Management & Optimization](15-context-management.md)
-Token budgets, prompt caching (90% savings), CLAUDE.md best practices, multi-document reasoning
+### [Section 15: Context Management & Cost Optimization](15-context-management.md)
+Token budgets, prompt caching (90% savings), CLAUDE.md best practices, real cost examples
+
+### [Section 15b: Performance & Speed Optimization](15b-performance-optimization.md)
+Latency optimization, parallel operations, model selection for speed, 3-10x faster responses
 
 ### [Section 16: Multi-Model Strategies](16-multi-model-strategies.md)
 Model selection, ensemble patterns, cost vs performance, latency optimization

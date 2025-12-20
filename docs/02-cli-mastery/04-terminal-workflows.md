@@ -42,6 +42,10 @@ cat error.log | claude "Analyze this error"
 git log --oneline -10 | claude "Summarize these commits" > summary.txt
 ```
 
+⚠️ **Anti-Pattern**: Not using piping - copying/pasting command output manually  
+✅ **Better**: Pipe directly to Claude: `git diff | claude "review"`  
+💡 **Why**: Piping is faster, preserves formatting, and enables automation in scripts. Manual copy-paste loses formatting and wastes time.
+
 ## Command Patterns
 
 ### Code Analysis
@@ -57,6 +61,10 @@ claude "Generate API endpoint for user CRUD operations"
 claude "Create React component for user profile"
 claude "Write database migration to add email_verified column"
 ```
+
+⚠️ **Anti-Pattern**: Vague prompts like "fix my code" or "improve this"  
+✅ **Better**: Specific requests with context: "Fix authentication timeout - 401 after OAuth refresh. Error: [paste]"  
+💡 **Why**: Vague prompts get generic advice. Specific prompts with error messages, file context, and desired outcome get targeted fixes.
 
 ### Refactoring
 ```bash
