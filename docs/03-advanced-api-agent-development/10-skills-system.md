@@ -1,3 +1,9 @@
+---
+title: "Section 10: Skills System & Knowledge Extension"
+parent: "Part 3: Advanced API & Agent Development"
+nav_order: 3
+---
+
 # Section 10: Skills System & Knowledge Extension
 
 ## Skills Architecture

@@ -1,3 +1,9 @@
+---
+title: "Section 6: CLI vs VS Code Extension"
+parent: "Part 2: Claude Code CLI Mastery"
+nav_order: 5
+---
+
 # Section 6: CLI vs VS Code Extension
 
 ## Decision Matrix

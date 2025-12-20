@@ -1,3 +1,9 @@
+---
+title: "Part 2: Claude Code CLI Mastery"
+nav_order: 3
+has_children: true
+---
+
 # Part 2: Claude Code CLI Mastery
 
 This part provides comprehensive coverage of Claude Code's command-line interface, from basic terminal workflows to advanced automation patterns. The CLI is the most powerful way to integrate Claude into your development workflow.

@@ -1,3 +1,9 @@
+---
+title: "Part 5: Prompt Engineering & Context Mastery"
+nav_order: 6
+has_children: true
+---
+
 # Part 5: Prompt Engineering & Context Mastery
 
 Master advanced prompting techniques and context optimization for maximum effectiveness.

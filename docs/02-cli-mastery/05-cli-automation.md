@@ -1,3 +1,9 @@
+---
+title: "Section 5: CLI Automation & Scripting"
+parent: "Part 2: Claude Code CLI Mastery"
+nav_order: 4
+---
+
 # Section 5: CLI Automation & Scripting
 
 ## Pre-Commit Hooks

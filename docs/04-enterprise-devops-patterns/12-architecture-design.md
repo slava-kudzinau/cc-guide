@@ -1,3 +1,9 @@
+---
+title: "Section 12: Architecture & System Design"
+parent: "Part 4: Enterprise & DevOps Integration"
+nav_order: 2
+---
+
 # Section 12: Architecture & System Design
 
 ## Microservices Architecture

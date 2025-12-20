@@ -1,3 +1,9 @@
+---
+title: "Section 8: Advanced Claude API Features"
+parent: "Part 3: Advanced API & Agent Development"
+nav_order: 1
+---
+
 # Section 8: Advanced Claude API Features
 
 ## Extended Thinking Optimization

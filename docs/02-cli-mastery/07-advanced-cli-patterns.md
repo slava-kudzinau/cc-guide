@@ -1,3 +1,9 @@
+---
+title: "Section 7: Advanced CLI Patterns"
+parent: "Part 2: Claude Code CLI Mastery"
+nav_order: 6
+---
+
 # Section 7: Advanced CLI Patterns
 
 ## Multi-Repository Workflows

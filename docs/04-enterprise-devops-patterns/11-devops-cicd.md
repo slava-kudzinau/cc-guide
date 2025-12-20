@@ -1,3 +1,9 @@
+---
+title: "Section 11: DevOps & CI/CD Integration"
+parent: "Part 4: Enterprise & DevOps Integration"
+nav_order: 1
+---
+
 # Section 11: DevOps & CI/CD Integration
 
 ## GitHub Actions Integration

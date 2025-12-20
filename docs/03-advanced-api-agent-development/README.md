@@ -1,3 +1,9 @@
+---
+title: "Part 3: Advanced API & Agent Development"
+nav_order: 4
+has_children: true
+---
+
 # Part 3: Advanced API & Agent Development
 
 Master programmatic integration with Claude API and build custom autonomous agents with the Agent SDK.

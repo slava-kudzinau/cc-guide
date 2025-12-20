@@ -1,3 +1,9 @@
+---
+title: "Section 4c: Interactive Features - Plan Mode, Context Rewind & More"
+parent: "Part 2: Claude Code CLI Mastery"
+nav_order: 3
+---
+
 # Section 4c: Interactive Features - Plan Mode, Context Rewind & More
 
 Claude Code includes powerful interactive features that set it apart from other AI coding tools. These features give you control, transparency, and safety while working with AI-generated code.

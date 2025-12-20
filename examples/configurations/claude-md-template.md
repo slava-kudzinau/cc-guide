@@ -1,3 +1,8 @@
+---
+title: "CLAUDE.md Template"
+nav_exclude: true
+---
+
 # CLAUDE.md Template
 
 This file provides persistent context to Claude about your project.

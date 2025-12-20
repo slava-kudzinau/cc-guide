@@ -1,3 +1,9 @@
+---
+title: "Section 21: Troubleshooting & Common Issues"
+parent: "Part 7: Reference, Troubleshooting & Future"
+nav_order: 2
+---
+
 # Section 21: Troubleshooting & Common Issues
 
 ## Authentication Issues

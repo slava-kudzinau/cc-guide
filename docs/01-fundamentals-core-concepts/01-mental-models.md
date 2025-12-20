@@ -1,3 +1,9 @@
+---
+title: "Section 1: Mental Models & Architecture"
+parent: "Part 1: Fundamentals & Core Concepts"
+nav_order: 1
+---
+
 # Section 1: Mental Models & Architecture
 
 ## Understanding Claude's Ecosystem

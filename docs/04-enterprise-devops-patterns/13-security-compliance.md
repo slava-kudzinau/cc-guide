@@ -1,3 +1,9 @@
+---
+title: "Section 13: Security & Compliance"
+parent: "Part 4: Enterprise & DevOps Integration"
+nav_order: 3
+---
+
 # Section 13: Security & Compliance
 
 ## Security Vulnerability Detection

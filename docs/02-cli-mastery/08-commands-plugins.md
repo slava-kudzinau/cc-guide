@@ -1,3 +1,9 @@
+---
+title: "Section 8: Commands & Plugins System"
+parent: "Part 2: Claude Code CLI Mastery"
+nav_order: 7
+---
+
 # Section 8: Commands & Plugins System
 
 Claude Code includes a powerful extensibility system through custom commands and plugins. This allows you to create reusable workflows, add project-specific commands, and extend Claude's capabilities.

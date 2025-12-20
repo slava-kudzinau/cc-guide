@@ -1,3 +1,9 @@
+---
+title: "Section 9: Building Agents with Agent SDK"
+parent: "Part 3: Advanced API & Agent Development"
+nav_order: 2
+---
+
 # Section 9: Building Agents with Agent SDK
 
 ## Agent Architecture

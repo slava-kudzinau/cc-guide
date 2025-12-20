@@ -1,3 +1,9 @@
+---
+title: "Part 7: Reference, Troubleshooting & Future"
+nav_order: 8
+has_children: true
+---
+
 # Part 7: Reference, Troubleshooting & Future
 
 Complete reference guide, troubleshooting solutions, and future roadmap.

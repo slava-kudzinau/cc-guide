@@ -1,3 +1,9 @@
+---
+title: "Section 2: Environment & Project Setup"
+parent: "Part 1: Fundamentals & Core Concepts"
+nav_order: 2
+---
+
 # Section 2: Environment & Project Setup
 
 Complete installation and configuration guide for Claude Code CLI, VS Code extension, API authentication, and project setup.

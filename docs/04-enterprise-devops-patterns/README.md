@@ -1,3 +1,9 @@
+---
+title: "Part 4: Enterprise & DevOps Integration"
+nav_order: 5
+has_children: true
+---
+
 # Part 4: Enterprise & DevOps Integration
 
 Production deployment patterns, infrastructure automation, and enterprise security with Claude Code.

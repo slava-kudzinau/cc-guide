@@ -1,3 +1,9 @@
+---
+title: "Section 4b: VS Code Extension Complete Guide"
+parent: "Part 2: Claude Code CLI Mastery"
+nav_order: 2
+---
+
 # Section 4b: VS Code Extension Complete Guide
 
 The Claude Code VS Code extension brings the full power of Claude Code directly into your IDE with a native graphical interface. This guide covers everything from installation to advanced workflows.

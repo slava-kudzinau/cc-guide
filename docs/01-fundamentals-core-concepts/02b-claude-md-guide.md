@@ -1,3 +1,9 @@
+---
+title: "Section 2b: CLAUDE.md - Your Project's Memory"
+parent: "Part 1: Fundamentals & Core Concepts"
+nav_order: 3
+---
+
 # Section 2b: CLAUDE.md - Your Project's Memory
 
 CLAUDE.md is the **single most important file** for working with Claude Code. It's your project's persistent context that Claude reads automatically in every session.

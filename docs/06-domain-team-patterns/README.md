@@ -1,3 +1,9 @@
+---
+title: "Part 6: Domain-Specific & Team Collaboration"
+nav_order: 7
+has_children: true
+---
+
 # Part 6: Domain-Specific & Team Collaboration
 
 Specialized workflows for different domains and team collaboration patterns.

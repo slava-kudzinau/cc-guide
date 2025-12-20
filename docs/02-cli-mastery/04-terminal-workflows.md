@@ -1,3 +1,9 @@
+---
+title: "Section 4: Terminal Workflows & Command Patterns"
+parent: "Part 2: Claude Code CLI Mastery"
+nav_order: 1
+---
+
 # Section 4: Terminal Workflows & Command Patterns
 
 ## CLI Basics

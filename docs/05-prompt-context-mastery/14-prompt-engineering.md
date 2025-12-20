@@ -1,3 +1,9 @@
+---
+title: "Section 14: Advanced Prompt Engineering - Practical Patterns Library"
+parent: "Part 5: Prompt Engineering & Context Mastery"
+nav_order: 1
+---
+
 # Section 14: Advanced Prompt Engineering - Practical Patterns Library
 
 This section provides **copy-paste ready prompts** for real development tasks. Every pattern includes examples, variations, and best practices from Anthropic engineers.

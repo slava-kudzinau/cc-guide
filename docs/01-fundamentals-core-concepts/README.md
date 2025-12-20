@@ -1,3 +1,9 @@
+---
+title: "Part 1: Fundamentals & Core Concepts"
+nav_order: 2
+has_children: true
+---
+
 # Part 1: Fundamentals & Core Concepts
 
 This part covers the essential foundations every Claude Code user needs to understand. Whether you're using the CLI, API, or Agent SDK, these concepts form the basis for effective usage.

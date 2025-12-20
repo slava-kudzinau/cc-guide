@@ -1,3 +1,9 @@
+---
+title: "Section 20: Complete Reference Guide"
+parent: "Part 7: Reference, Troubleshooting & Future"
+nav_order: 1
+---
+
 # Section 20: Complete Reference Guide
 
 ## CLI Command Reference

@@ -1,3 +1,8 @@
+---
+title: "Feature Development Prompt Template"
+nav_exclude: true
+---
+
 # Feature Development Prompt Template
 
 ## Template

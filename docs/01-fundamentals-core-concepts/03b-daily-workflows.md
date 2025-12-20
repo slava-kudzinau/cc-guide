@@ -1,3 +1,9 @@
+---
+title: "Section 3b: Day-in-the-Life - Real Developer Workflows"
+parent: "Part 1: Fundamentals & Core Concepts"
+nav_order: 5
+---
+
 # Section 3b: Day-in-the-Life - Real Developer Workflows
 
 This guide shows you **exactly** how to use Claude Code throughout your workday, from morning stand-up to end-of-day cleanup. Every scenario is real, practical, and copy-paste ready.

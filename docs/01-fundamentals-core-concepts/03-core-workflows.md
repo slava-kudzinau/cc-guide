@@ -1,3 +1,9 @@
+---
+title: "Section 3: Core Workflows"
+parent: "Part 1: Fundamentals & Core Concepts"
+nav_order: 4
+---
+
 # Section 3: Core Workflows
 
 Essential development patterns for daily work with Claude Code. These workflows are applicable whether you're using CLI, API, or Agent SDK.

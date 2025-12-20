@@ -1,3 +1,9 @@
+---
+title: "Section 23: Anti-Patterns & Common Mistakes"
+parent: "Part 7: Reference, Troubleshooting & Future"
+nav_order: 3
+---
+
 # Section 23: Anti-Patterns & Common Mistakes
 
 Learn from others' mistakes! This guide shows you what **NOT** to do when working with Claude Code, and how to do it right instead.
