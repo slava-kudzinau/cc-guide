@@ -11,25 +11,25 @@ Master programmatic integration with Claude API and build custom autonomous agen
 
 ## Sections
 
-### [Section 8: Advanced Claude API Features](08-advanced-api-features.md)
+### [Section 1: Advanced Claude API Features](01-advanced-api-features.md)
 - Extended thinking optimization
 - Vision API for code generation
 - Batch processing for cost savings
 - Prompt caching (90% reduction)
 - Streaming responses
 
-### [Section 9: Building Agents with Agent SDK](09-agent-sdk.md)
+### [Section 2: Building Agents with Agent SDK](02-agent-sdk.md)
 - Agent architecture and design
 - Multi-agent orchestration
 - Custom tool integration
 - Subagent patterns
 - Real-world agent examples
 
-### [Section 10: Skills System & Knowledge Extension](10-skills-system.md)
+### [Section 3: Skills System & Knowledge Extension](03-skills-system.md)
 - Progressive disclosure model
 - Creating custom skills
 - Skills composition patterns
-- Domain-specific skills
+- Context7 as dynamic alternative
 - Team skills repositories
 
 ## Key Concepts
@@ -39,7 +39,4 @@ Master programmatic integration with Claude API and build custom autonomous agen
 **Agent SDK:** Build autonomous agents with full programmatic control.  
 **Skills:** Just-in-time knowledge loading for specialized domains.
 
-[← Part 2: Tools Mastery](../02-tools-mastery/) | [Next: Advanced API Features →](08-advanced-api-features.md)
-
-
-
+[← Part 2: Tools Mastery](../02-tools-mastery/) | [Next: Advanced API Features →](01-advanced-api-features.md)

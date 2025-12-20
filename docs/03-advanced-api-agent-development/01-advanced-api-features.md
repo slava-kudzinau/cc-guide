@@ -1,10 +1,10 @@
 ---
-title: "Section 8: Advanced Claude API Features"
+title: "Section 1: Advanced Claude API Features"
 parent: "Part 3: Advanced API & Agent Development"
 nav_order: 1
 ---
 
-# Section 8: Advanced Claude API Features
+# Section 1: Advanced Claude API Features
 
 ## Extended Thinking Optimization
 
@@ -145,7 +145,5 @@ for await (const event of stream) {
 ✅ **Better**: Always stream responses in interactive applications - show progress as tokens arrive  
 💡 **Why**: Non-streaming makes users wait 5-20 seconds staring at a blank screen. Streaming shows immediate progress, feels 50-80% faster, and allows early termination if output goes off-track.
 
-[← Back to Part 3 Index](README) | [Next: Agent SDK →](09-agent-sdk)
-
-
+[← Back to Part 3 Index](README) | [Next: Agent SDK →](02-agent-sdk)
 

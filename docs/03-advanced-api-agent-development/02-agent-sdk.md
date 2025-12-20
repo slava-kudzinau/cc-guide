@@ -1,10 +1,10 @@
 ---
-title: "Section 9: Building Agents with Agent SDK"
+title: "Section 2: Building Agents with Agent SDK"
 parent: "Part 3: Advanced API & Agent Development"
 nav_order: 2
 ---
 
-# Section 9: Building Agents with Agent SDK
+# Section 2: Building Agents with Agent SDK
 
 ## Agent Architecture
 
@@ -126,7 +126,5 @@ const agent = new PRReviewAgent();
 await agent.reviewPR('owner', 'repo', 123);
 ```
 
-[← Back: Advanced API](08-advanced-api-features) | [Next: Skills System →](10-skills-system)
-
-
+[← Back: Advanced API](01-advanced-api-features) | [Next: Skills System →](03-skills-system)
 
