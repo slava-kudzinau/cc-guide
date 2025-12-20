@@ -1,8 +1,6 @@
 ---
 ---
 
-@import "{{ site.theme }}";
-
 /* Fix for long site title - allow proper wrapping and prevent cutoff */
 .site-title {
   white-space: normal !important;
