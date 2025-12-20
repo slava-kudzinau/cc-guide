@@ -16,4 +16,41 @@
   });
 </script>
 
+<!-- Custom CSS to fix long site title -->
+<style>
+  /* Fix for long site title - allow proper wrapping and prevent cutoff */
+  .site-title {
+    white-space: normal !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    line-height: 1.25 !important;
+    padding-right: 1rem !important;
+    max-width: 100% !important;
+    display: block !important;
+    font-size: 0.9rem !important;
+    hyphens: none !important;
+  }
+
+  /* Ensure the sidebar header has enough space */
+  .site-header {
+    min-height: auto !important;
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
+  }
+
+  /* Adjust the site nav to accommodate multi-line title */
+  .site-nav {
+    padding-top: 0.5rem !important;
+  }
+
+  /* Additional adjustments for the sidebar */
+  .side-bar {
+    padding-top: 1rem !important;
+  }
+
+  /* Make sure aux links don't interfere */
+  .aux-nav {
+    padding-top: 0.5rem !important;
+  }
+</style>
 
