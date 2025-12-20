@@ -203,6 +203,10 @@ Don't implement yet - ask clarifying questions first.
 
 **When**: Building feature step-by-step
 
+⚠️ **Anti-Pattern**: Building entire feature in one massive prompt  
+✅ **Better**: Break into steps (database → model → service → API → tests) with review between each  
+💡 **Why**: Large prompts create large, untested code blocks that are hard to review. Incremental development catches issues early and lets you course-correct.
+
 **Template**:
 ```bash
 # Step 1: Database
@@ -346,6 +350,10 @@ Show me:
 ## Pattern Library: Debugging
 
 ### Pattern 4: Error Analysis
+
+⚠️ **Anti-Pattern**: Asking "fix this error" without providing the error message or context  
+✅ **Better**: Include full stack trace, recent changes, frequency, and what user was doing  
+💡 **Why**: "Fix my error" gives generic debugging advice. Full context (error + files + recent changes) pinpoints root cause in seconds.
 
 **Template**:
 ```bash

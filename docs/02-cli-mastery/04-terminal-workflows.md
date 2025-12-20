@@ -31,6 +31,10 @@ claude "@src/models/User.js explain this model"
 claude --thinking=5000 "Design microservices architecture"
 ```
 
+⚠️ **Anti-Pattern**: Using extended thinking for simple tasks (formatting, quick questions)  
+✅ **Better**: Reserve `--thinking` for complex reasoning tasks. Use default mode for simple queries.  
+💡 **Why**: Extended thinking adds 2-4x latency and cost. Simple tasks like "fix linting" or "format code" don't benefit from deep reasoning - they're pattern matching, not problem-solving.
+
 ### Piping (Unix Composition)
 ```bash
 # Pipe command output
@@ -90,6 +94,10 @@ claude
 > Generate tests for both features
 # Claude generates tests for auth + rate limiting
 ```
+
+⚠️ **Anti-Pattern**: Starting new session for each question instead of continuing conversation  
+✅ **Better**: Use multi-turn conversations for related tasks - context accumulates and responses improve  
+💡 **Why**: Each new session loses context. Multi-turn conversations let Claude build on previous understanding, saving tokens (via caching) and providing more coherent solutions across related tasks.
 
 ## CLI Configuration
 

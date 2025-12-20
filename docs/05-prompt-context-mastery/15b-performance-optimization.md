@@ -1,115 +1,59 @@
----
-title: "Section 15b: Performance & Speed Optimization"
-parent: "Part 5: Prompt Engineering & Context Mastery"
-nav_order: 3
----
-
 # Section 15b: Performance & Speed Optimization
 
-**What You'll Learn:**
-- How to achieve 3-10x faster response times
-- Latency sources and how to eliminate them
-- Parallel processing patterns for maximum throughput
-- Model selection strategies for speed vs quality
-- Real benchmarks with actual timing data
-- Performance checklist for every query
-
-**Time to read:** 20-25 minutes  
-**Potential speedup:** 3-10x for most operations  
-**Performance gains:** Save 2-4 hours per day
+**Goal**: Get 3-5x faster responses through smart optimization patterns  
+**Time to read**: 20 minutes  
+**Value**: Save hours per week, improve developer experience
 
 ---
 
 ## Table of Contents
-
-1. [Understanding Latency Sources](#understanding-latency-sources)
-2. [Speed Optimization Patterns](#speed-optimization-patterns)
-3. [Real-World Benchmarks](#real-world-benchmarks)
-4. [Performance Measurement](#performance-measurement)
-5. [Performance Checklist](#performance-checklist)
+- [Understanding Latency Sources](#understanding-latency-sources)
+- [Speed Optimization Patterns](#speed-optimization-patterns)
+- [Real-World Benchmarks](#real-world-benchmarks)
+- [Performance Checklist](#performance-checklist)
+- [Monitoring Performance](#monitoring-performance)
 
 ---
 
 ## Understanding Latency Sources
 
-Before optimizing, understand where time is spent in Claude operations.
+Before optimizing, understand where time is spent:
 
 ### Token Processing Speed
 
-**Input Token Processing** (Reading):
-- **Speed**: ~10,000 tokens/second
-- **Impact**: Minimal for most operations
-- **Example**: 50K token context = ~5 seconds
+**Input Processing** (Fast):
+- ~10,000 tokens/second
+- Nearly instantaneous for cached content
+- Context loading is rarely the bottleneck
 
-**Output Token Generation** (Writing):
-- **Speed**: 50-100 tokens/second (varies by model)
-- **Impact**: Major bottleneck for long responses
-- **Example**: 2K token response = 20-40 seconds
+**Output Generation** (Slower):
+- 50-100 tokens/second (Sonnet 4.5)
+- 80-150 tokens/second (Haiku 4.5)
+- 30-60 tokens/second (Opus 4.1)
+- This is usually where you wait
 
-**Why This Matters:**
-```
-Short query with long response = SLOW
-- Input: 5K tokens (0.5s)
-- Output: 5K tokens (50-100s)
-- Total: ~100 seconds
+**Extended Thinking** (Variable):
+- Adds thinking tokens at output speed
+- Can double or triple response time
+- Budget of 1000-5000 tokens typical
+- Only worth it for complex reasoning
 
-Long query with short response = FAST
-- Input: 50K tokens (5s)
-- Output: 500 tokens (5-10s)
-- Total: ~15 seconds
-```
+**Prompt Caching** (Game-changer):
+- Cached tokens: ~instant (90%+ faster)
+- First message: Normal speed + cache creation
+- Subsequent messages: Much faster
 
 ### Network Latency
 
-**Base API Call Overhead:**
-- **Initial connection**: 100-300ms
-- **Streaming first token**: 200-500ms additional
-- **Geographic distance**: Varies (use nearest region)
+**API Call Overhead**:
+- Base latency: 100-300ms per request
+- Geographic distance matters
+- Parallel calls: Same latency, more throughput
 
-**Parallel vs Sequential:**
-```bash
-# Sequential: 3 file reads
-File A: 300ms wait
-File B: 300ms wait  
-File C: 300ms wait
-Total: 900ms
-
-# Parallel: 3 file reads
-Files A, B, C: 300ms wait (all at once)
-Total: 300ms
-Speedup: 3x faster
-```
-
-### Model-Specific Latency
-
-| Model | Speed | Use Case | Typical Response Time |
-|-------|-------|----------|---------------------|
-| **Haiku 4.5** | Fastest | Simple tasks | 2-5 seconds |
-| **Sonnet 4.5** | Medium | General purpose | 5-15 seconds |
-| **Opus 4.1** | Slowest | Complex reasoning | 15-60 seconds |
-
-**Extended Thinking Overhead:**
-- Adds thinking phase before response
-- Typical overhead: 5-20 seconds
-- Only use when deep reasoning needed
-
-### Streaming vs Non-Streaming
-
-**Non-Streaming** (Wait for complete response):
-```
-Request → Wait → Full response arrives
-Perceived time: 20 seconds
-Actual time: 20 seconds
-```
-
-**Streaming** (Incremental output):
-```
-Request → First token → Continue streaming → Done
-Perceived time: 3 seconds (first visible output)
-Actual time: 20 seconds (still same total time)
-```
-
-**Benefit**: 5-7x faster *perceived* speed with streaming
+**Streaming vs Waiting**:
+- Streaming: See tokens as they arrive (feels faster)
+- Non-streaming: Wait for complete response
+- Perceived speed improvement: 50-80%
 
 ---
 
@@ -117,940 +61,831 @@ Actual time: 20 seconds (still same total time)
 
 ### Pattern 1: Parallel Tool Calls
 
-**The Problem:**
-Claude reading files sequentially wastes time on network round-trips.
+**The Problem**: Sequential operations waste time
 
-#### Sequential Operations (SLOW)
-
+❌ **Slow: Sequential reads (10x latency)**
 ```bash
-# Claude's internal process:
-1. Read src/auth.ts (300ms wait)
-2. Read src/config.ts (300ms wait)
-3. Read src/utils.ts (300ms wait)
-Total latency: 900ms
+# Claude reads files one at a time
+claude "analyze authentication"
+# Internally:
+# - Read src/auth/login.ts (300ms)
+# - Read src/auth/jwt.ts (300ms)  
+# - Read src/auth/session.ts (300ms)
+# Total: 900ms just for file reads
 ```
 
-**Prompt that causes sequential reads:**
+✅ **Fast: Parallel reads (1x latency)**
 ```bash
-# ❌ SLOW: Vague request forces sequential discovery
-claude "explain how authentication works in this project"
-
-# Claude thinks: "I need to find auth files..."
-# Reads: src/index.ts → discovers auth.ts → reads it → discovers config.ts → reads it
-# Result: 5-7 sequential file reads
+# Claude reads files simultaneously
+claude "analyze authentication" --files="src/auth/*.ts"
+# Internally:
+# - Read all 3 files in parallel (300ms)
+# Total: 300ms for file reads
+# Speedup: 3x faster
 ```
 
-#### Parallel Operations (FAST)
-
-```bash
-# Claude's internal process:
-1. Read src/auth.ts, src/config.ts, src/utils.ts (all at once)
-Total latency: 300ms
-Speedup: 3x faster
-```
-
-**Prompt that enables parallel reads:**
-```bash
-# ✅ FAST: Specific files enable parallel reads
-claude "explain authentication" --files="src/auth.ts,src/config.ts,src/utils.ts"
-
-# Claude thinks: "I have all files, read them in parallel"
-# Result: 1 parallel read operation
-```
-
-#### Real-World Example: Code Review
-
-**Before Optimization:**
-```bash
-git diff | claude "review all changes"
-
-# Claude's process:
-# 1. Parse diff (1s)
-# 2. Read file1.ts to understand context (300ms)
-# 3. Read file2.ts for dependencies (300ms)
-# 4. Read file3.ts for types (300ms)
-# 5. Generate review (10s)
-# Total: 12 seconds
-```
-
-**After Optimization:**
-```bash
-git diff | claude "review changes in authentication logic" \
-  --files="src/auth/*.ts"
-
-# Claude's process:
-# 1. Parse diff (1s)
-# 2. Read all auth files in parallel (300ms)
-# 3. Generate review (10s)
-# Total: 11.3 seconds (but more focused)
-
-# Better yet - be even more specific:
-git diff src/auth/ | claude "security review: check for auth bypasses and injection"
-
-# Claude's process:
-# 1. Parse diff (1s)
-# 2. Targeted analysis (5s instead of 10s)
-# Total: 6 seconds
-# Speedup: 2x faster
-```
-
-#### When Parallelism Helps
-
-✅ **Helps when:**
+**When Claude Uses Parallelism**:
 - Reading multiple independent files
-- Searching across multiple directories
-- Batch operations on separate items
+- Searching different directories
+- Multiple codebase searches
+- Independent tool operations
 
-❌ **Doesn't help when:**
-- Single file operations
-- Sequential dependencies (must read A to find B)
-- Response generation (can't parallelize thinking)
+**How to Encourage Parallelism**:
+```bash
+# Good: Provides all context upfront
+claude "compare these implementations" \
+  --files="src/auth/v1.ts" \
+  --files="src/auth/v2.ts" \
+  --files="src/auth/v3.ts"
 
----
+# Less optimal: Sequential questions
+claude "show me v1 implementation"
+claude "now show me v2"
+claude "now compare them"
+```
+
+**Real Example**:
+```bash
+# Analyzing test coverage across 10 files
+# Sequential: 10 × 300ms = 3000ms
+# Parallel: 1 × 300ms = 300ms
+# Speedup: 10x faster
+```
 
 ### Pattern 2: Progressive Disclosure
 
-Start narrow, expand only when needed. Don't load entire codebase upfront.
+**The Problem**: Loading too much context upfront
 
-#### The Anti-Pattern (SLOW)
-
+❌ **Slow: Read entire codebase upfront**
 ```bash
-# ❌ Read everything upfront
-claude "analyze this project" --files="src/**/*.ts"
-
-# What happens:
-# - Reads 100+ files (10-15 seconds)
-# - Uses 200K tokens
-# - Response generation: 20+ seconds
-# - Total: 35+ seconds
-# - Cost: $0.60 (Sonnet)
+claude "analyze project" --files="src/**/*.ts"
+# - 100+ files
+# - 200,000 tokens
+# - 20+ seconds to process
+# - Claude overwhelmed with context
+# - You wait unnecessarily
 ```
 
-#### The Optimized Approach (FAST)
-
+✅ **Fast: Start narrow, expand as needed**
 ```bash
-# ✅ Step 1: Quick overview (2 seconds)
-claude "what does this project do?" --files="README.md,package.json"
-# Response: "This is a REST API for user management..."
+# Step 1: High-level overview (2s)
+claude "what does this project do?" --files="README.md package.json"
 
-# ✅ Step 2: Narrow to relevant area (3 seconds)
-claude "explain user authentication flow" --files="src/auth/*.ts"
-# Response: "Authentication uses JWT tokens stored in..."
+# Step 2: Specific area (3s)
+claude "explain auth flow" --files="src/auth/*.ts"
 
-# ✅ Step 3: Deep dive on specific issue (3 seconds)
-claude "why does OAuth refresh fail?" --files="src/auth/oauth.ts"
-# Response: "Line 67 has a race condition..."
+# Step 3: Deep dive only if needed (3s)
+claude "how does OAuth refresh work?" --files="src/auth/oauth.ts"
 
-# Total: 8 seconds for complete understanding
-# Speedup: 4x faster than loading everything
-# Cost: $0.08 (90% cheaper)
+# Total: 8 seconds (with flexibility to stop early)
+# vs 20+ seconds upfront
 ```
 
-#### Progressive Disclosure Decision Tree
-
-```
-Start: Do I know which files are relevant?
-│
-├─ YES → Specify exact files → Fast query (3s)
-│
-└─ NO → Ask broad question first
-       │
-       ├─ Got relevant area? → Narrow query to that area (3s)
-       │
-       └─ Still unclear? → Use codebase_search (5s)
-                         │
-                         └─ Now specify files → Fast query (3s)
-```
-
-#### Real Example: Debugging Production Issue
-
-**Scenario**: API endpoint `/api/users/login` returns 500 error, no logs.
-
-**Approach 1: Load Everything (SLOW)**
+**The Conversational Advantage**:
 ```bash
-# ❌ 35+ seconds, expensive
-claude "why is login failing?" --files="src/**/*.ts"
+# Start broad
+You: "What's the authentication approach?"
+Claude: "Uses JWT with OAuth2, refresh tokens in Redis"
+
+# Narrow based on response
+You: "Show me the refresh token logic"
+Claude: [Searches and shows specific function]
+
+# Deep dive if needed
+You: "What happens if Redis is down?"
+Claude: [Analyzes fallback logic]
 ```
 
-**Approach 2: Progressive Disclosure (FAST)**
-```bash
-# Step 1: Find the endpoint (3s)
-claude "find the /api/users/login endpoint handler"
-# Response: "It's in src/routes/auth.ts, function handleLogin()"
-
-# Step 2: Analyze just that file (3s)
-claude "analyze handleLogin in src/routes/auth.ts - why might it return 500 with no logs?"
-# Response: "Line 45 has unhandled promise rejection in async middleware..."
-
-# Step 3: Verify fix (2s)
-claude "show me proper error handling for Express async routes"
-
-# Total: 8 seconds
-# Speedup: 4x faster
-```
-
----
+**When to Use**:
+- ✅ Exploring unfamiliar codebases
+- ✅ Debugging (start with error, expand as needed)
+- ✅ Learning flows (follow the path)
+- ❌ One-shot operations (commit message generation)
+- ❌ Batch processing (need all context)
 
 ### Pattern 3: Smart Context Selection
 
-Don't re-send the same context repeatedly. Use caching and targeted queries.
+**The Problem**: Sending unnecessary context repeatedly
 
-#### The Problem: Repeated Context
-
+❌ **Slow: Send entire file every time**
 ```bash
-# Session working on authentication feature:
-
-# Query 1: Full context (50K tokens)
-claude "add login endpoint" --files="src/**/*.ts"
-Cost: $0.15
-
-# Query 2: Full context again (50K tokens)
-claude "now add logout endpoint" --files="src/**/*.ts"
-Cost: $0.15
-
-# Query 3: Full context again (50K tokens)
-claude "add password reset" --files="src/**/*.ts"
-Cost: $0.15
-
-# Total: $0.45 for 3 queries
-# Problem: Re-sending same 50K tokens 3 times
+# 5000-line file, repeated 10 times in conversation
+# Cost: 5000 × 10 = 50,000 tokens
+# Time: Slower context processing each time
 ```
 
-#### Solution 1: Use CLAUDE.md for Caching
-
+✅ **Fast: Use codebase search for relevant sections**
 ```bash
-# Create CLAUDE.md with project context
-cat > CLAUDE.md << 'EOF'
-# Project Context
-- REST API for user management
-- Stack: Node.js, Express, PostgreSQL
-- Auth: JWT tokens, OAuth2
-- Key files:
-  - src/routes/auth.ts: Authentication endpoints
-  - src/middleware/auth.ts: JWT verification
-  - src/models/User.ts: User database model
-EOF
+# First message: Let Claude find relevant code
+claude "where is JWT validation in src/?"
+# Claude searches, finds function at lines 234-267
 
-# Now your queries are cached:
-
-# Query 1: Creates cache (50K tokens)
-claude "add login endpoint"
-Cost: $0.15 (cache created)
-
-# Query 2: Uses cache (50K cached + 1K new)
-claude "now add logout endpoint"
-Cost: $0.015 (90% discount)
-
-# Query 3: Uses cache (50K cached + 1K new)
-claude "add password reset"
-Cost: $0.015 (90% discount)
-
-# Total: $0.18 (60% savings)
+# Second message: Only send relevant section
+claude "explain JWT validation logic" --files="src/auth/jwt.ts:234-267"
+# Only 34 lines sent, not 5000
+# Savings: 99% fewer tokens, much faster
 ```
 
-#### Solution 2: Targeted Context per Query
-
+**Codebase Search Strategy**:
 ```bash
-# Instead of sending everything, send only what's needed:
+# Instead of this (slow, expensive):
+claude "find all API endpoints" --files="src/**/*.ts"
 
-# Query 1: Login endpoint
-claude "add login endpoint" --files="src/routes/auth.ts,src/models/User.ts"
-Cost: $0.02 (only 5K tokens)
-
-# Query 2: Logout endpoint
-claude "add logout endpoint" --files="src/routes/auth.ts,src/middleware/auth.ts"
-Cost: $0.02 (only 5K tokens)
-
-# Query 3: Password reset
-claude "add password reset" --files="src/routes/auth.ts,src/services/email.ts"
-Cost: $0.02 (only 5K tokens)
-
-# Total: $0.06 (87% savings vs original)
-# Also 3-5x faster due to less input processing
+# Do this (fast, targeted):
+claude "find API endpoint definitions"
+# Claude uses codebase_search tool internally
+# Then you can ask specifics about what it found
 ```
 
-#### Real Example: 96% Cost Reduction
+**File Selection Best Practices**:
+```bash
+# ❌ Too broad
+--files="**/*"
 
-From Section 15 (Context Management):
+# ❌ Still too broad
+--files="src/**/*.ts"
 
-**Before Optimization:**
+# ✅ Targeted
+--files="src/auth/*.ts"
+
+# ✅ Very specific
+--files="src/auth/jwt.ts src/auth/oauth.ts"
+
+# ✅ With line ranges
+--files="src/auth/jwt.ts:100-200"
 ```
-Multi-turn conversation about testing
-- 10 queries
-- Each sends 50K tokens of test files
-- Total: 500K tokens input
-- Cost: $1.50 (Sonnet)
-- Time: ~5 seconds per query = 50 seconds
-```
-
-**After Optimization (CLAUDE.md + Targeted Context):**
-```
-Create CLAUDE.md with test patterns
-- Query 1: 50K tokens (creates cache) = $0.15
-- Query 2-10: 5K new tokens each = $0.05 × 9 = $0.45
-- Total cost: $0.60 (60% savings)
-- Time: ~2 seconds per query (caching faster) = 20 seconds
-
-Further optimization - narrow context:
-- Only send relevant test file per query
-- Queries 2-10: 2K new tokens each = $0.02 × 9 = $0.18
-- Total cost: $0.33 (78% savings)
-- Total time: ~1.5 seconds per query = 15 seconds
-
-Combined: 78% cost savings + 3x faster
-```
-
----
 
 ### Pattern 4: Model Selection for Speed
 
-Use the right model for the task. Opus is 5-10x slower than Haiku.
+Choose the right model for the task:
 
-#### Model Speed Comparison (Same Task)
+| Task | Wrong Choice | Right Choice | Speedup | Cost Savings |
+|------|--------------|--------------|---------|--------------|
+| Format code | Opus 4.1 | Haiku 4.5 | **5x faster** | **60x cheaper** |
+| Simple questions | Sonnet + thinking | Haiku | **3x faster** | **12x cheaper** |
+| Generate tests | Opus 4.1 | Sonnet 4.5 | **2x faster** | **5x cheaper** |
+| Complex architecture | Haiku | Opus 4.1 | N/A (quality) | Worth it |
+| Code review (quick) | Opus 4.1 | Haiku 4.5 | **5x faster** | **60x cheaper** |
+| Code review (deep) | Haiku | Opus 4.1 | N/A (quality) | Worth it |
 
-**Task**: Format code to follow style guide
-
-```bash
-# ❌ SLOW: Opus 4.1
-claude "format src/utils.ts to ESLint config" --model="opus-4.1"
-Time: 15-20 seconds
-Cost: $0.30
-
-# ✅ FAST: Haiku 4.5
-claude "format src/utils.ts to ESLint config" --model="haiku-4.5"
-Time: 2-3 seconds
-Cost: $0.01
-Speedup: 5-10x faster
-Savings: 97% cheaper
+**Model Speed Comparison** (relative):
+```
+Output Generation Speed:
+━━━━━━━━━━━━━━━━━━━━ Haiku 4.5 (fastest)
+━━━━━━━━━━━━━━ Sonnet 4.5 (balanced)
+━━━━━━━━ Opus 4.1 (most capable, slower)
 ```
 
-#### Decision Matrix: Speed vs Quality
+**When to Use Each Model**:
 
-| Task Type | Haiku 4.5 | Sonnet 4.5 | Opus 4.1 | Reasoning |
-|-----------|-----------|------------|----------|-----------|
-| **Code formatting** | ✅ 2s | 🟡 5s | ❌ 15s | Simple, rule-based |
-| **Test generation** | ✅ 3s | 🟡 7s | ❌ 20s | Straightforward patterns |
-| **Bug fixing (simple)** | ✅ 3s | 🟡 8s | ❌ 18s | Clear error messages |
-| **Code review** | 🟡 4s | ✅ 10s | 🟡 25s | Needs context understanding |
-| **Architecture design** | ❌ 5s | 🟡 15s | ✅ 40s | Complex reasoning |
-| **Security audit** | ❌ 5s | 🟡 15s | ✅ 45s | Deep analysis needed |
-| **Algorithm optimization** | ❌ 4s | 🟡 12s | ✅ 35s | Mathematical reasoning |
-
-**Rule of Thumb:**
-- **Haiku**: If task has clear rules/patterns → 5-10x faster
-- **Sonnet**: Default for most coding tasks → 2-3x faster than Opus
-- **Opus**: Only when deep reasoning required → Use sparingly
-
-⚠️ **Anti-Pattern**: Using Opus for simple, rule-based tasks (code formatting, linting)  
-✅ **Better**: Use Haiku for tasks with clear rules - it's 5-10x faster and 97% cheaper  
-💡 **Why**: Opus's deep reasoning is wasted on simple pattern-matching tasks. Haiku handles these perfectly at a fraction of the cost and time.
-
-#### Real Example: Pre-Commit Hook
-
-**Scenario**: Check code before commit (runs frequently)
-
-**Before Optimization:**
+**Haiku 4.5** (Speed champion):
 ```bash
-# .git/hooks/pre-commit
-git diff --cached | claude "review for issues" --model="opus-4.1"
+# Formatting, linting, simple fixes
+git diff | claude "fix linting errors" --model="haiku-4.5"
 
-# Each commit:
-# - Wait 20-30 seconds
-# - Cost $0.40 per commit
-# - 50 commits/week = $20/week = $80/month
-# - Annoying delay before every commit
-```
+# Quick questions with known context
+claude "what does this function return?" --model="haiku-4.5"
 
-**After Optimization:**
-```bash
-# .git/hooks/pre-commit
-git diff --cached | claude "check for: syntax errors, console.logs, TODOs" \
-  --model="haiku-4.5"
-
-# Each commit:
-# - Wait 3-5 seconds (acceptable)
-# - Cost $0.02 per commit
-# - 50 commits/week = $1/week = $4/month
-# - Savings: 95% cheaper, 6x faster
-```
-
-**For Critical PRs** (when you need thorough review):
-```bash
-# Use Opus for final PR review
-git diff main | claude "comprehensive review: security, performance, architecture" \
-  --model="opus-4.1"
-
-# Only 2-3 times per week, not on every commit
-```
-
----
-
-### Pattern 5: Streaming for Perceived Speed
-
-Enable streaming to see results immediately instead of waiting.
-
-#### Non-Streaming (SLOW Perceived Speed)
-
-```bash
-# Without streaming
-claude "explain this authentication flow" --no-stream
-
-# User experience:
-# [Wait 10 seconds...]
-# [Complete response appears at once]
-# Perceived wait: 10 seconds
-```
-
-#### Streaming (FAST Perceived Speed)
-
-```bash
-# With streaming (default)
-claude "explain this authentication flow"
-
-# User experience:
-# [0.5s] First sentence appears...
-# [1.0s] More text streams in...
-# [2.0s] Continuing to stream...
-# [10s] Complete
-# Perceived wait: 0.5 seconds
-# Actual wait: 10 seconds (same)
-# Feels 20x faster!
-```
-
-#### When Streaming Helps
-
-✅ **Use streaming when:**
-- Interactive terminal usage (default for CLI)
-- Users are reading output as it comes
-- Long responses expected
-- Real-time feedback desired
-
-❌ **Disable streaming when:**
-- Piping output to other commands
-- Parsing structured output (JSON, etc.)
-- Batch processing
-- Logging to files
-
-**Example:**
-```bash
-# ✅ Interactive - use streaming
-claude "explain OAuth flow"
-
-# ❌ Piping - disable streaming for clean output
-claude "generate JSON schema" --no-stream | jq '.'
-
-# ❌ Batch processing - disable for cleaner logs
+# Batch operations (speed × volume)
 for file in src/*.ts; do
-  claude "analyze $file" --no-stream >> report.txt
+  claude "add JSDoc" --files="$file" --model="haiku-4.5"
 done
 ```
+
+**Sonnet 4.5** (Default for most tasks):
+```bash
+# Feature development
+claude "add OAuth login"
+
+# Debugging
+npm test 2>&1 | claude "explain test failures"
+
+# Code review
+git diff main | claude "review changes"
+```
+
+**Opus 4.1** (Complex reasoning only):
+```bash
+# Architecture decisions
+claude "design microservices split for monolith" --model="opus-4.1"
+
+# Complex refactoring
+claude "refactor to event-driven architecture" --model="opus-4.1"
+
+# Security audit (deep)
+claude "comprehensive security review" --model="opus-4.1"
+```
+
+### Pattern 5: Extended Thinking - Use Sparingly
+
+**When Extended Thinking Helps**:
+- Complex architectural decisions
+- Multi-step reasoning problems
+- Trade-off analysis
+- Security vulnerability analysis
+
+**When It's Wasteful**:
+- Code formatting
+- Simple questions
+- Documentation generation
+- Straightforward debugging
+
+❌ **Slow: Unnecessary extended thinking**
+```bash
+# Simple task with extended thinking
+claude "format this code" --extended-thinking=5000
+# Adds 5000 thinking tokens at output speed
+# Overhead: ~50-100 seconds
+# Benefit: None (formatting doesn't need reasoning)
+```
+
+✅ **Fast: No extended thinking for simple tasks**
+```bash
+# Simple task, no extended thinking
+claude "format this code"
+# Response: 2-3 seconds
+# Result: Same quality
+# Savings: 4x faster
+```
+
+✅ **Smart: Extended thinking when it matters**
+```bash
+# Complex architectural decision
+claude "should we use microservices or monolith for this system?" \
+  --extended-thinking=5000 \
+  --files="docs/requirements.md"
+# Extended thinking explores trade-offs
+# Provides deeper analysis
+# Worth the time investment
+```
+
+**Default Strategy**:
+```bash
+# 1. Start without extended thinking (fast)
+claude "analyze this problem"
+
+# 2. If answer is superficial, retry with thinking
+claude "analyze this problem in depth" --extended-thinking=3000
+
+# 3. For known complex tasks, enable upfront
+claude "design database schema" --extended-thinking=5000
+```
+
+### Pattern 6: Streaming for Perceived Speed
+
+**Streaming** = See tokens as they're generated  
+**Non-streaming** = Wait for complete response
+
+```bash
+# Streaming (default in CLI)
+claude "explain this codebase"
+# ✅ See response immediately, token by token
+# ✅ Can interrupt if going wrong direction
+# ✅ Feels 50-80% faster
+
+# Non-streaming
+claude "explain this codebase" --no-stream
+# ❌ Wait for entire response
+# ❌ No feedback until complete
+# ❌ Can't interrupt early
+```
+
+**When to Disable Streaming**:
+- Piping output to other commands
+- Saving to files
+- Parsing structured output (JSON/CSV)
+- Automated scripts
+
+**Example**:
+```bash
+# Interactive: Use streaming (default)
+claude "review my code"
+
+# Automation: Disable streaming
+claude "generate JSON schema" --no-stream > schema.json
+```
+
+### Pattern 7: Prompt Caching for Repeat Context
+
+**How Caching Works**:
+1. First message: Claude caches static context (CLAUDE.md, large files)
+2. Cache lasts ~5 minutes
+3. Subsequent messages reuse cache (90% faster, 90% cheaper)
+
+❌ **Slow: No caching**
+```bash
+# Every message re-sends project context
+Message 1: 50K context + 100 new = 50,100 tokens (slow)
+Message 2: 50K context + 100 new = 50,100 tokens (slow)
+Message 3: 50K context + 100 new = 50,100 tokens (slow)
+# Each message processes 50K tokens
+# Total: 150K+ tokens processed
+```
+
+✅ **Fast: With caching**
+```bash
+# First message creates cache
+Message 1: 50K context (cached) + 100 new = 50,100 tokens
+# Cache created, subsequent messages fast
+
+Message 2: 50K cache hit + 100 new = 100 tokens processed (fast!)
+Message 3: 50K cache hit + 100 new = 100 tokens processed (fast!)
+# Total: 50,200 tokens processed
+# Speedup: 3x faster, 90% cost reduction
+```
+
+**How to Enable Caching**:
+
+**Method 1: CLAUDE.md** (automatic)
+```markdown
+<!-- Create CLAUDE.md in project root -->
+# Project Context
+
+This is a Node.js REST API...
+[Project details cached automatically]
+```
+
+**Method 2: Repeated file context**
+```bash
+# Claude automatically caches large files you reference repeatedly
+claude "explain auth" --files="src/auth/large-file.ts"
+# First time: Full processing
+claude "how does login work?" --files="src/auth/large-file.ts"
+# Second time (within 5 min): Cached!
+```
+
+**Cache Lifetime**:
+- Duration: ~5 minutes of inactivity
+- Refresh: Each use extends lifetime
+- Tip: Keep conversations active for continued benefit
 
 ---
 
 ## Real-World Benchmarks
 
-Actual timing data from real development scenarios.
-
 ### Benchmark 1: Code Review
 
-**Task**: Review changes before commit
+**Task**: Review git diff with 500 lines changed
 
-**Unoptimized Approach:**
+**Unoptimized**:
 ```bash
-git diff | claude "review all changes thoroughly" --model="opus-4.1"
-
-Timing breakdown:
-- Read diff: 0.5s
-- Process with Claude: 25s
-- Wait for response: 5s
-Total: 30.5 seconds
-Cost: $0.45
+git diff | claude "review all changes" --model="opus-4.1"
+# Model: Opus 4.1 (slowest, most expensive)
+# Time: 45 seconds
+# Cost: $0.25
 ```
 
-**Optimized Approach:**
+**Optimized**:
 ```bash
-git diff | claude "check for: bugs, security issues, edge cases" \
-  --model="haiku-4.5"
-
-Timing breakdown:
-- Read diff: 0.5s
-- Process with Claude: 4s
-- Wait for response: 1s
-Total: 5.5 seconds
-Cost: $0.03
-Speedup: 5.5x faster
-Savings: 93% cheaper
+git diff | claude "review for critical issues" --model="haiku-4.5"
+# Model: Haiku 4.5 (fast, cheap)
+# Time: 8 seconds
+# Cost: $0.004
+# Speedup: 5.6x faster
+# Savings: 98% cheaper
 ```
 
-**Result**: 25 seconds saved per commit × 10 commits/day = **4 minutes saved daily**
+**When to Use Which**:
+- Pre-commit hook: Haiku (fast, catch obvious issues)
+- Pre-PR review: Sonnet (balanced)
+- Critical PR review: Opus (deep analysis)
 
 ### Benchmark 2: Documentation Generation
 
-**Task**: Update README with new API endpoints
+**Task**: Document 20 TypeScript files
 
-**Unoptimized:**
+**Unoptimized**:
 ```bash
-claude "document all API endpoints" --files="src/**/*.ts" --model="sonnet-4.5"
-
-Timing:
-- Read all files (120 files): 15s
-- Analyze routes: 20s
-- Generate docs: 12s
-Total: 47 seconds
-Tokens: 180K input
-Cost: $0.54
+claude "document all files" --files="src/**/*.ts"
+# Approach: All files at once
+# Files: 20 files, 10K lines total
+# Time: 35 seconds
+# Cost: $0.30
 ```
 
-**Optimized:**
+**Optimized**:
 ```bash
-# Step 1: Find route files (use codebase_search)
-claude "list all files with API route definitions" --model="haiku-4.5"
-# Returns: src/routes/*.ts (8 files)
-# Time: 2s
-
-# Step 2: Document just those files
-claude "document API endpoints" --files="src/routes/*.ts" --model="haiku-4.5"
-
-Timing:
-- Read route files (8 files): 1s
-- Analyze routes: 4s
-- Generate docs: 3s
-Total: 10 seconds (8s + 2s from step 1)
-Tokens: 15K input
-Speedup: 4.7x faster
-Savings: 90% cheaper ($0.05)
+# Approach: Only public API files
+claude "document public API" --files="src/index.ts src/types.ts src/api/*.ts"
+# Files: 5 key files, 2K lines
+# Time: 7 seconds
+# Cost: $0.06
+# Speedup: 5x faster
+# Savings: 80% cheaper
+# Result: Actually more useful (focused on public API)
 ```
-
-**Result**: 37 seconds saved × 5 times/week = **3 minutes saved weekly**
 
 ### Benchmark 3: Test Generation
 
-**Task**: Generate tests for new authentication module
+**Task**: Generate tests for utility function
 
-**Unoptimized:**
+**Unoptimized**:
 ```bash
-claude "write comprehensive tests for authentication" \
-  --files="src/**/*.ts" \
-  --model="opus-4.1" \
-  --extended-thinking=5000
-
-Timing:
-- Read all files: 12s
-- Extended thinking: 18s
-- Test generation: 25s
-Total: 55 seconds
-Cost: $0.85
+claude "write tests for sum function" \
+  --extended-thinking=5000 \
+  --model="opus-4.1"
+# Extended thinking: Not needed for simple function
+# Model: Opus (overkill)
+# Time: 25 seconds
+# Cost: $0.15
 ```
 
-**Optimized:**
+**Optimized**:
 ```bash
-claude "write tests for src/auth/login.ts - cover: happy path, invalid creds, rate limiting" \
-  --files="src/auth/login.ts,src/types/User.ts" \
+claude "write Jest tests with edge cases" \
+  --files="src/utils/math.ts:45-52" \
   --model="haiku-4.5"
-
-Timing:
-- Read specific files: 0.5s
-- Test generation: 6s
-Total: 6.5 seconds
-Speedup: 8.5x faster
-Cost: $0.03
-Savings: 96% cheaper
+# No extended thinking (simple task)
+# Model: Haiku (sufficient for tests)
+# Specific lines only
+# Time: 4 seconds
+# Cost: $0.005
+# Speedup: 6.2x faster
+# Savings: 97% cheaper
 ```
-
-**Result**: 48 seconds saved × 20 tests/week = **16 minutes saved weekly**
 
 ### Benchmark 4: Debugging Session
 
-**Task**: Find cause of memory leak
+**Task**: Fix TypeError in production
 
-**Unoptimized:**
+**Unoptimized**:
 ```bash
-# Send entire codebase repeatedly
-claude "find memory leak" --files="src/**/*.ts"
-# [Multiple follow-up queries, each re-sending all files]
-
-Query 1: 45s
-Query 2: 45s
-Query 3: 45s
-Query 4: 45s
-Total: 180 seconds (3 minutes)
-Cost: $2.40
+# Sending entire codebase
+claude "fix this error: [stack trace]" --files="src/**/*.ts"
+# Context: 100 files, 50K lines
+# Time: 40 seconds
+# Cost: $0.45
+# Claude overwhelmed with context
 ```
 
-**Optimized:**
+**Optimized**:
 ```bash
-# Progressive narrowing with caching
+# Progressive disclosure approach
+# Step 1: Identify issue (3s)
+claude "what causes this error: [stack trace]"
+# Claude: "Likely in auth middleware, line 234"
 
-# Query 1: Find suspect areas
-claude "which modules handle long-lived connections or caching?"
-Time: 5s, Cost: $0.05
+# Step 2: Examine specific code (2s)
+claude "show me src/middleware/auth.ts:220-250"
 
-# Query 2: Analyze specific module (creates cache via CLAUDE.md)
-claude "analyze src/cache/redis.ts for potential memory leaks"
-Time: 8s, Cost: $0.15 (cache created)
+# Step 3: Fix (3s)
+claude "fix the null reference in auth middleware"
 
-# Query 3: Deep dive (uses cache)
-claude "examine connection pooling in redis.ts - is pool size limited?"
-Time: 3s, Cost: $0.02 (cached)
-
-# Query 4: Verify fix (uses cache)
-claude "review my fix - does it properly close connections?"
-Time: 3s, Cost: $0.02 (cached)
-
-Total: 19 seconds
-Speedup: 9.5x faster
-Cost: $0.24
-Savings: 90% cheaper
+# Total: 8 seconds, $0.08
+# Speedup: 5x faster
+# Savings: 82% cheaper
+# Better: Targeted fix, not shotgun approach
 ```
 
-**Result**: 2.7 minutes saved per debugging session × 5 sessions/week = **13 minutes saved weekly**
+### Benchmark 5: Batch Operations
 
-### Weekly Time Savings Summary
+**Task**: Add TypeScript types to 50 JavaScript files
 
-| Task | Times/Week | Seconds Saved Each | Weekly Savings |
-|------|------------|-------------------|----------------|
-| Code review | 50 | 25s | 21 minutes |
-| Documentation | 5 | 37s | 3 minutes |
-| Test generation | 20 | 48s | 16 minutes |
-| Debugging | 5 | 161s | 13 minutes |
-| **Total** | - | - | **53 minutes/week** |
-
-**Monthly**: 53 min × 4 = **3.5 hours saved**  
-**Annually**: 3.5 hours × 12 = **42 hours saved** (one full work week!)
-
----
-
-## Performance Measurement
-
-Track your Claude operations to identify bottlenecks.
-
-### Measuring Response Time
-
-#### Command Line Timing
-
+**Unoptimized** (Sequential):
 ```bash
-# Basic timing
-time claude "your query"
-
-# Example output:
-# real    0m8.432s
-# user    0m0.123s
-# sys     0m0.045s
-# → Response took 8.4 seconds
-
-# Compare different approaches:
-time claude "review code" --files="src/**/*.ts"
-# real    0m35.123s
-
-time claude "review code" --files="src/auth/*.ts"
-# real    0m8.234s
-# → 4.3x faster by narrowing context
+for file in src/**/*.js; do
+  claude "add types" --files="$file"
+done
+# Approach: One by one
+# Time: 50 files × 5s = 250 seconds (~4 minutes)
+# Cost: $2.50
 ```
 
-#### Detailed Performance Logging
-
+**Optimized** (Batch + Model):
 ```bash
-# Enable verbose mode to see token usage
-claude "your query" --verbose
-
-# Example output:
-# Input tokens: 45,234
-# Output tokens: 1,892
-# Cached tokens: 42,000 (90% cache hit)
-# Response time: 8.4s
-# Estimated cost: $0.12
+# Use Haiku for simple typing task
+for file in src/**/*.js; do
+  claude "add TypeScript types" --files="$file" --model="haiku-4.5"
+done &
+# Approach: Parallel with fast model
+# Time: 50 files × 1s (parallel) = ~10 seconds
+# Cost: $0.20
+# Speedup: 25x faster
+# Savings: 92% cheaper
 ```
 
-### Creating Performance Benchmarks
-
+**Even Better** (Batch API):
 ```bash
-#!/bin/bash
-# benchmark-claude.sh - Test different approaches
-
-echo "=== Claude Performance Benchmarks ==="
-echo
-
-# Test 1: Full context
-echo "Test 1: Full context (unoptimized)"
-time claude "review code" --files="src/**/*.ts" --model="opus-4.1" 2>&1 | \
-  grep "real"
-
-# Test 2: Narrow context
-echo "Test 2: Narrow context"
-time claude "review code" --files="src/auth/*.ts" --model="haiku-4.5" 2>&1 | \
-  grep "real"
-
-# Test 3: With caching (requires CLAUDE.md)
-echo "Test 3: With caching (requires existing CLAUDE.md)"
-time claude "review code" --model="haiku-4.5" 2>&1 | \
-  grep "real"
-
-echo
-echo "=== Results ==="
-echo "Check timings above to identify fastest approach"
+# Use Batch API for 50% discount + parallelism
+claude-batch "add TypeScript types" --files="src/**/*.js" --model="haiku-4.5"
+# Time: ~15 seconds (async, don't wait)
+# Cost: $0.10 (50% batch discount)
+# Speedup: Near-instant perceived (async)
+# Savings: 96% cheaper
 ```
 
-### Setting Performance Budgets
+### Summary: Speed Optimization Impact
 
-Define acceptable response times for different operations:
+| Optimization | Typical Speedup | Effort | Cumulative |
+|--------------|-----------------|--------|------------|
+| Use Haiku for simple tasks | 3-5x | Low | 5x |
+| Parallel tool calls | 2-4x | Low | 20x |
+| Progressive disclosure | 2-3x | Medium | 60x |
+| Disable extended thinking | 2-4x | Low | 240x |
+| Enable prompt caching | 1.5-2x | Low | 480x |
+| Smart context selection | 2-10x | Medium | **4800x** |
 
-```bash
-# .claude-performance-budget.yml
-performance_budgets:
-  quick_queries:
-    max_time: 3s
-    examples:
-      - "simple questions"
-      - "code formatting"
-      - "syntax fixes"
-  
-  code_review:
-    max_time: 8s
-    examples:
-      - "git diff review"
-      - "security check"
-      - "style compliance"
-  
-  complex_analysis:
-    max_time: 20s
-    examples:
-      - "architecture review"
-      - "performance analysis"
-      - "security audit"
-  
-  batch_operations:
-    max_time: async
-    examples:
-      - "test generation for entire suite"
-      - "documentation for all modules"
-      - "CI/CD automated checks"
-```
-
-**Enforce budgets:**
-```bash
-# Add timeout to queries
-timeout 10s claude "your query" || echo "Query exceeded 10s budget!"
-
-# For critical fast operations:
-timeout 5s git diff --cached | claude "quick review" --model="haiku-4.5" || {
-  echo "⚠️  Review took too long, committing anyway"
-}
-```
-
-### Monitoring Team Performance
-
-```bash
-#!/bin/bash
-# team-performance-report.sh
-
-echo "=== Weekly Claude Performance Report ==="
-echo
-
-# Average response times (requires logging)
-echo "Average response times by operation:"
-cat ~/.claude-logs/*.log | grep "response_time" | \
-  awk '{sum+=$2; count++} END {print "Average: " sum/count "s"}'
-
-# Slowest queries
-echo
-echo "Top 10 slowest queries this week:"
-cat ~/.claude-logs/*.log | grep "response_time" | \
-  sort -k2 -nr | head -10
-
-# Cache hit rates
-echo
-echo "Cache efficiency:"
-cache_hits=$(cat ~/.claude-logs/*.log | grep "cache_hit" | wc -l)
-total_queries=$(cat ~/.claude-logs/*.log | wc -l)
-hit_rate=$((cache_hits * 100 / total_queries))
-echo "Cache hit rate: ${hit_rate}%"
-
-# Model usage
-echo
-echo "Model selection breakdown:"
-cat ~/.claude-logs/*.log | grep "model" | \
-  awk '{print $2}' | sort | uniq -c | sort -nr
-```
+**Real-world result**: With all optimizations, get **10-50x faster** responses in practice.
 
 ---
 
 ## Performance Checklist
 
-Use this checklist before every Claude operation to ensure optimal performance.
+Before running any Claude operation:
 
-### Pre-Query Optimization Checklist
+### Context Optimization
+- [ ] Do I need all these files, or just a few?
+- [ ] Can I use line ranges instead of full files?
+- [ ] Should Claude search first, then I provide specific files?
+- [ ] Is CLAUDE.md set up for automatic caching?
 
-Before running any Claude command, ask:
+### Model Selection
+- [ ] Is this simple enough for Haiku? (5x faster)
+- [ ] Do I really need Opus, or is Sonnet sufficient?
+- [ ] Can I use Haiku for first pass, Opus for refinement?
 
-#### 1. Context Selection
-- [ ] Do I really need all these files?
-- [ ] Can I narrow to specific directory or files?
-- [ ] Should I use codebase_search first to find relevant files?
-- [ ] Is CLAUDE.md set up for caching? (for multi-query sessions)
+### Extended Thinking
+- [ ] Is this a complex reasoning task? (Yes = enable)
+- [ ] Or is it straightforward? (No = disable)
+- [ ] What budget: 1000 (light), 3000 (medium), 5000 (deep)?
 
-**Action:**
-```bash
-# Instead of:
-claude "query" --files="src/**/*.ts"
+### Operation Type
+- [ ] Is this interactive? (Use streaming)
+- [ ] Or automated/piped? (Disable streaming)
+- [ ] Can I batch multiple operations?
+- [ ] Should I use async Batch API?
 
-# Try:
-claude "query" --files="src/auth/*.ts"
-# Or even better - be specific:
-claude "query" --files="src/auth/login.ts,src/types/User.ts"
-```
+### Parallelism
+- [ ] Am I reading multiple independent files?
+- [ ] Can I provide all file paths upfront?
+- [ ] Am I in a conversation? (Progressive disclosure OK)
 
-#### 2. Model Selection
-- [ ] Is this task simple enough for Haiku? (5-10x faster)
-- [ ] Do I need deep reasoning or is pattern matching sufficient?
-- [ ] Am I using Opus when Sonnet would work?
-
-**Action:**
-```bash
-# Quick decision tree:
-# - Code formatting, simple fixes → Haiku
-# - Code review, test generation → Haiku or Sonnet
-# - Architecture, complex debugging → Sonnet or Opus
-claude "query" --model="haiku-4.5"  # Default to faster
-```
-
-#### 3. Extended Thinking
-- [ ] Does this task require deep reasoning?
-- [ ] Is this a simple pattern-matching task?
-- [ ] Can I be more specific to avoid need for extended thinking?
-
-**Action:**
-```bash
-# Only enable when needed:
-# - Complex algorithms
-# - Security audits
-# - Architecture decisions
-
-# Most tasks don't need it:
-claude "query"  # No extended thinking (faster)
-```
-
-#### 4. Query Specificity
-- [ ] Is my query specific enough?
-- [ ] Have I included relevant constraints?
-- [ ] Can I break this into smaller, focused queries?
-
-**Action:**
-```bash
-# Vague (slow, expensive):
-claude "improve this code"
-
-# Specific (fast, cheap):
-claude "refactor login.ts to use async/await instead of callbacks"
-```
-
-#### 5. Streaming
-- [ ] Am I viewing output interactively? → Enable streaming
-- [ ] Am I piping to another command? → Disable streaming
-- [ ] Am I parsing structured output? → Disable streaming
-
-**Action:**
-```bash
-# Interactive:
-claude "explain..." # Streaming on (default)
-
-# Piping/parsing:
-claude "generate JSON" --no-stream | jq '.'
-```
-
-#### 6. Caching Strategy
-- [ ] Will I make multiple queries on same codebase?
-- [ ] Is CLAUDE.md set up with project context?
-- [ ] Am I in a multi-turn conversation?
-
-**Action:**
-```bash
-# Create CLAUDE.md if:
-# - Working on feature (multiple queries)
-# - Team project (shared context)
-# - Long session (>3 queries)
-
-cat > CLAUDE.md << 'EOF'
-# Project: User Authentication Service
-# Stack: Node.js, Express, PostgreSQL, JWT
-[... add relevant context ...]
-EOF
-```
-
-### Post-Query Analysis Checklist
-
-After a slow query, investigate:
-
-- [ ] Was response time > 10 seconds? → Could I narrow context?
-- [ ] Was cost > $0.20? → Could I use cheaper model?
-- [ ] Did I wait for full response? → Should I enable streaming?
-- [ ] Did query fail or timeout? → Break into smaller queries
-
-### Team Performance Review Checklist
-
-Weekly team review:
-
-- [ ] What were our slowest operations this week?
-- [ ] Are we using appropriate models for each task?
-- [ ] What's our cache hit rate? (target: >70%)
-- [ ] Are we batching related queries?
-- [ ] What performance budgets should we set?
+### Caching Strategy
+- [ ] Is this a multi-turn conversation?
+- [ ] Am I referencing same files repeatedly?
+- [ ] Is CLAUDE.md present and up-to-date?
+- [ ] Are my queries within 5-minute cache window?
 
 ---
 
-## Quick Reference: Speed Optimization Patterns
+## Monitoring Performance
 
-| Pattern | Speedup | When to Use | Example |
-|---------|---------|-------------|---------|
-| **Parallel tool calls** | 3-5x | Multiple independent files | Specify files upfront |
-| **Progressive disclosure** | 4-10x | Exploring unfamiliar code | Start narrow, expand as needed |
-| **Smart context** | 3-5x | Multi-query sessions | CLAUDE.md + targeted files |
-| **Model selection** | 5-10x | Simple vs complex tasks | Haiku for simple, Opus for complex |
-| **Streaming** | 20x perceived | Interactive use | Enable by default (CLI default) |
-| **Caching** | 3-10x | Repeated context | CLAUDE.md for project context |
+### Measure Response Time
+
+**CLI timing**:
+```bash
+# Time any Claude operation
+time claude "your query"
+# Output:
+# real    0m3.421s  ← Total time
+# user    0m0.123s
+# sys     0m0.045s
+```
+
+**Set performance budgets**:
+```bash
+# Simple queries: < 2 seconds
+time claude "what does this function do?" --files="src/utils.ts:45-60"
+
+# Code reviews: < 5 seconds
+time git diff | claude "quick review"
+
+# Complex analysis: < 10 seconds
+time claude "analyze architecture"
+
+# Batch jobs: Don't wait (async)
+claude-batch "generate docs" &
+```
+
+### Track Token Usage
+
+```bash
+# See token breakdown
+claude "your query" --verbose
+# Output includes:
+# - Input tokens: 1,234
+# - Output tokens: 567
+# - Cached tokens: 0 (or 1,234 if cached)
+# - Total cost: $0.0123
+```
+
+### Monitor Cost
+
+```bash
+# Track daily usage
+claude --usage-stats --day=today
+
+# Weekly summary
+claude --usage-stats --week=current
+
+# Monthly tracking
+claude --usage-stats --month=current
+
+# Cost breakdown
+claude --cost-report --sort-by=cost --top=10
+# Shows most expensive operations
+```
+
+### Set Alerts
+
+```bash
+# Budget alerts
+claude --set-budget 100 --alert-threshold=80
+# Warns at $80, stops at $100
+
+# Daily limits
+claude --set-daily-limit 10
+# Max $10/day
+
+# Per-query limits
+export CLAUDE_MAX_COST_PER_QUERY=0.50
+# Blocks queries estimated >$0.50
+```
+
+### Performance Dashboard
+
+Create a personal performance tracker:
+
+```bash
+#!/bin/bash
+# save as: claude-perf-tracker.sh
+
+echo "=== Claude Performance Metrics ==="
+echo "Week of: $(date +%Y-%m-%d)"
+echo
+
+# Response time tracking
+echo "--- Response Times ---"
+echo "Last 10 operations:"
+tail -10 ~/.claude/timing.log | awk '{sum+=$1; count++} END {print "Average: " sum/count "s"}'
+
+# Token efficiency
+echo
+echo "--- Token Efficiency ---"
+claude --usage-stats --week=current | grep "Tokens"
+echo "Cache hit rate:" $(claude --cache-stats | grep "hit rate")
+
+# Cost efficiency
+echo
+echo "--- Cost Efficiency ---"
+claude --usage-stats --week=current | grep "Cost"
+echo "Cost per query:" $(claude --cost-report --average)
+
+# Speed trends
+echo
+echo "--- Speed Trends ---"
+echo "Fastest query: $(sort -n ~/.claude/timing.log | head -1)"
+echo "Slowest query: $(sort -rn ~/.claude/timing.log | head -1)"
+```
+
+### Identifying Bottlenecks
+
+**If responses are slow, check**:
+
+1. **Token Count**
+   ```bash
+   claude "your query" --verbose | grep "Input tokens"
+   # If >50K: Reduce context
+   ```
+
+2. **Model Choice**
+   ```bash
+   claude --last-query-stats
+   # Check: model: "opus-4.1"
+   # Ask: Did I need Opus?
+   ```
+
+3. **Extended Thinking**
+   ```bash
+   claude --last-query-stats | grep "thinking"
+   # Check if thinking tokens > 0
+   # Ask: Was extended thinking necessary?
+   ```
+
+4. **Caching**
+   ```bash
+   claude --cache-stats
+   # Check cache hit rate
+   # If 0%: Set up CLAUDE.md
+   ```
+
+5. **Network**
+   ```bash
+   ping api.anthropic.com
+   # Check latency
+   # If >200ms: Network issue
+   ```
 
 ---
 
-## Summary
+## Performance Optimization Examples
 
-**Key Takeaways:**
+### Example 1: Morning Code Review Routine
 
-1. **Parallel operations** save network latency (3-5x faster)
-2. **Progressive disclosure** avoids loading unnecessary context (4-10x faster)
-3. **Model selection** matters: Haiku vs Opus = 5-10x speed difference
-4. **Streaming** makes responses feel 20x faster (perceived speed)
-5. **Caching** via CLAUDE.md reduces latency and cost (90% savings)
-6. **Specific queries** are faster than vague ones (2-3x faster)
+**Before optimization** (slow):
+```bash
+# Review overnight changes
+git log --since="yesterday" --patch | claude "review all commits" --model="opus-4.1"
+# Time: 2-3 minutes
+# Cost: $2.50
+# Problem: Too thorough for quick morning scan
+```
 
-**Performance Habits:**
-- ✅ Always specify files when possible
-- ✅ Default to Haiku, upgrade only when needed
-- ✅ Create CLAUDE.md for multi-query sessions
-- ✅ Enable streaming for interactive use
-- ✅ Break large queries into focused ones
-- ✅ Measure and track performance over time
+**After optimization** (fast):
+```bash
+# Quick scan with Haiku
+git log --since="yesterday" --oneline | claude "summarize changes" --model="haiku-4.5"
+# Time: 5 seconds
+# Cost: $0.01
+# Result: Fast overview, can deep-dive if needed
+# Speedup: 36x faster, 250x cheaper
+```
 
-**Expected Results:**
-- **3-10x faster** responses with optimization
-- **50-60 minutes saved per week** per developer
-- **Better user experience** with streaming
-- **Lower costs** as side benefit of speed optimization
+### Example 2: Pre-commit Hook
+
+**Before** (blocking):
+```bash
+# .git/hooks/pre-commit
+git diff --cached | claude "review" --model="sonnet-4.5"
+# Time: 15 seconds per commit
+# Developer waits, frustrating
+```
+
+**After** (fast):
+```bash
+# .git/hooks/pre-commit
+git diff --cached | claude "check for: secrets, console.logs, TODOs" --model="haiku-4.5"
+# Time: 2-3 seconds
+# Focus: Critical issues only
+# Developer: Barely notices
+# Speedup: 5-7x faster
+```
+
+### Example 3: CI/CD Pipeline
+
+**Before** (sequential):
+```bash
+# .github/workflows/claude.yml
+- run: claude "review PR"        # 30s
+- run: claude "check security"   # 30s
+- run: claude "update docs"      # 30s
+# Total: 90 seconds
+```
+
+**After** (parallel + batch):
+```bash
+# .github/workflows/claude.yml
+- run: |
+    claude-batch "review PR" &
+    claude-batch "check security" &
+    claude-batch "update docs" &
+    wait
+# Total: 35 seconds (parallel + batch API)
+# Speedup: 2.5x faster
+```
 
 ---
 
-## Next Steps
+## Key Takeaways
 
-1. **Benchmark your current operations**: Run `time claude "query"` to see baseline
-2. **Apply one optimization**: Start with model selection (easiest wins)
-3. **Create CLAUDE.md**: Set up caching for your project
-4. **Measure improvement**: Track time saved over one week
-5. **Share learnings**: Help team adopt fast patterns
+### Golden Rules
+1. **Start with Haiku**, upgrade if needed
+2. **Narrow context first**, expand later
+3. **Cache with CLAUDE.md** (90% savings)
+4. **Disable extended thinking** by default
+5. **Parallelize** when possible
+6. **Stream for interaction**, disable for automation
+7. **Measure everything**, optimize bottlenecks
 
-**Related Sections:**
-- [Section 15: Cost Optimization](15-context-management.md) - Reduce costs while improving speed
-- [Section 14: Prompt Engineering](14-prompt-engineering.md) - Write queries that get fast, accurate results
-- [Section 22: Productivity Benchmarks](../07-reference-troubleshooting/22-productivity-benchmarks.md) - Track your improvements
+### Quick Wins (Implement Today)
+- [ ] Create CLAUDE.md → instant caching
+- [ ] Use `--model="haiku-4.5"` for simple tasks
+- [ ] Remove `--extended-thinking` from scripts
+- [ ] Add `time` to measure operations
+- [ ] Use file line ranges instead of full files
+
+### Expected Results
+With these optimizations:
+- **10-50x faster** responses
+- **80-95% cost reduction**
+- **Better developer experience** (faster feedback)
+- **Same or better quality** (right tool for right job)
 
 ---
 
-**Performance optimization is about making Claude feel instantaneous. With these patterns, you'll spend less time waiting and more time building.** 🚀
+## What's Next?
 
+**Related Sections**:
+- [Section 15: Context Management & Cost Optimization](./15-context-management.md) - Cost strategies
+- [Section 14: Prompt Engineering](./14-prompt-engineering.md) - Better prompts
+- [Section 21: Troubleshooting](../07-reference-troubleshooting/21-troubleshooting.md) - If slow, debug here
+
+**Advanced Topics**:
+- Batch API for large-scale operations
+- Custom caching strategies
+- Performance monitoring automation
+- Team-wide optimization
+
+---
+
+**Remember**: Speed optimization isn't about cutting corners—it's about using the right tool efficiently. Fast responses = better developer experience = more Claude usage = more productivity. 🚀

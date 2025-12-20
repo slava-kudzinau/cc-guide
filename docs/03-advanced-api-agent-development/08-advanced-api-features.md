@@ -120,6 +120,10 @@ const cachedPrompt = await client.messages.create({
 // Subsequent calls with same context: 90% cheaper!
 ```
 
+⚠️ **Anti-Pattern**: Not using prompt caching for repeated context (costs 10x more)  
+✅ **Better**: Cache large context (docs, code) that repeats across requests  
+💡 **Why**: Without caching, sending 50K tokens 10 times costs $1.50. With caching: $0.18 (first request) + $0.14 (9 cached requests) = $0.32 total. That's 79% savings!
+
 ## Streaming Responses
 
 ### Real-Time Output
@@ -136,6 +140,10 @@ for await (const event of stream) {
   }
 }
 ```
+
+⚠️ **Anti-Pattern**: Not using streaming for user-facing applications (poor UX)  
+✅ **Better**: Always stream responses in interactive applications - show progress as tokens arrive  
+💡 **Why**: Non-streaming makes users wait 5-20 seconds staring at a blank screen. Streaming shows immediate progress, feels 50-80% faster, and allows early termination if output goes off-track.
 
 [← Back to Part 3 Index](README) | [Next: Agent SDK →](09-agent-sdk)
 

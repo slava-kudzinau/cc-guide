@@ -26,6 +26,10 @@ Exit 1 if issues found"
 exit $?
 ```
 
+⚠️ **Anti-Pattern**: Committing changes without any review automation  
+✅ **Better**: Add pre-commit hooks that catch issues before they reach CI/CD  
+💡 **Why**: Issues caught in pre-commit hooks take seconds to fix. Same issues in CI take 5-10 minutes (pipeline run time) or worse - reach production.
+
 ### Auto-Format & Fix
 ```bash
 #!/bin/bash
@@ -65,6 +69,10 @@ jobs:
           git diff origin/main... | \
           claude "Review for: security, performance, best practices"
 ```
+
+⚠️ **Anti-Pattern**: Using expensive Opus model in CI/CD for all checks  
+✅ **Better**: Use Haiku for fast checks (linting, formatting), reserve Sonnet/Opus for security reviews  
+💡 **Why**: CI runs dozens of times per day. Haiku is 10x faster and 60x cheaper - perfect for quick checks. Use `--model haiku-4.5` for speed.
 
 ### GitLab CI
 ```yaml

@@ -141,7 +141,162 @@ Creates endpoints with:
 - Integration tests
 ```
 
-## Team Skills Repository
+## Context7 as a Dynamic Skill Alternative
+
+While traditional skills provide static, pre-defined knowledge, **Context7** offers dynamic, always-current library documentation.
+
+### Skills vs Context7: When to Use Each
+
+| Aspect | Traditional Skills | Context7 |
+|--------|-------------------|----------|
+| **Knowledge type** | Custom patterns, conventions | Library/framework docs |
+| **Update frequency** | Manual (you update) | Automatic (real-time) |
+| **Use case** | Company-specific patterns | Public library knowledge |
+| **Best for** | Internal conventions | Latest framework features |
+| **Example** | "Use our auth pattern" | "Latest Next.js patterns" |
+
+### Using Context7 Instead of Skills
+
+**Before: Creating a Static Skill**
+```bash
+# Create skill for Next.js patterns (quickly outdated)
+cat > nextjs-skill/SKILL.md << 'EOF'
+# Next.js Patterns
+Use these Next.js patterns:
+- getServerSideProps for SSR
+- getStaticProps for SSG
+# ...but these may be outdated in months
+EOF
+```
+
+**After: Use Context7 (Always Current)**
+```bash
+# No skill needed - query Context7 directly
+claude "Context7: Next.js 15 server components data fetching patterns"
+
+# Context7 provides current, version-specific guidance
+# No maintenance needed - always up-to-date
+```
+
+### Hybrid Approach: Skills + Context7
+
+Combine both for maximum power:
+
+```bash
+# Use skill for company conventions
+claude "Use @auth-skill to understand our auth flow
+
+# Use Context7 for latest library patterns
+Context7: Show me Prisma 5 client extensions
+
+# Implement using both
+Now implement OAuth using our patterns with latest Prisma features"
+```
+
+### When to Use Context7 Over Skills
+
+**✅ Use Context7 when:**
+- Working with public libraries/frameworks
+- Framework has version-specific differences (Next.js 13 vs 15)
+- Library updates frequently (React, Vue, AWS SDK)
+- Need latest best practices
+- Checking for deprecations
+
+**❌ Don't use Context7, create a Skill instead when:**
+- Company-specific patterns and conventions
+- Internal APIs and services
+- Custom tooling and workflows
+- Team coding standards
+- Proprietary logic
+
+### Examples: Context7 as Knowledge Source
+
+**Frontend Development**
+```bash
+# Instead of creating React/Vue/Svelte skills
+claude "Context7: React 19 use() hook for data fetching"
+claude "Context7: Vue 3.4 composition API patterns"
+claude "Context7: Svelte 5 runes state management"
+```
+
+**Backend Development**
+```bash
+# Instead of framework-specific skills
+claude "Context7: NestJS 10 microservices setup"
+claude "Context7: Fastify v4 async hooks"
+claude "Context7: Express 5 router syntax changes"
+```
+
+**Database & ORM**
+```bash
+# Instead of ORM skills
+claude "Context7: Prisma 5 multi-schema support"
+claude "Context7: TypeORM 0.3 DataSource API"
+claude "Context7: Drizzle ORM migration syntax"
+```
+
+**Cloud Platforms**
+```bash
+# Instead of cloud provider skills
+claude "Context7: AWS CDK v3 Lambda L2 constructs"
+claude "Context7: Terraform 1.7 import blocks"
+claude "Context7: Pulumi ESC environment variables"
+```
+
+### Building Skills That Leverage Context7
+
+Create skills that **use** Context7 for up-to-date info:
+
+````markdown
+---
+name: modern-react-component
+description: Generate React components using latest patterns
+---
+
+# Modern React Component Generator
+
+## Instructions
+
+1. Query Context7 for latest React patterns:
+   - "Context7: React [current-version] component patterns"
+   - "Context7: React [current-version] hooks best practices"
+
+2. Generate component with:
+   - Latest hook patterns from Context7
+   - Our company TypeScript conventions
+   - Our testing standards
+
+3. Include Context7-verified patterns for:
+   - State management
+   - Effect handling
+   - Performance optimization
+````
+
+### Context7 Usage in Skills
+
+Reference Context7 in skill documentation:
+
+```markdown
+# Backend API Skill
+
+## Before generating code:
+
+1. Check latest patterns:
+   ```
+   Context7: [framework] [version] - verify current best practices
+   ```
+
+2. Apply our conventions:
+   - Use our error handling middleware
+   - Follow our naming conventions
+   - Apply our security standards
+
+3. Generate code using:
+   - Latest library patterns (Context7)
+   - Company standards (from skill)
+```
+
+### Team Skills Repository
 
 ### Shared Skills Setup
 ```bash
