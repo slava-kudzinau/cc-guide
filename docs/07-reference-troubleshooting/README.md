@@ -2,6 +2,7 @@
 title: "Part 7: Reference, Troubleshooting & Future"
 nav_order: 8
 has_children: true
+permalink: /docs/07-reference-troubleshooting/
 ---
 
 # Part 7: Reference, Troubleshooting & Future

@@ -2,6 +2,7 @@
 title: "Part 4: Enterprise & DevOps Integration"
 nav_order: 5
 has_children: true
+permalink: /docs/04-enterprise-devops-patterns/
 ---
 
 # Part 4: Enterprise & DevOps Integration

@@ -2,6 +2,7 @@
 title: "Part 5: Prompt Engineering & Context Mastery"
 nav_order: 6
 has_children: true
+permalink: /docs/05-prompt-context-mastery/
 ---
 
 # Part 5: Prompt Engineering & Context Mastery

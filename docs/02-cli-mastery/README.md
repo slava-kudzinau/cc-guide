@@ -2,6 +2,7 @@
 title: "Part 2: Claude Code CLI Mastery"
 nav_order: 3
 has_children: true
+permalink: /docs/02-cli-mastery/
 ---
 
 # Part 2: Claude Code CLI Mastery

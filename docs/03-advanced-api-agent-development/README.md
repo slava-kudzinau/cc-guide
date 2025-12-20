@@ -2,6 +2,7 @@
 title: "Part 3: Advanced API & Agent Development"
 nav_order: 4
 has_children: true
+permalink: /docs/03-advanced-api-agent-development/
 ---
 
 # Part 3: Advanced API & Agent Development

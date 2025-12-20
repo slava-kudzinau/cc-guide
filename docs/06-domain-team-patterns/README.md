@@ -2,6 +2,7 @@
 title: "Part 6: Domain-Specific & Team Collaboration"
 nav_order: 7
 has_children: true
+permalink: /docs/06-domain-team-patterns/
 ---
 
 # Part 6: Domain-Specific & Team Collaboration
