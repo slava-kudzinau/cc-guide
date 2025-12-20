@@ -22,10 +22,9 @@ graph TD
     API --> Models
     SDK --> Models
     
-    Models --> Sonnet45[Sonnet 4.5<br/>Balanced]
-    Models --> Haiku45[Haiku 4.5<br/>Fast]
-    Models --> Opus4[Opus 4.1<br/>Most Capable]
-    Models --> Claude4[Claude 4<br/>Latest]
+    Models --> Sonnet45[Claude Sonnet 4.5<br/>Balanced]
+    Models --> Haiku45[Claude Haiku 4.5<br/>Fast]
+    Models --> Opus4[Claude Opus 4.1<br/>Most Capable]
     
     CLI --> MCP[MCP Servers]
     VSCode --> MCP
@@ -42,12 +41,13 @@ graph TD
 
 ### Active Models (December 2025)
 
+> **Note:** "Claude 4" is the family name, not a specific model. Always specify the complete model name: Claude Opus 4.1, Claude Sonnet 4.5, or Claude Haiku 4.5.
+
 | Model | Best For | Speed | Cost (Input/Output per MTOK) | Context Window |
 |-------|----------|-------|------------------------------|----------------|
-| **Claude 4** | Latest, most advanced | Moderate | $15 / $75 | 200K |
-| **Sonnet 4.5** | **Daily coding (recommended)** | Fast | $3 / $15 | 200K |
-| **Haiku 4.5** | Speed + cost optimization | Fastest | $1 / $5 | 200K |
-| **Opus 4.1** | Complex reasoning, architecture | Moderate | $15 / $75 | 200K |
+| **Claude Opus 4.1** | Complex reasoning, architecture | Moderate | $15 / $75 | 200K |
+| **Claude Sonnet 4.5** | **Daily coding (recommended)** | Fast | $3 / $15 | 200K |
+| **Claude Haiku 4.5** | Speed + cost optimization | Fastest | $1 / $5 | 200K |
 
 **All models support:**
 - ✅ Extended thinking
@@ -57,26 +57,31 @@ graph TD
 - ✅ Prompt caching
 - ✅ Multilingual capabilities
 
+**API Model Identifiers:**
+- Claude Opus 4.1 → `claude-opus-4-1`
+- Claude Sonnet 4.5 → `claude-sonnet-4-5`
+- Claude Haiku 4.5 → `claude-haiku-4-5`
+
 ### Model Selection Decision Tree
 
 ```mermaid
 graph TD
     Start{What's your<br/>primary need?}
     
-    Start -->|Speed + Cost| Haiku[Haiku 4.5<br/>$1/$5 MTOK]
-    Start -->|Balanced| Sonnet[Sonnet 4.5<br/>$3/$15 MTOK]
-    Start -->|Max Intelligence| Opus[Opus 4.1 or Claude 4<br/>$15/$75 MTOK]
+    Start -->|Speed + Cost| Haiku[Claude Haiku 4.5<br/>$1/$5 MTOK]
+    Start -->|Balanced| Sonnet[Claude Sonnet 4.5<br/>$3/$15 MTOK]
+    Start -->|Max Intelligence| Opus[Claude Opus 4.1<br/>$15/$75 MTOK]
     
     Start -->|Complex Reasoning| Extended{Need extended<br/>thinking?}
-    Extended -->|Yes| SonnetExt[Sonnet 4.5<br/>with 5K-10K budget]
-    Extended -->|Very Complex| OpusExt[Opus/Claude 4<br/>with 10K-32K budget]
+    Extended -->|Yes| SonnetExt[Claude Sonnet 4.5<br/>with 5K-10K budget]
+    Extended -->|Very Complex| OpusExt[Claude Opus 4.1<br/>with 10K-32K budget]
     
     Start -->|High Volume| Batch[Any Model<br/>with Batch API<br/>50% cost reduction]
 ```
 
 ### When to Use Each Model
 
-**Haiku 4.5** - Speed & Cost Priority
+**Claude Haiku 4.5** - Speed & Cost Priority
 - Quick code completions
 - Simple refactoring
 - Documentation generation
@@ -84,7 +89,7 @@ graph TD
 - Real-time chat interactions
 - **Cost:** ~10x cheaper than Opus
 
-**Sonnet 4.5** - Daily Workhorse (Recommended)
+**Claude Sonnet 4.5** - Daily Workhorse (Recommended)
 - Feature development
 - Code review
 - Bug fixes and debugging
@@ -92,7 +97,7 @@ graph TD
 - API design
 - **Sweet spot:** 4x faster than Opus, nearly as capable
 
-**Opus 4.1 / Claude 4** - Complex Tasks
+**Claude Opus 4.1** - Complex Tasks
 - System architecture design
 - Complex algorithm implementation
 - Security analysis
@@ -455,9 +460,9 @@ graph TB
     end
     
     subgraph Intelligence
-        Haiku[Haiku 4.5<br/>Fast/Cheap]
-        Sonnet[Sonnet 4.5<br/>Balanced]
-        Opus[Opus/Claude 4<br/>Max Intelligence]
+        Haiku[Claude Haiku 4.5<br/>Fast/Cheap]
+        Sonnet[Claude Sonnet 4.5<br/>Balanced]
+        Opus[Claude Opus 4.1<br/>Max Intelligence]
         Extended[Extended Thinking<br/>Deep Reasoning]
     end
     
@@ -488,7 +493,7 @@ graph TB
 ### Key Principles
 
 1. **Choose the right tool:** CLI for automation, API for integration, SDK for agents
-2. **Choose the right model:** Haiku for speed, Sonnet for balance, Opus for complexity
+2. **Choose the right model:** Claude Haiku 4.5 for speed, Claude Sonnet 4.5 for balance, Claude Opus 4.1 for complexity
 3. **Use extended thinking:** For complex reasoning (5K-10K budget typical)
 4. **Leverage prompt caching:** Save 90% on repeated context
 5. **Use MCP:** Connect to external data and tools
@@ -501,14 +506,14 @@ graph TB
 
 | Scenario | Tool | Model | Features |
 |----------|------|-------|----------|
-| Daily feature development | CLI | Sonnet 4.5 | Standard context |
-| Architecture design | CLI/API | Opus 4.1 | Extended thinking 10K |
-| High-volume API calls | API | Haiku 4.5 | Batch processing |
-| Screenshot to code | CLI/API | Sonnet 4.5 | Vision |
-| Custom automation | Agent SDK | Sonnet 4.5 | Custom tools |
-| CI/CD integration | CLI | Haiku 4.5 | Non-interactive |
-| Complex debugging | CLI | Sonnet 4.5 | Extended thinking 5K |
-| Full repo analysis | API | Sonnet 4.5 | Batch (2M context) |
+| Daily feature development | CLI | Claude Sonnet 4.5 | Standard context |
+| Architecture design | CLI/API | Claude Opus 4.1 | Extended thinking 10K |
+| High-volume API calls | API | Claude Haiku 4.5 | Batch processing |
+| Screenshot to code | CLI/API | Claude Sonnet 4.5 | Vision |
+| Custom automation | Agent SDK | Claude Sonnet 4.5 | Custom tools |
+| CI/CD integration | CLI | Claude Haiku 4.5 | Non-interactive |
+| Complex debugging | CLI | Claude Sonnet 4.5 | Extended thinking 5K |
+| Full repo analysis | API | Claude Sonnet 4.5 | Batch (2M context) |
 
 ---
 
