@@ -11,19 +11,13 @@ Master advanced prompting techniques and context optimization for maximum effect
 
 ## Sections
 
-### [Section 14: Advanced Prompt Engineering](14-prompt-engineering.md)
-Chain-of-thought, multishot examples, XML tags, role-based prompting, constraint specification
+### [Section 01: Advanced Prompt Engineering](01-prompt-engineering.md)
+Copy-paste ready patterns for feature development, debugging, code review, refactoring, testing, and documentation. Includes chain-of-thought, role-based prompting, few-shot examples, and constraint-based techniques.
 
-### [Section 15: Context Management & Cost Optimization](15-context-management.md)
-Token budgets, prompt caching (90% savings), CLAUDE.md best practices, real cost examples
+### [Section 02: Context, Cost & Performance Optimization](02-optimization-guide.md)
+Complete guide to making Claude Code 70-90% cheaper and 10-50x faster. Covers CLAUDE.md setup, smart model selection, prompt caching, parallel operations, progressive disclosure, budget planning, and ROI calculations.
 
-### [Section 15b: Performance & Speed Optimization](15b-performance-optimization.md)
-Latency optimization, parallel operations, model selection for speed, 3-10x faster responses
-
-### [Section 16: Multi-Model Strategies](16-multi-model-strategies.md)
-Model selection, ensemble patterns, cost vs performance, latency optimization
-
-[← Part 4: Enterprise](../04-enterprise-devops-patterns/) | [Next: Prompt Engineering →](14-prompt-engineering.md)
+[← Part 4: Enterprise](../04-enterprise-devops-patterns/) | [Next: Prompt Engineering →](01-prompt-engineering.md)
 
 
 
