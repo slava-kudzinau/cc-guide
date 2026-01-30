@@ -660,39 +660,42 @@ claude "review file3.ts"
 **Steps**:
 
 1. **Install** (2 minutes):
-```bash
-# macOS/Linux/WSL (Recommended)
-curl -fsSL https://claude.ai/install.sh | bash
 
-# Windows PowerShell
-irm https://claude.ai/install.ps1 | iex
+   ```bash
+   # macOS/Linux/WSL (Recommended)
+   curl -fsSL https://claude.ai/install.sh | bash
 
-# Homebrew (macOS)
-brew install --cask claude-code
+   # Windows PowerShell
+   irm https://claude.ai/install.ps1 | iex
 
-# WinGet (Windows)
-winget install Anthropic.ClaudeCode
+   # Homebrew (macOS)
+   brew install --cask claude-code
 
-# OR install VS Code extension: search "Claude Code" in Extensions
-```
+   # WinGet (Windows)
+   winget install Anthropic.ClaudeCode
+
+   # OR install VS Code extension: search "Claude Code" in Extensions
+   ```
 
 2. **Setup API key** (1 minute):
-```bash
-export ANTHROPIC_API_KEY="your-key-here"
-# Get key from: https://console.anthropic.com/
-```
+
+   ```bash
+   export ANTHROPIC_API_KEY="your-key-here"
+   # Get key from: https://console.anthropic.com/
+   ```
 
 3. **Run these 3 commands** (5 minutes):
-```bash
-# Review your code
-git diff | claude "review my changes for bugs and best practices"
 
-# Write a test
-claude "write jest test for src/utils.ts with edge cases"
+   ```bash
+   # Review your code
+   git diff | claude "review my changes for bugs and best practices"
 
-# Debug failure
-npm test 2>&1 | claude "explain failures and suggest fixes"
-```
+   # Write a test
+   claude "write jest test for src/utils.ts with edge cases"
+
+   # Debug failure
+   npm test 2>&1 | claude "explain failures and suggest fixes"
+   ```
 
 4. **✅ Success Check**: You've used Claude to review, test, and debug real code
 
