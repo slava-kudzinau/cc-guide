@@ -739,6 +739,7 @@ function calculateDiscount(price, coupon) {
 - **Learn Good Patterns**: [Prompt Engineering](../05-prompt-context-mastery/14-prompt-engineering)
 - **Set Up Properly**: [CLAUDE.md Guide](../01-fundamentals-core-concepts/02b-claude-md-guide)
 - **See Real Workflows**: [Daily Workflows](../01-fundamentals-core-concepts/03b-daily-workflows)
+- **Review AI Code**: [PR Review Guide](05-pr-review-guide.md)
 
 ---
 

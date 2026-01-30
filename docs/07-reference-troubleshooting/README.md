@@ -23,6 +23,9 @@ Real-world metrics, time savings, cost analysis, ROI calculations, dashboard tem
 ### [Section 04: Anti-Patterns & Common Mistakes](04-antipatterns.md)
 What NOT to do, common failures, anti-patterns to avoid, correction strategies
 
+### [Section 05: PR Review Guide for AI-Generated Code](05-pr-review-guide.md)
+Security vulnerabilities, invariants, edge cases, error handling, AI-specific pitfalls, review checklists
+
 [← Part 6: Domain & Team](../06-domain-team-patterns/) | [Next: Reference Guide →](01-complete-reference.md)
 
 
