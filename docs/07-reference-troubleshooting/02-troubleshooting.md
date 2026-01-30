@@ -31,6 +31,8 @@ nav_order: 2
 4. **High costs?** → Enable [Caching](#problem-4-costs-too-high)
 5. **Extension issues?** → Check [VS Code Version](#problem-5-vs-code-extension-issues)
 
+**If Claude runs but results are poor or inconsistent** → [Anti-Patterns](04-antipatterns). **Reviewing AI-generated code** → [PR Review Guide](05-pr-review-guide).
+
 ---
 
 ### Decision Tree

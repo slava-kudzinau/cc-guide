@@ -507,6 +507,8 @@ const message = await client.messages.create({
 });
 ```
 
+Having issues? [Troubleshooting](../07-reference-troubleshooting/02-troubleshooting) (MCP, extended thinking, context overflow).
+
 ---
 
 ## 1.8 Mental Model Summary

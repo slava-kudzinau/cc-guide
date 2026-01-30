@@ -70,6 +70,8 @@ jobs:
           claude "Review for: security, performance, best practices"
 ```
 
+What to check in AI-generated code: [PR Review Guide](../07-reference-troubleshooting/05-pr-review-guide).
+
 **Anti-Pattern**: Using expensive Opus model in CI/CD for all checks  
 **Better**: Use Haiku for fast checks (linting, formatting), reserve Sonnet/Opus for security reviews  
 **Why**: CI runs dozens of times per day. Haiku is 10x faster and 60x cheaper. Use `--model haiku-4.5` for speed.

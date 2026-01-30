@@ -61,6 +61,8 @@ claude "generate code" > output.js
 }
 ```
 
+Something not working? See [Troubleshooting](02-troubleshooting). Full checklist for AI-generated code: [PR Review Guide](05-pr-review-guide).
+
 ## Essential Prompts
 
 **The 12 most-used prompts for daily development.**

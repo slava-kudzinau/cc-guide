@@ -70,6 +70,8 @@ claude /login
 claude "Hello, are you working?"
 ```
 
+Auth problems? [Troubleshooting – Authentication](../07-reference-troubleshooting/02-troubleshooting#authentication-issues).
+
 **Benefits:**
 - ✅ No API key management needed
 - ✅ Seamless authentication

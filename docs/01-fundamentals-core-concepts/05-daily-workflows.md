@@ -199,6 +199,8 @@ Pattern: @tests/example.test.js
 
 **Time saved**: 1 hour (vs writing all this from scratch)
 
+Avoid common mistakes: [Anti-Patterns](../07-reference-troubleshooting/04-antipatterns).
+
 ---
 
 ## Lunch: Code Review Time (12:00 PM - 1:00 PM)
@@ -271,6 +273,8 @@ Format:
 Be constructive and specific.
 "
 ```
+
+Full AI review checklist: [PR Review Guide](../07-reference-troubleshooting/05-pr-review-guide).
 
 **Time saved**: 10 minutes (deeper review in less time)
 

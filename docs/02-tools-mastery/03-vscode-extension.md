@@ -336,6 +336,8 @@ function calculateTotal(items) {
 }
 ```
 
+Extension issues? [Troubleshooting – VS Code Extension](../07-reference-troubleshooting/02-troubleshooting#vs-code-extension-issues).
+
 ### Workspace-Specific
 
 ```json

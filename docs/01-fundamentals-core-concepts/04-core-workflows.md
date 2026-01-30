@@ -50,7 +50,7 @@ claude "Explain the database layer architecture in this project"
 
 ⚠️ **Anti-Pattern**: Starting implementation without exploring existing patterns  
 ✅ **Better**: Always run Phase 1 exploration before coding new features  
-💡 **Why**: Your codebase already has established patterns. Following existing conventions ensures consistency and reduces technical debt. Building without exploration leads to inconsistent code styles.
+💡 **Why**: Your codebase already has established patterns. Following existing conventions ensures consistency and reduces technical debt. Building without exploration leads to inconsistent code styles. See [Anti-Patterns](../07-reference-troubleshooting/04-antipatterns) for more.
 
 ### Phase 2: Requirements Clarification
 
@@ -179,6 +179,8 @@ claude "Review the roles implementation for:
 claude "Refactor the role check middleware to be more efficient"
 ```
 
+Checklist for AI-generated code: [PR Review Guide](../07-reference-troubleshooting/05-pr-review-guide).
+
 ---
 
 ## 3.2 Debugging Workflow
@@ -217,6 +219,8 @@ TypeError: Cannot read property 'id' of undefined
 What's the root cause?"
 ```
 
+Still stuck? [Troubleshooting](../07-reference-troubleshooting/02-troubleshooting).
+
 ### Step 3: Diagnose Root Cause
 
 Claude analyzes:
@@ -229,7 +233,7 @@ Claude analyzes:
 
 ⚠️ **Anti-Pattern**: Giving Claude only the error message without code context  
 ✅ **Better**: Include full stack trace + relevant files using `--files` or `@filename`  
-💡 **Why**: Claude needs to see the code to understand what went wrong. Just the error message forces Claude to guess, leading to generic advice instead of specific fixes.
+💡 **Why**: Claude needs to see the code to understand what went wrong. Just the error message forces Claude to guess, leading to generic advice instead of specific fixes. See [Anti-Patterns](../07-reference-troubleshooting/04-antipatterns) for more.
 
 ### Step 4: Implement Fix
 
@@ -297,7 +301,7 @@ List APIs, databases, and third-party integrations"
 
 ⚠️ **Anti-Pattern**: Reading entire large files upfront (`--files="src/**/*.ts"`)  
 ✅ **Better**: Use progressive disclosure - start with README/package.json, then narrow to specific areas  
-💡 **Why**: Loading 100+ files wastes time and tokens. Start broad (overview), then drill down to relevant sections. This is 5-10x faster and uses 90% fewer tokens.
+💡 **Why**: Loading 100+ files wastes time and tokens. Start broad (overview), then drill down to relevant sections. This is 5-10x faster and uses 90% fewer tokens. See [Anti-Patterns](../07-reference-troubleshooting/04-antipatterns) for more.
 
 ### Tracing Code Flow
 

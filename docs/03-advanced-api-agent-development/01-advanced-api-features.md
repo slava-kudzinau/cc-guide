@@ -29,7 +29,7 @@ const architectureDesign = await client.messages.create({
 
 ⚠️ **Anti-Pattern**: Using extended thinking for simple tasks (code formatting, basic questions)  
 ✅ **Better**: Reserve extended thinking for complex reasoning tasks only  
-💡 **Why**: Extended thinking adds 5-20 seconds latency and doubles costs. Simple tasks don't benefit from deep reasoning. Use Haiku without thinking for formatting/simple tasks.
+💡 **Why**: Extended thinking adds 5-20 seconds latency and doubles costs. Simple tasks don't benefit from deep reasoning. Use Haiku without thinking for formatting/simple tasks. More: [Anti-Patterns](../07-reference-troubleshooting/04-antipatterns).
 
 ## Vision API
 
@@ -123,6 +123,8 @@ const cachedPrompt = await client.messages.create({
 ⚠️ **Anti-Pattern**: Not using prompt caching for repeated context (costs 10x more)  
 ✅ **Better**: Cache large context (docs, code) that repeats across requests  
 💡 **Why**: Without caching, sending 50K tokens 10 times costs $1.50. With caching: $0.18 (first request) + $0.14 (9 cached requests) = $0.32 total. That's 79% savings!
+
+Problems? [Troubleshooting](../07-reference-troubleshooting/02-troubleshooting) (extended thinking, context overflow).
 
 ## Streaming Responses
 

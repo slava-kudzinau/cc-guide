@@ -18,6 +18,8 @@ All prompts below are production-ready - no placeholders to replace. Copy, paste
 
 ### Comprehensive Security Review
 
+Full AI code review checklist: [PR Review Guide](05-pr-review-guide).
+
 ```bash
 git diff --cached | claude "Review for security vulnerabilities:
 

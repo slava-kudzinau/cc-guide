@@ -52,6 +52,8 @@ jobs:
             });
 ```
 
+Review criteria for AI-generated code: [PR Review Guide](../07-reference-troubleshooting/05-pr-review-guide).
+
 ### Release Notes Generation
 ```bash
 # Generate release notes from commits

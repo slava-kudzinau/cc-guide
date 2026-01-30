@@ -239,6 +239,8 @@ claude --model haiku-4.5 "review for obvious errors"
 - Complex architecture design
 - High-stakes decisions
 
+Slow or expensive? [Troubleshooting](../07-reference-troubleshooting/02-troubleshooting) (performance, cost).
+
 ---
 
 ## Summary

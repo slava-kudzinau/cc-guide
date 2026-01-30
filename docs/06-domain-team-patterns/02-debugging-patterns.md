@@ -16,6 +16,8 @@ nav_order: 2
 
 **Average time savings:** 10-30x faster than traditional debugging
 
+Tool/API/extension issues: [Troubleshooting](../07-reference-troubleshooting/02-troubleshooting).
+
 ---
 
 ## Table of Contents
@@ -141,6 +143,8 @@ const posts = await prisma.post.findMany({
 ```bash
 git diff main -- src/ | claude "What performance anti-patterns did this introduce?"
 ```
+
+Full list: [Anti-Patterns](../07-reference-troubleshooting/04-antipatterns).
 
 **Key Learning:** Always use `include` for relations; avoid loops with queries
 

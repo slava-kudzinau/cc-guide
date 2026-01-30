@@ -758,6 +758,8 @@ claude "query" --verbose
 # Batch jobs: Async (don't wait)
 ```
 
+Still slow or costly? [Troubleshooting](../07-reference-troubleshooting/02-troubleshooting) (performance, cost).
+
 ---
 
 ### ROI Calculation

@@ -17,6 +17,8 @@ Traditional code review focuses on formatting, naming conventions, and style con
 
 AI models are trained on open-source code—both good and bad. They inherit not just best practices but also insecure patterns that were prevalent in training data.
 
+Many review issues stem from [Anti-Patterns](04-antipatterns).
+
 ---
 
 ## 1. Security Vulnerabilities

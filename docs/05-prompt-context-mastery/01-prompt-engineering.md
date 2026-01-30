@@ -507,6 +507,8 @@ Balance perfect vs pragmatic.
 "
 ```
 
+Checklist for AI-generated code: [PR Review Guide](../07-reference-troubleshooting/05-pr-review-guide).
+
 **Variations:**
 
 **Security-focused:**
@@ -1148,6 +1150,8 @@ Within constraints, refactor to:
 ---
 
 ## Common Mistakes to Avoid
+
+Full list and fixes: [Anti-Patterns & Common Mistakes](../07-reference-troubleshooting/04-antipatterns).
 
 ### ❌ Mistake 1: Vague Requests
 ```bash

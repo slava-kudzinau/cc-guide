@@ -467,6 +467,8 @@ Month 7+: Company-wide
 
 ## Measuring Success
 
+Track impact: [Productivity Metrics](../07-reference-troubleshooting/03-productivity-metrics).
+
 ### Leading Indicators (Track Weekly)
 
 | Metric | Target | Why It Matters |
@@ -507,6 +509,8 @@ Month 7+: Company-wide
 ---
 
 ## Common Challenges
+
+Cost/performance/extension issues: [Troubleshooting](../07-reference-troubleshooting/02-troubleshooting).
 
 ### Challenge 1: Low Adoption (<60%)
 
@@ -573,6 +577,8 @@ Process:
 ```
 
 **Metrics:** Track bugs from Claude-generated code. If >10%, need better review process.
+
+What to avoid: [Anti-Patterns](../07-reference-troubleshooting/04-antipatterns). How to review AI code: [PR Review Guide](../07-reference-troubleshooting/05-pr-review-guide).
 
 ### Challenge 4: Senior Developer Resistance
 

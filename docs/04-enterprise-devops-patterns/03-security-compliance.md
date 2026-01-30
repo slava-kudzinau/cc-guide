@@ -32,6 +32,8 @@ For each issue:
 - Recommended fix with code example"
 ```
 
+AI-specific security review: [PR Review Guide – Security](../07-reference-troubleshooting/05-pr-review-guide#1-security-vulnerabilities).
+
 ## Secrets Management
 
 ### Detection & Migration
