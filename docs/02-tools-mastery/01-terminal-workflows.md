@@ -101,24 +101,45 @@ claude
 
 ## CLI Configuration
 
-### Global Config (~/.clauderc)
-```yaml
-model: claude-sonnet-4-5
-thinking:
-  default_budget: 5000
-output:
-  color: true
-  verbose: false
+Claude Code uses JSON-based settings files at multiple scopes:
+
+### User Settings (~/.claude/settings.json)
+```json
+{
+  "model": "claude-sonnet-4-5-20250929",
+  "thinking": {
+    "enabled": false,
+    "budgetTokens": 5000
+  },
+  "output": {
+    "color": true,
+    "verbose": false
+  }
+}
 ```
 
-### Project Config (./.clauderc)
-```yaml
-context_files:
-  - CLAUDE.md
-  - README.md
-  - package.json
-auto_include:
-  - "*.test.js"
+### Project Settings (.claude/settings.json)
+```json
+{
+  "model": "claude-sonnet-4-5-20250929",
+  "contextFiles": [
+    "CLAUDE.md",
+    "README.md",
+    "package.json"
+  ]
+}
+```
+
+### User Preferences & MCP (~/.claude.json)
+```json
+{
+  "mcpServers": {
+    "google-drive": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-gdrive"]
+    }
+  }
+}
 ```
 
 [← Back to Part 2 Index](README.md) | [Next: CLI Automation →](02-cli-automation.md)

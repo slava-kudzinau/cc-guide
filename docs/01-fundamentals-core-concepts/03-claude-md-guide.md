@@ -266,6 +266,176 @@ Add to Level 2:
 
 ---
 
+## Advanced CLAUDE.md Features
+
+### File Imports with @
+
+Import content from other files using `@path/to/file` syntax:
+
+```markdown
+# My Project
+
+## Architecture Overview
+@docs/architecture.md
+
+## API Endpoints
+@docs/api-reference.md
+
+## Database Schema
+@prisma/schema.prisma
+```
+
+**Benefits:**
+- Modular documentation
+- DRY principle (Don't Repeat Yourself)
+- Auto-updates when imported files change
+- Keep CLAUDE.md focused
+
+### Modular Rules with .claude/rules/
+
+Split rules into separate files in `.claude/rules/` directory:
+
+**Directory structure:**
+```
+.claude/
+├── rules/
+│   ├── typescript.md       # TypeScript conventions
+│   ├── testing.md          # Testing standards
+│   ├── api-design.md       # API patterns
+│   └── security.md         # Security guidelines
+└── CLAUDE.md               # Main project context
+```
+
+**Example `.claude/rules/typescript.md`:**
+```markdown
+---
+name: TypeScript Conventions
+paths:
+  - "src/**/*.ts"
+  - "src/**/*.tsx"
+---
+
+# TypeScript Rules
+
+## Type Safety
+- Always use strict mode
+- No `any` types (use `unknown` instead)
+- Explicit return types for functions
+
+## Naming
+- Interfaces: PascalCase with `I` prefix (IUser)
+- Types: PascalCase (UserRole)
+- Enums: PascalCase (OrderStatus)
+```
+
+**Path-specific rules:**
+Rules apply only to matched file paths using the `paths:` frontmatter.
+
+**Automatic discovery:**
+All `.md` files in `.claude/rules/` are automatically loaded. No configuration needed.
+
+### Personal Overrides with CLAUDE.local.md
+
+Create `CLAUDE.local.md` for personal preferences:
+
+**Why use CLAUDE.local.md:**
+- Personal coding preferences
+- Local development setup
+- Individual workflow customizations
+- Automatically gitignored (add to `.gitignore`)
+
+**Example `CLAUDE.local.md`:**
+```markdown
+---
+personal: true
+---
+
+# Personal Preferences
+
+## Code Style
+- I prefer single quotes over double quotes
+- Add more inline comments than team standard
+- Use verbose variable names for clarity
+
+## Development Setup
+- Use localhost:3001 (not 3000, port conflict)
+- Test database: local_test_db
+- Redis on port 6380
+
+## Workflow
+- Always create tests before implementation
+- Run full test suite before commits
+- Prefer functional programming patterns
+```
+
+**Priority:** CLAUDE.local.md > CLAUDE.md > .claude/rules/
+
+### Combining Features
+
+**Complete setup:**
+```
+project/
+├── .claude/
+│   ├── rules/
+│   │   ├── backend.md
+│   │   ├── frontend.md
+│   │   └── testing.md
+│   └── settings.json
+├── CLAUDE.md              # Main project context
+├── CLAUDE.local.md        # Personal overrides (gitignored)
+└── docs/
+    ├── architecture.md
+    └── api-reference.md
+```
+
+**In CLAUDE.md:**
+```markdown
+# Project Context
+
+## Architecture
+@docs/architecture.md
+
+## Team Standards
+Rules are defined in `.claude/rules/`
+- Backend: See `.claude/rules/backend.md`
+- Frontend: See `.claude/rules/frontend.md`
+- Testing: See `.claude/rules/testing.md`
+
+## Personal Setup
+See `CLAUDE.local.md` for individual preferences
+```
+
+### Best Practices for Advanced Features
+
+**1. Use @imports for:**
+- Large documentation sections
+- Frequently changing content
+- Technical specifications
+- API schemas
+
+**2. Use .claude/rules/ for:**
+- Domain-specific conventions (backend, frontend)
+- Technology-specific rules (TypeScript, React)
+- Path-specific guidelines
+- Team standards that need organization
+
+**3. Use CLAUDE.local.md for:**
+- Personal code style preferences
+- Local development configuration
+- Individual workflow optimizations
+- Anything you don't want in version control
+
+**4. Gitignore setup:**
+```gitignore
+# Personal overrides
+CLAUDE.local.md
+
+# But keep shared rules
+!.claude/rules/*.md
+```
+
+---
+
 ## Maintenance
 
 **When to update CLAUDE.md:**
@@ -274,10 +444,10 @@ Add to Level 2:
 
 **Review cycle:**
 - **Weekly**: Check if recent PRs introduced new patterns
-- **Monthly**: Full review with team, remove outdated sections
-- **Quarterly**: Major refactor if needed
+- **Monthly**: Full review with team, remove outdated sections in CLAUDE.md and .claude/rules/
+- **Quarterly**: Major refactor if needed, reorganize rules
 
-**Pro tip**: Add a changelog at the bottom to track evolution.
+**Pro tip:** Add a changelog at the bottom to track evolution.
 
 ---
 

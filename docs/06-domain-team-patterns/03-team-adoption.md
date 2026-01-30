@@ -128,7 +128,8 @@ Payback period: < 1 week
 # Option B: Shared key in secret manager
 
 # 2. Install CLI
-npm install -g @anthropic/claude-code
+curl -fsSL https://claude.ai/install.sh | bash  # macOS/Linux
+# Or: irm https://claude.ai/install.ps1 | iex  # Windows PowerShell
 
 # 3. Create CLAUDE.md template
 cat > CLAUDE.md.template << 'EOF'

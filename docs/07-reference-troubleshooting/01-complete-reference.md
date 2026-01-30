@@ -22,8 +22,8 @@ claude "@src/file.js explain this"
 # Extended thinking
 claude --thinking=5000 "complex task"
 
-# Specific model
-claude --model claude-opus-4-0 "task"
+# Specific model (use opus for current Opus 4.5; see [Models overview](https://docs.claude.com/en/docs/about-claude/models/overview))
+claude --model opus "task"
 
 # Output to file
 claude "generate code" > output.js

@@ -62,7 +62,9 @@ nav_order: 2
 4. **Verify Installation**
    ```bash
    claude --version  # Should show version
-   npm install -g @anthropic/claude-code  # If missing
+   # If missing, reinstall:
+   curl -fsSL https://claude.ai/install.sh | bash  # macOS/Linux
+   # Or: irm https://claude.ai/install.ps1 | iex  # Windows PowerShell
    ```
 
 5. **Debug Mode**
@@ -74,7 +76,7 @@ nav_order: 2
 - Missing key → `export ANTHROPIC_API_KEY="sk-ant-..."`
 - Expired key → Generate new at console.anthropic.com
 - Network issue → Check firewall/proxy
-- Version conflict → `npm update -g @anthropic/claude-code`
+- Version conflict → Reinstall: `curl -fsSL https://claude.ai/install.sh | bash`
 
 ---
 
@@ -164,8 +166,8 @@ For complex problems:
 # Enable extended thinking
 claude --thinking=5000 "complex architectural question"
 
-# Use Opus for hardest problems
-claude --model claude-opus-4-1 "difficult debugging"
+# Use Opus 4.5 for hardest problems (opus alias = current flagship; see [Model configuration](https://code.claude.com/docs/en/model-config))
+claude --model opus "difficult debugging"
 ```
 
 **When to use extended thinking:**
@@ -219,7 +221,7 @@ claude "explain auth" @src/auth/validate.ts @src/middleware/auth.ts
 
 ```bash
 # ❌ Slow: Opus for simple task
-claude --model claude-opus-4-1 "format code"
+claude --model opus "format code"
 
 # ✅ Fast: Haiku for simple task
 claude --model claude-haiku-4-5 "format code"
@@ -314,11 +316,10 @@ claude --config-set defaultModel claude-sonnet-4-5
 
 **C. Extended Thinking Always On**
 ```bash
-# Check if thinking is in default config
-cat ~/.clauderc | grep thinking
+# Check if thinking is enabled in settings
+cat ~/.claude/settings.json | grep thinking
 
-# Remove if present:
-claude --config-set thinking 0
+# Configure via settings.json or /config command
 ```
 
 **Use thinking only explicitly:**
@@ -515,7 +516,7 @@ git merge --continue
 
 | Symptom | Most Likely Cause | Quick Fix |
 |---------|------------------|-----------|
-| "Command not found" | CLI not installed | `npm install -g @anthropic/claude-code` |
+| "Command not found" | CLI not installed | `curl https://claude.ai/install.sh \| bash` |
 | "Invalid API key" | Key not set or expired | `export ANTHROPIC_API_KEY="your-key"` |
 | Very slow responses | Extended thinking on | Remove `--thinking` flag |
 | High costs | No prompt caching | Create `CLAUDE.md` file |
@@ -586,8 +587,11 @@ claude "test"
 
 ### MCP Server Authentication Fails
 ```bash
-# Check MCP config
-cat .claude/mcp_config.json
+# Check MCP config (user-level)
+cat ~/.claude.json
+
+# Check project MCP config
+cat .mcp.json
 
 # Verify environment variables
 env | grep GOOGLE
@@ -626,9 +630,8 @@ npx @anthropics/mcp-server-gdrive --test
 # Use focused context
 claude "@specific-file" instead of "@entire-directory"
 
-# Use .claudeignore
-echo "node_modules/" >> .claudeignore
-echo "dist/" >> .claudeignore
+# Configure ignore patterns in .claude/settings.json
+# Or add to project .gitignore (Claude respects .gitignore)
 
 # Use Batch API for full codebase analysis
 ```
@@ -669,8 +672,8 @@ curl -fsSL https://claude.ai/install.sh | sh
 # Fix permissions
 chmod +x ~/.claude/bin/claude
 
-# Or use sudo (if necessary)
-sudo npm install -g @anthropic-ai/claude-code
+# Or reinstall with proper permissions
+curl -fsSL https://claude.ai/install.sh | bash
 ```
 
 [← Back: Reference Guide](01-complete-reference.md) | [Next: Productivity Metrics →](03-productivity-metrics.md)

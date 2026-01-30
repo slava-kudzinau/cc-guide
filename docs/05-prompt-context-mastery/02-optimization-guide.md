@@ -52,13 +52,17 @@ nav_order: 2
 
 ### Pricing & Cost Formula
 
-**Pricing (December 2025)**
+**Pricing (as of December 2025)**
+
+> **Note:** Pricing may change. Always check [anthropic.com/pricing](https://www.anthropic.com/pricing) for current rates.
 
 | Model | Input (per 1M tokens) | Output (per 1M tokens) | Cached Input (90% off) |
 |-------|----------------------|------------------------|------------------------|
-| **Haiku 4.5** | $0.25 | $1.25 | $0.025 |
+| **Haiku 4.5** | $1.00 | $5.00 | $0.10 |
 | **Sonnet 4.5** | $3.00 | $15.00 | $0.30 |
-| **Opus 4.1** | $15.00 | $75.00 | $1.50 |
+| **Opus 4.5** | $5.00 | $25.00 | $0.50 |
+
+*Source: [Anthropic Pricing](https://www.anthropic.com/pricing) and [API Pricing](https://docs.claude.com/en/docs/about-claude/pricing).*
 
 **Additional:**
 - **Batch API**: 50% discount (async processing)
@@ -185,29 +189,29 @@ Team of 10: $135/year saved!
 | Code review (deep) | Sonnet 4.5 | Better reasoning | Balanced | Balanced |
 | Bug investigation | Sonnet 4.5 | Good analysis | Balanced | Balanced |
 | Feature development | Sonnet 4.5 | Best default | Balanced | Balanced |
-| Architecture decisions | Opus 4.1 | Complex reasoning | Slower | Expensive |
-| Security audit (deep) | Opus 4.1 | Worth the cost | Slower | Expensive |
+| Architecture decisions | Opus 4.5 | Complex reasoning | Slower | Expensive |
+| Security audit (deep) | Opus 4.5 | Worth the cost | Slower | Expensive |
 
 **Cost comparison (same 1000 input + 500 output):**
 
 ```
-Haiku:   (1000 × $0.25/M) + (500 × $1.25/M) = $0.000875
-Sonnet:  (1000 × $3/M) + (500 × $15/M) = $0.0105     (12x more)
-Opus:    (1000 × $15/M) + (500 × $75/M) = $0.0525    (60x more)
+Haiku:   (1000 × $1/M) + (500 × $5/M) = $0.0035
+Sonnet:  (1000 × $3/M) + (500 × $15/M) = $0.0105     (3x more)
+Opus:    (1000 × $5/M) + (500 × $25/M) = $0.0175     (5x more)
 ```
 
 **Daily workflow example:**
 
 ```
 Developer's day:
-- 15 quick questions (Haiku): $0.015
+- 15 quick questions (Haiku): $0.053
 - 5 code reviews (Sonnet): $0.05
-- 1 architecture decision (Opus): $0.05
-Total: $0.115/day = $2.50/month
+- 1 architecture decision (Opus 4.5): $0.0175
+Total: $0.12/day = $2.60/month
 
-If everything used Opus:
-- 21 queries × $0.05 = $1.05/day = $23/month
-Monthly savings: $20.50 (89%)
+If everything used Opus 4.5:
+- 21 queries × $0.0175 = $0.37/day = $8/month
+Monthly savings: $5.50 (69%)
 ```
 
 **Set default model:**

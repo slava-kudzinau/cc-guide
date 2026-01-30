@@ -60,7 +60,7 @@ const agent = new Agent({
 // Specialized agents
 const architectAgent = new Agent({
   systemPrompt: 'You design system architecture',
-  model: 'claude-opus-4-0'
+  model: 'claude-opus-4-5'  // Opus 4.5; see [Models overview](https://docs.claude.com/en/docs/about-claude/models/overview) for current IDs
 });
 
 const codeAgent = new Agent({

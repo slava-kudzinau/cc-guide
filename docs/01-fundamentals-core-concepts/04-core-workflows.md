@@ -708,6 +708,649 @@ npm test
 
 ---
 
+## 3.6 Plan Mode - Safe Code Exploration
+
+Plan Mode is a read-only exploration mode that lets Claude analyze code and plan changes without making any modifications.
+
+### What is Plan Mode?
+
+Plan Mode enables:
+- ✅ Code exploration and understanding
+- ✅ Planning complex refactoring
+- ✅ Analyzing potential impacts
+- ✅ Reviewing architecture decisions
+- ❌ No file modifications
+- ❌ No command execution
+
+### Activating Plan Mode
+
+**In VS Code Extension:**
+```
+Press Shift+Tab to toggle Plan Mode
+```
+
+**In CLI:**
+```bash
+claude --permission-mode plan "Analyze how to refactor the authentication system"
+```
+
+**In settings.json:**
+```json
+{
+  "defaultPermissionMode": "plan"
+}
+```
+
+### When to Use Plan Mode
+
+**✅ Use Plan Mode for:**
+
+1. **Code Exploration**
+```bash
+claude --permission-mode plan "How does the payment processing work in this codebase?"
+```
+
+2. **Planning Complex Changes**
+```bash
+claude --permission-mode plan "Create a plan to migrate from REST to GraphQL"
+```
+
+3. **Impact Analysis**
+```bash
+claude --permission-mode plan "What would break if we changed the User model schema?"
+```
+
+4. **Architecture Review**
+```bash
+claude --permission-mode plan "Review the current microservices architecture and suggest improvements"
+```
+
+**❌ Don't use Plan Mode for:**
+- Quick fixes you want applied immediately
+- Simple code generation
+- Documentation updates
+- Tasks where you're ready to make changes
+
+### Plan Mode Workflow
+
+**Typical workflow:**
+
+1. **Plan in Plan Mode**
+```bash
+# Explore and create a plan
+claude --permission-mode plan "Plan how to add Redis caching to our API"
+```
+
+2. **Review the Plan**
+- Claude provides detailed analysis
+- No changes made to codebase
+- Review recommendations carefully
+
+3. **Execute in Normal Mode**
+```bash
+# Switch to normal mode to implement
+claude "Implement the Redis caching plan we discussed"
+```
+
+### Plan Mode Best Practices
+
+**1. Use for Unfamiliar Codebases**
+```bash
+# Safe exploration when onboarding
+claude --permission-mode plan "Explain the database migration strategy"
+```
+
+**2. Large Refactoring Planning**
+```bash
+# Plan multi-file changes before execution
+claude --permission-mode plan "Plan refactoring of all controllers to use new middleware pattern"
+```
+
+**3. Security Review**
+```bash
+# Analyze without modifications
+claude --permission-mode plan "Review authentication system for security issues"
+```
+
+**4. Team Collaboration**
+```bash
+# Share analysis without changes
+claude --permission-mode plan "Document the API architecture for new team members"
+```
+
+### Switching Between Modes
+
+**In VS Code:** `Shift+Tab` toggles between Plan and Normal mode
+
+**In CLI:** Use `--permission-mode` flag:
+```bash
+# Plan mode
+claude --permission-mode plan "your query"
+
+# Normal mode (default)
+claude "your query"
+```
+
+---
+
+## 3.7 Session Management
+
+Claude Code maintains conversation history across sessions for continuity.
+
+### Resuming Sessions
+
+**Continue Most Recent Session:**
+```bash
+claude --continue
+# Resumes your last conversation
+```
+
+**Resume Specific Session:**
+```bash
+claude --resume
+# Opens session picker
+# Select from recent conversations
+```
+
+### Session Commands
+
+**Rename Session:**
+```bash
+# Within a session
+/rename "Feature: User Authentication"
+```
+
+**Fork Session:**
+```bash
+# Create a branch from current conversation
+claude --fork-session
+# Useful for exploring alternative approaches
+```
+
+**Rewind Session:**
+```bash
+# Within a session
+/rewind
+# Returns to an earlier point in the conversation
+# Like git checkout for conversations
+```
+
+### Session Best Practices
+
+**1. Name Important Sessions**
+```bash
+/rename "Refactor: Payment System"
+```
+
+**2. Fork for Experiments**
+```bash
+# Try alternative approaches without losing original plan
+claude --fork-session
+```
+
+**3. Use Continue for Context**
+```bash
+# Morning workflow
+claude --continue
+# Pick up where you left off yesterday
+```
+
+**4. Rewind for Course Correction**
+```bash
+# If a path isn't working
+/rewind
+# Return to a better decision point
+```
+
+### Session Organization Tips
+
+- Name sessions with clear prefixes: "Feature:", "Bug:", "Refactor:"
+- Fork when exploring multiple solutions
+- Rewind instead of starting over
+- Continue sessions to maintain context
+
+---
+
+## 3.8 Essential CLI Commands Reference
+
+Claude Code provides several built-in slash commands and utilities for common tasks.
+
+### Session & Context Commands
+
+**`/init` - Generate Starter CLAUDE.md**
+```bash
+# Within a Claude session
+/init
+# Creates CLAUDE.md with project structure and conventions
+# Great for starting new projects
+```
+
+**`/context` - Check Context Usage**
+```bash
+/context
+# Shows:
+# - Current token usage
+# - Context window utilization
+# - Cached content stats
+```
+
+**`/compact` - Manual Context Compaction**
+```bash
+/compact
+# Compresses conversation history
+# Use when approaching context limits
+# Preserves key information
+```
+
+**`/memory` - Edit Memory Files**
+```bash
+/memory
+# Opens CLAUDE.md or memory files for editing
+# Quick access to project context
+```
+
+### Configuration Commands
+
+**`/mcp` - Manage MCP Servers**
+```bash
+# List MCP servers
+/mcp list
+
+# Test MCP server
+/mcp test google-drive
+
+# Reload MCP configuration
+/mcp reload
+```
+
+**`/agents` - Configure Subagents**
+```bash
+# List available agents
+/agents list
+
+# Configure agent settings
+/agents config
+
+# View agent status
+/agents status
+```
+
+**`/doctor` - Diagnose Issues**
+```bash
+/doctor
+# Runs diagnostics:
+# - Authentication status
+# - MCP server connections
+# - Configuration validation
+# - Environment variables
+# - Common issues
+```
+
+### Git Integration
+
+**`claude commit` - Create Git Commits**
+```bash
+# Generate commit from staged changes
+claude commit
+
+# Interactive commit creation
+git add .
+claude commit
+# Claude analyzes changes and suggests commit message
+# Reviews with conventional commits format
+```
+
+**Commit workflow:**
+```bash
+# 1. Stage changes
+git add src/auth/
+
+# 2. Generate commit
+claude commit
+# Reviews changes, suggests message
+# Format: type(scope): description
+
+# 3. Review and confirm
+# Claude shows:
+# - Files changed
+# - Suggested message
+# - Impact summary
+
+# 4. Commit is created
+```
+
+### Command Usage Examples
+
+**Project Initialization:**
+```bash
+# Start new project
+cd my-project
+claude
+/init
+# Generates CLAUDE.md with detected tech stack
+```
+
+**Context Management:**
+```bash
+# Check usage during long session
+/context
+# Output:
+# Tokens used: 45,234 / 200,000
+# Cached: 12,000 tokens
+# Available: 154,766 tokens
+
+# Compact if needed
+/compact
+```
+
+**MCP Troubleshooting:**
+```bash
+# MCP not working?
+/doctor
+# Checks all MCP servers
+# Shows connection status
+# Suggests fixes
+
+# Test specific server
+/mcp test jira
+```
+
+**Subagent Management:**
+```bash
+# See available agents
+/agents list
+# - Explore (codebase exploration)
+# - Plan (architecture planning)
+# - general-purpose (default)
+# - custom agents from .claude/agents/
+
+# Configure agent
+/agents config
+```
+
+### Best Practices
+
+**1. Use `/init` for every project**
+```bash
+# Creates foundation for context caching
+/init
+```
+
+**2. Monitor context with `/context`**
+```bash
+# Check periodically in long sessions
+/context
+```
+
+**3. Use `/doctor` when things break**
+```bash
+# First step for troubleshooting
+/doctor
+```
+
+**4. Commit with `claude commit`**
+```bash
+# Better commit messages
+git add .
+claude commit
+```
+
+**5. Manage MCP with `/mcp`**
+```bash
+# Verify servers are connected
+/mcp list
+```
+
+---
+
+## 3.9 Subagents - Specialized AI Assistants
+
+Subagents are specialized Claude instances configured for specific tasks. Claude Code includes built-in agents and supports custom agents.
+
+### Built-in Agents
+
+**Explore Agent**
+- **Purpose:** Fast codebase exploration and search
+- **Best for:** Finding files, understanding structure, answering "where is X?"
+- **Automatically invoked for:** Exploratory questions
+
+**Plan Agent**
+- **Purpose:** Architecture planning and design
+- **Best for:** Complex refactoring, system design, multi-file changes
+- **Automatically invoked for:** Planning and design questions
+
+**General-Purpose Agent (Default)**
+- **Purpose:** All-around coding tasks
+- **Best for:** Daily development work
+- **Used for:** Everything not specialized
+
+### Custom Agents
+
+Create custom agents in `.claude/agents/` directory:
+
+**Directory structure:**
+```
+.claude/agents/
+├── security-reviewer/
+│   └── AGENT.md
+├── test-generator/
+│   └── AGENT.md
+└── api-designer/
+    └── AGENT.md
+```
+
+### Creating a Custom Agent
+
+**Example `.claude/agents/security-reviewer/AGENT.md`:**
+
+```markdown
+---
+name: security-reviewer
+description: Reviews code for security vulnerabilities
+model: claude-sonnet-4-5-20250929
+tools:
+  - Read
+  - Grep
+  - SemanticSearch
+skills:
+  - security-analysis
+  - owasp-top-10
+disable-write: true
+---
+
+# Security Reviewer Agent
+
+Specialized agent for security code review.
+
+## Mission
+
+Review code for:
+- SQL injection vulnerabilities
+- XSS attacks
+- Authentication/Authorization issues
+- Sensitive data exposure
+- OWASP Top 10 vulnerabilities
+
+## Process
+
+1. **Read target files**
+2. **Search for common patterns:**
+   - Raw SQL queries
+   - User input handling
+   - Authentication logic
+   - Data encryption
+3. **Report findings:**
+   - Severity (Critical/High/Medium/Low)
+   - Location (file:line)
+   - Explanation
+   - Remediation steps
+
+## Example Output
+
+```
+CRITICAL: SQL Injection Risk
+File: src/api/users.ts:45
+Issue: Direct string concatenation in SQL query
+Fix: Use parameterized queries
+```
+```
+
+### Agent Frontmatter Options
+
+```yaml
+---
+name: agent-name              # Required: Unique identifier
+description: What it does     # Required: Agent purpose
+model: claude-sonnet-4-5-... # Optional: Specific model
+tools:                        # Optional: Allowed tools
+  - Read
+  - Write
+skills:                       # Optional: Skills to load
+  - skill-name
+disable-write: false          # Optional: Read-only mode
+temperature: 0.7              # Optional: Response creativity
+---
+```
+
+### Using Subagents
+
+**Automatic invocation (recommended):**
+```bash
+# Claude automatically selects appropriate agent
+claude "Find all authentication logic in the codebase"
+# Uses Explore agent
+
+claude "Plan refactoring of user service"
+# Uses Plan agent
+
+claude "Review this file for security issues"
+# Uses security-reviewer (if configured)
+```
+
+**Manual invocation:**
+```bash
+# Explicitly specify agent
+claude --agent explore "Where is JWT validation?"
+
+claude --agent plan "Design new payment system"
+
+claude --agent security-reviewer "Review src/auth/"
+```
+
+### Managing Agents
+
+**List available agents:**
+```bash
+/agents list
+# Shows:
+# - Built-in agents (Explore, Plan, general-purpose)
+# - Custom agents from .claude/agents/
+```
+
+**Configure agent:**
+```bash
+/agents config
+# Interactive agent configuration
+```
+
+**Check agent status:**
+```bash
+/agents status
+# Shows which agent is active
+```
+
+### Agent Best Practices
+
+**1. Specialized Agents for Specialized Tasks**
+```
+Good agent purposes:
+✅ Security review
+✅ Test generation
+✅ API design
+✅ Performance optimization
+✅ Documentation writing
+
+Poor agent purposes:
+❌ General coding
+❌ Everything
+❌ Too broad scope
+```
+
+**2. Configure Tools Appropriately**
+```markdown
+---
+tools:
+  - Read        # For analysis
+  - Write       # For generation
+  - Grep        # For search
+  - Bash        # For execution
+---
+```
+
+**3. Use Skills for Domain Knowledge**
+```markdown
+---
+skills:
+  - security-owasp
+  - api-design-patterns
+  - performance-optimization
+---
+```
+
+**4. Set disable-write for Review Agents**
+```markdown
+---
+disable-write: true  # Read-only for safety
+---
+```
+
+**5. Choose Right Model**
+```markdown
+---
+model: claude-haiku-4-5-20250403    # Fast for simple tasks
+model: claude-sonnet-4-5-20250929   # Balanced (recommended)
+model: opus                         # Complex reasoning (Opus 4.5; see [Model configuration](https://code.claude.com/docs/en/model-config))
+---
+```
+
+### Example Use Cases
+
+**Security Review Agent:**
+```bash
+claude --agent security-reviewer "Audit authentication system"
+```
+
+**Test Generation Agent:**
+```bash
+claude --agent test-generator "Create tests for src/api/users.ts"
+```
+
+**API Designer Agent:**
+```bash
+claude --agent api-designer "Design REST API for blog system"
+```
+
+**Documentation Agent:**
+```bash
+claude --agent doc-writer "Document all functions in src/utils/"
+```
+
+### Agent vs Skills
+
+**Use Agents when:**
+- Different models needed for different tasks
+- Different tool permissions required
+- Complex multi-step workflows
+- Need isolated context
+
+**Use Skills when:**
+- Same model, different knowledge
+- Simple instructions/patterns
+- Context sharing desired
+- Lighter weight solution
+
+---
+
 [← Back: Environment Setup](02-environment-setup.md) | [Next: Daily Workflows →](05-daily-workflows.md)
 
 

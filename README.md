@@ -8,9 +8,12 @@ nav_order: 1
 
 **Author**: AI-Generated Technical Guide  
 **Maintainer**: [Viachaslau Kudzinau](viachaslau_kudzinau@epam.com)
-**Version**: 1.0  
-**Last Updated**: December 2025  
+**Version**: 2.0  
+**Last Updated**: January 2026  
 **Based on**: Latest Claude Code, API, and Agent SDK documentation
+
+[![GitHub](https://img.shields.io/badge/GitHub-cc--guide-181717?logo=github)](https://github.com/slava-kudzinau/cc-guide)  
+**📂 [View source & contribute on GitHub](https://github.com/slava-kudzinau/cc-guide)** — docs, examples, and full guide in one repo.
 
 ---
 
@@ -192,7 +195,7 @@ Create `CLAUDE.md` in your project root:
 
 **Benefits**:
 - Claude uses this context automatically (with prompt caching)
-- 90% cost reduction on repeated context
+- Significant cost reduction on repeated context
 - Onboarding new team members
 - Consistent responses across sessions
 
@@ -215,20 +218,20 @@ Working with images? ───→ Use Vision API
 
 | Task | Model | Why |
 |------|-------|-----|
-| Quick questions | Haiku 4.5 | 10x faster, 10x cheaper |
+| Quick questions | Haiku 4.5 | Faster, more cost-effective |
 | Daily coding | Sonnet 4.5 | Best balance |
-| Complex architecture | Opus 4.1 | Deepest reasoning |
+| Complex architecture | Opus 4.5 | Deepest reasoning |
 | Simple formatting | Haiku 4.5 | Instant results |
 | Code review | Sonnet 4.5 | Thorough but fast |
 
-**Cost example**:
-- Using Opus for everything: **$85/month**
-- Using Haiku + Sonnet strategically: **$6/month**
-- **14x cheaper** with better speed!
+**Cost optimization**:
+- Use the right model for each task to optimize costs
+- Haiku + Sonnet strategically for routine work
+- Reserve Opus for complex reasoning tasks
 
-⚠️ **Anti-Pattern**: Using Opus 4.1 for all tasks (slow and 10x more expensive)  
+⚠️ **Anti-Pattern**: Using Opus for all tasks (slower and more expensive)  
 ✅ **Better**: Use Haiku for simple tasks, Sonnet for daily coding, Opus only for complex reasoning  
-💡 **Why**: Most coding tasks don't need Opus's deep reasoning. Haiku handles 70% of tasks at 10x lower cost and 5x faster speed. Save Opus for architecture decisions and complex debugging.
+💡 **Why**: Most coding tasks don't need Opus's deep reasoning. Haiku handles many routine tasks efficiently. Save Opus for architecture decisions and complex debugging.
 
 ### Pattern 7: Use Context7 for Latest Documentation
 
@@ -325,10 +328,10 @@ claude "search codebase for JWT validation logic"
 # Then: claude "explain lines 234-267 in src/services/huge-service.ts"
 ```
 
-### Tip 2: Enable Prompt Caching (90% Faster Responses)
+### Tip 2: Enable Prompt Caching (Significantly Faster Responses)
 
-**Without caching**: Same 50K context sent every message → $0.50 each  
-**With caching** (via CLAUDE.md): Context cached → $0.05 per message
+**Without caching**: Same context sent every message  
+**With caching** (via CLAUDE.md): Context cached, reducing costs and improving response time
 
 **Setup**: Just create `CLAUDE.md` in project root. Claude automatically caches it.
 
@@ -364,7 +367,7 @@ claude "review file3.ts"
 
 **Sections Covered:**
 1. **Mental Models & Architecture** - Understanding Claude's ecosystem
-   - Model family (Claude 4 family: Opus 4/4.1, Sonnet 4/4.5, Haiku 4.5, plus legacy Sonnet 3.7)
+   - Model family (Claude 4 family: Opus 4.5, Sonnet 4/4.5, Haiku 4.5, plus legacy Sonnet 3.7)
    - Tool selection matrix (CLI vs API vs Agent SDK vs VS Code)
    - Extended thinking architecture
    - Vision capabilities for code
@@ -376,7 +379,7 @@ claude "review file3.ts"
    - Claude Code CLI installation (all platforms)
    - VS Code extension setup (beta)
    - API key management (Anthropic, AWS, GCP)
-   - Project configuration (CLAUDE.md, .clauderc, .claudeignore)
+   - Project configuration (CLAUDE.md, .claude/settings.json)
    - MCP server configuration
    - Skills repository setup
    - Enterprise deployment options
@@ -407,7 +410,7 @@ claude "review file3.ts"
    - Natural language commands
    - Piping and Unix composition
    - Session management
-   - CLI configuration (.clauderc)
+   - CLI configuration (settings.json)
 
 2. **CLI Automation & Scripting**
    - Scripting in bash/zsh/PowerShell
@@ -549,7 +552,7 @@ claude "review file3.ts"
     - CLAUDE.md best practices
 
 16. **Multi-Model Strategies**
-    - Choosing between Claude Opus 4.1, Claude Sonnet 4.5, Claude Haiku 4.5, and legacy models
+    - Choosing between Claude Opus 4.5, Claude Sonnet 4.5, Claude Haiku 4.5, and legacy models
     - Model ensemble patterns
     - Cost vs performance trade-offs
     - Latency optimization
@@ -557,9 +560,9 @@ claude "review file3.ts"
 
 **Key Takeaways:**
 - Extended thinking for planning, Claude Haiku 4.5 for speed
-- Prompt caching reduces repeated context costs by 90%
+- Prompt caching significantly reduces repeated context costs
 - CLAUDE.md provides persistent project context
-- Chain models: Claude Opus 4.1 for architecture, Claude Sonnet 4.5 for implementation
+- Chain models: Claude Opus 4.5 for architecture, Claude Sonnet 4.5 for implementation
 
 ---
 
@@ -658,8 +661,18 @@ claude "review file3.ts"
 
 1. **Install** (2 minutes):
 ```bash
-# Choose one:
-npm install -g @anthropic/claude-code  # CLI
+# macOS/Linux/WSL (Recommended)
+curl -fsSL https://claude.ai/install.sh | bash
+
+# Windows PowerShell
+irm https://claude.ai/install.ps1 | iex
+
+# Homebrew (macOS)
+brew install --cask claude-code
+
+# WinGet (Windows)
+winget install Anthropic.ClaudeCode
+
 # OR install VS Code extension: search "Claude Code" in Extensions
 ```
 
@@ -807,14 +820,14 @@ npm test 2>&1 | claude "explain failures and suggest fixes"
 
 | Task Type | Model | Why |
 |-----------|-------|-----|
-| **Complex architecture** | Claude Opus 4/4.1 | Most capable, deepest reasoning |
+| **Complex architecture** | Claude Opus 4.5 | Most capable, deepest reasoning |
 | **Daily coding** | Claude Sonnet 4.5 / Claude Sonnet 3.7 | Best balance: speed + intelligence |
 | **Speed + cost** | Claude Haiku 4.5 | Near-instant, 10x cheaper |
-| **Extended thinking** | Claude Sonnet 4.5 / Claude Opus 4.1 | Interleaved thinking support |
+| **Extended thinking** | Claude Sonnet 4.5 / Claude Opus 4.5 | Interleaved thinking support |
 | **Batch processing** | Any active model | All models support batches |
 | **Vision tasks** | Claude Sonnet 4.5+ | Text + image input |
 
-> **Note on Model Naming:** "Claude 4" refers to the model family, not a single model. The Claude 4 family includes: Claude Opus 4/4.1 (most powerful), Claude Sonnet 4/4.5 (balanced), and Claude Haiku 4.5 (fastest/cheapest). Always specify the complete model name (e.g., "Claude Opus 4.1" not just "Claude 4") when referencing specific models.
+> **Note on Model Naming:** "Claude 4" refers to the model family, not a single model. The Claude 4 family includes: Claude Opus 4.5 (most powerful), Claude Sonnet 4/4.5 (balanced), and Claude Haiku 4.5 (fastest/most cost-effective). Always specify the complete model name (e.g., "Claude Opus 4.5" not just "Claude 4") when referencing specific models.
 
 ### Extended Thinking Budget Guide
 
@@ -843,8 +856,36 @@ npm test 2>&1 | claude "explain failures and suggest fixes"
 | **Interactive** | `claude` | Ask questions, iterative development |
 | **One-shot** | `claude "task"` | Single command execution |
 | **Piped input** | `git diff \| claude "review"` | Analyze command output |
+| **Headless/prompt** | `claude -p "task"` | Non-interactive execution |
 | **File input** | `claude < prompt.txt` | Run saved prompts |
 | **Scripted** | `#!/bin/bash + claude` | Automation workflows |
+
+**Headless Mode Details:**
+
+```bash
+# Interactive mode (default)
+claude
+# Opens interactive session, type prompt
+
+# Headless mode with -p flag
+claude -p "review this code for bugs"
+# Executes and exits, no interactive session
+
+# Output format options
+claude -p "task" --output-format text      # Plain text (default)
+claude -p "task" --output-format json      # JSON response
+claude -p "task" --output-format stream-json  # Streaming JSON
+
+# Pipe with headless
+git diff | claude -p "review for security issues" --output-format text
+```
+
+**When to use headless mode:**
+- ✅ Scripts and automation
+- ✅ CI/CD pipelines
+- ✅ Cron jobs
+- ✅ Non-interactive environments
+- ❌ Don't use for conversations or multi-turn interactions
 
 ---
 
@@ -1135,9 +1176,9 @@ claude "scan src/ for common vulnerabilities:
 ### Setup Once
 
 - [ ] Create `CLAUDE.md` in project root (enables prompt caching)
-- [ ] Configure budget alerts: `claude --set-budget 100 --alert-at 80%`
-- [ ] Set default model: `claude --set-default-model haiku-4.5`
-- [ ] Enable usage tracking: `claude --enable-usage-stats`
+- [ ] Configure budget alerts if needed
+- [ ] Set default model in settings.json
+- [ ] Enable usage tracking in settings
 
 ### Before Every Query
 
@@ -1224,7 +1265,7 @@ claude "analyze my usage patterns - suggest cost optimizations"
 |---------|-------------------------|-------------------------------|
 | **What is it?** | Official Anthropic CLI + VS Code Extension | Third-party AI-powered IDE |
 | **Maker** | Anthropic (official) | Cursor (third-party) |
-| **Installation** | `npm install -g @anthropic/claude-code` | Download Cursor app |
+| **Installation** | `curl https://claude.ai/install.sh \| bash` | Download Cursor app |
 | **Works with** | Any editor (CLI), VS Code (extension) | Cursor IDE only |
 | **Best for** | Automation, CI/CD, scriptable workflows | Full IDE experience |
 
@@ -1293,9 +1334,9 @@ All use Claude API underneath.
 
 #### Q: Which model should I use?
 **A**: Quick guide:
-- **Simple tasks**: Haiku 4.5 (fast, cheap)
+- **Simple tasks**: Haiku 4.5 (fast, cost-effective)
 - **Daily coding**: Sonnet 4.5 (balanced)
-- **Complex architecture**: Opus 4.1 (powerful)
+- **Complex architecture**: Opus 4.5 (powerful)
 
 See "Model Selection Guide" section for detailed decision matrix.
 

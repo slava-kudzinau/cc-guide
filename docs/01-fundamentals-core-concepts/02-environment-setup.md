@@ -12,33 +12,28 @@ Complete installation and configuration guide for Claude Code CLI, VS Code exten
 
 ## 2.1 Claude Code CLI Installation
 
-### macOS / Linux
+### macOS / Linux / WSL
 
-**Option 1: curl (Recommended)**
+**Option 1: curl/bash (Recommended)**
 ```bash
-curl -fsSL https://claude.ai/install.sh | sh
+curl -fsSL https://claude.ai/install.sh | bash
 ```
 
 **Option 2: Homebrew (macOS)**
 ```bash
-brew install claude-code
-```
-
-**Option 3: npm (Node.js 18+)**
-```bash
-npm install -g @anthropic-ai/claude-code
+brew install --cask claude-code
 ```
 
 ### Windows
 
-**PowerShell (Run as Administrator)**
+**Option 1: PowerShell (Recommended)**
 ```powershell
-iwr -useb https://claude.ai/install.ps1 | iex
+irm https://claude.ai/install.ps1 | iex
 ```
 
-**Or via npm:**
+**Option 2: WinGet**
 ```powershell
-npm install -g @anthropic-ai/claude-code
+winget install Anthropic.ClaudeCode
 ```
 
 ### Verification
@@ -52,9 +47,38 @@ claude --version
 
 ---
 
-## 2.2 API Key Setup
+## 2.2 Authentication
 
-### Anthropic API Key (Primary Method)
+Claude Code supports two authentication methods:
+
+### Method 1: Claude Subscription (Recommended)
+
+For Claude Pro, Team, Max, or Enterprise subscriptions:
+
+1. **Login via command:**
+```bash
+claude /login
+```
+
+2. **Follow the prompts:**
+   - Opens browser for authentication
+   - Login with your Claude account
+   - Authorizes Claude Code CLI
+
+3. **Verify:**
+```bash
+claude "Hello, are you working?"
+```
+
+**Benefits:**
+- ✅ No API key management needed
+- ✅ Seamless authentication
+- ✅ Automatic token refresh
+- ✅ Works with team/enterprise accounts
+
+### Method 2: API Key (Console Users)
+
+For users with Claude API Console access:
 
 1. **Get your API key:**
    - Go to [console.anthropic.com](https://console.anthropic.com/)
@@ -146,46 +170,50 @@ claude --platform vertex "test message"
 
 ---
 
-## 2.3 Claude Code CLI Configuration
+## 2.3 Claude Code Configuration
 
-### Configuration File: `.clauderc`
+### Settings Files
 
-**Location:**
-- Global: `~/.clauderc`
-- Project: `./.clauderc`
+Claude Code uses JSON-based configuration files at multiple scopes:
 
-**Example `.clauderc`:**
-```yaml
-# Default model
-model: claude-sonnet-4-5
+**Configuration Hierarchy:**
+- User settings: `~/.claude/settings.json` (global defaults)
+- Project settings: `.claude/settings.json` (project-specific)
+- Local settings: `.claude/settings.local.json` (personal overrides, gitignored)
+- User preferences: `~/.claude.json` (user-level preferences and MCP servers)
 
-# Extended thinking defaults
-thinking:
-  enabled: false
-  budget_tokens: 5000
-
-# Output preferences
-output:
-  verbose: false
-  color: true
-  stream: true
-
-# Tool permissions
-tools:
-  bash:
-    allowed: true
-    patterns:
-      - git:*
-      - npm:*
-      - docker:*
-    deny_patterns:
-      - rm -rf /*
-      - sudo *
-
-# Cost tracking
-budget:
-  monthly_limit: 100.00
-  warn_threshold: 80.00
+**Example `settings.json`:**
+```json
+{
+  "model": "claude-sonnet-4-5-20250929",
+  "thinking": {
+    "enabled": false,
+    "budgetTokens": 5000
+  },
+  "output": {
+    "verbose": false,
+    "color": true,
+    "stream": true
+  },
+  "tools": {
+    "bash": {
+      "allowed": true,
+      "allowedCommands": [
+        "git*",
+        "npm*",
+        "docker*"
+      ],
+      "deniedCommands": [
+        "rm -rf /*",
+        "sudo*"
+      ]
+    }
+  },
+  "budget": {
+    "monthlyLimit": 100.00,
+    "warnThreshold": 80.00
+  }
+}
 ```
 
 ### Project Context: `CLAUDE.md`
@@ -261,29 +289,44 @@ npm run lint        # Lint code
 - AWS S3 (file storage)
 ````
 
-### Ignore Patterns: `.claudeignore`
+### Ignore Patterns
 
-Prevent Claude from accessing unnecessary files (improves performance and reduces costs).
+Configure which files Claude should ignore using `.gitignore`-style patterns in `settings.json`:
 
-**Example `.claudeignore`:**
+**Example ignore configuration in `settings.json`:**
+```json
+{
+  "ignore": [
+    "node_modules/",
+    "vendor/",
+    "dist/",
+    "build/",
+    "out/",
+    ".env*",
+    "*.log",
+    "coverage/",
+    ".DS_Store"
+  ]
+}
+```
+
+**Alternative: `.claudeignore` (legacy, still supported)**
+
+You can also create a `.claudeignore` file using `.gitignore` syntax:
+
 ```gitignore
 # Dependencies
 node_modules/
 vendor/
-.pnp/
 
 # Build outputs
 dist/
 build/
-out/
-.next/
-target/
 
 # Environment files
 .env
 .env.local
 *.key
-*.pem
 
 # Logs
 *.log
@@ -291,70 +334,61 @@ logs/
 
 # Test coverage
 coverage/
-.nyc_output/
-
-# IDE
-.vscode/
-.idea/
-*.swp
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Large data files
-*.sql
-*.dump
-data/
-
-# Lock files (large and not useful)
-package-lock.json
-yarn.lock
-pnpm-lock.yaml
 ```
 
 ---
 
 ## 2.4 MCP Server Configuration
 
-MCP servers enable Claude to access external datasources.
+MCP (Model Context Protocol) servers enable Claude to access external datasources.
 
-### MCP Configuration File
+### MCP Installation Scopes
 
-**Location:** `.claude/mcp_config.json`
+**User MCP servers:** `~/.claude.json` (available across all projects)
+**Project MCP servers:** `.mcp.json` (project-specific, in project root)
 
+### User MCP Configuration
+
+**Example `~/.claude.json`:**
 ```json
 {
   "mcpServers": {
     "google-drive": {
       "command": "npx",
-      "args": ["-y", "@anthropics/mcp-server-gdrive"],
+      "args": ["-y", "@modelcontextprotocol/server-gdrive"],
       "env": {
-        "GOOGLE_OAUTH_TOKEN": "${GDRIVE_TOKEN}",
-        "GOOGLE_CLIENT_ID": "${GDRIVE_CLIENT_ID}",
-        "GOOGLE_CLIENT_SECRET": "${GDRIVE_SECRET}"
+        "GOOGLE_OAUTH_TOKEN": "${GDRIVE_TOKEN}"
       }
     },
+    "slack": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-slack"],
+      "env": {
+        "SLACK_BOT_TOKEN": "${SLACK_TOKEN}"
+      }
+    }
+  }
+}
+```
+
+### Project MCP Configuration
+
+**Example `.mcp.json` (in project root):**
+```json
+{
+  "mcpServers": {
     "jira": {
       "command": "npx",
-      "args": ["-y", "@anthropics/mcp-server-jira"],
+      "args": ["-y", "@modelcontextprotocol/server-jira"],
       "env": {
         "JIRA_URL": "https://company.atlassian.net",
         "JIRA_EMAIL": "${JIRA_EMAIL}",
         "JIRA_API_TOKEN": "${JIRA_TOKEN}"
       }
     },
-    "slack": {
-      "command": "npx",
-      "args": ["-y", "@anthropics/mcp-server-slack"],
-      "env": {
-        "SLACK_BOT_TOKEN": "${SLACK_TOKEN}",
-        "SLACK_TEAM_ID": "${SLACK_TEAM}"
-      }
-    },
     "github": {
       "command": "npx",
-      "args": ["-y", "@anthropics/mcp-server-github"],
+      "args": ["-y", "@modelcontextprotocol/server-github"],
       "env": {
         "GITHUB_TOKEN": "${GITHUB_TOKEN}",
         "GITHUB_REPO": "owner/repo"
@@ -366,15 +400,14 @@ MCP servers enable Claude to access external datasources.
 
 ### Installing MCP Servers
 
-```bash
-# Install MCP servers globally
-npm install -g @anthropics/mcp-server-gdrive
-npm install -g @anthropics/mcp-server-jira
-npm install -g @anthropics/mcp-server-slack
-npm install -g @anthropics/mcp-server-github
+MCP servers are automatically installed on first use via `npx`. No global installation required.
 
-# Verify installation
-claude --list-mcp-servers
+```bash
+# List configured MCP servers
+claude /mcp list
+
+# Test MCP server connection
+claude /mcp test google-drive
 ```
 
 ### Testing MCP Connection
@@ -392,33 +425,49 @@ claude "Search Slack for discussions about authentication"
 
 ---
 
-## 2.5 Skills Setup
+## 2.5 Skills System
 
-### Installing Official Skills
+Skills are reusable knowledge modules stored as `SKILL.md` files that give Claude specialized capabilities.
+
+### Skills Directory Structure
+
+**User skills:** `~/.claude/skills/` (available across all projects)
+**Project skills:** `.claude/skills/` (project-specific)
+
+```
+.claude/skills/
+├── typescript-api/
+│   └── SKILL.md
+├── security-review/
+│   └── SKILL.md
+└── test-generator/
+    ├── SKILL.md
+    ├── templates/
+    │   └── test.template.ts
+    └── examples/
+        └── sample-test.ts
+```
+
+### Listing Skills
+
+Skills are automatically discovered from the `.claude/skills/` and `~/.claude/skills/` directories.
 
 ```bash
-# Add Anthropic skills marketplace
-claude /plugin marketplace add anthropics/skills
-
-# List available skills
-claude /skills list
-
-# Install a skill
-claude /skills install security-review
-claude /skills install pdf-extractor
-claude /skills install test-generator
+# Within Claude session - list available skills
+/agents list
+# Shows all skills loaded from user and project directories
 ```
 
 ### Creating Custom Skills
 
-**Structure:**
+**1. Create skill directory:**
+```bash
+mkdir -p .claude/skills/typescript-api
 ```
-my-custom-skill/
-├── SKILL.md          # Required: Core instructions
-├── scripts/          # Optional: Executable scripts
-├── references/       # Optional: Reference docs
-└── assets/           # Optional: Templates, examples
-```
+
+**2. Create SKILL.md:**
+
+Create `.claude/skills/typescript-api/SKILL.md` with frontmatter:
 
 **Example Custom Skill (`typescript-api/SKILL.md`):**
 
@@ -499,19 +548,569 @@ usersRouter.post(
 ```
 ````
 
-**Install custom skill:**
-```bash
-# Package skill
-cd my-custom-skill/
-zip -r ../typescript-api.zip .
+### Skill Frontmatter Options
 
-# Install
-claude /skills install ../typescript-api.zip
+- `name`: Unique identifier (required)
+- `description`: What the skill does (required)  
+- `disable-model-invocation`: Disable automatic use (optional)
+- `allowed-tools`: Tool restrictions (optional)
+- `context`: Keywords for matching (optional)
+
+### Using Skills
+
+Skills are automatically discovered and invoked:
+
+```bash
+claude "Create a new API endpoint for user registration"
+# Claude automatically uses relevant skills based on query context
+```
+
+### Best Practices
+
+- Focus on single responsibility per skill
+- Include clear step-by-step instructions
+- Add context keywords for better matching
+- Store user skills in `~/.claude/skills/`
+- Store project skills in `.claude/skills/`
+
+---
+
+## 2.6 Hooks System
+
+Hooks allow you to run custom scripts at specific points in Claude's workflow for automation and customization.
+
+### Available Hook Types
+
+**PreToolUse** - Runs before Claude uses a tool
+**PostToolUse** - Runs after Claude uses a tool  
+**SessionStart** - Runs when starting a new session
+
+### Configuring Hooks
+
+Add hooks configuration to `settings.json`:
+
+**Example `.claude/settings.json`:**
+```json
+{
+  "hooks": {
+    "PreToolUse": {
+      "Write": {
+        "command": "bash",
+        "args": ["-c", "echo 'About to write file'"]
+      }
+    },
+    "PostToolUse": {
+      "Write": {
+        "command": "npm",
+        "args": ["run", "format"],
+        "description": "Auto-format after file edits"
+      },
+      "StrReplace": {
+        "command": "eslint",
+        "args": ["--fix", "${file}"],
+        "description": "Auto-lint after replacements"
+      }
+    },
+    "SessionStart": {
+      "command": "bash",
+      "args": ["-c", "git pull && npm install"],
+      "description": "Update dependencies on session start"
+    }
+  }
+}
+```
+
+### Hook Configuration Options
+
+```json
+{
+  "command": "executable",       // Required: Command to run
+  "args": ["arg1", "arg2"],      // Optional: Arguments
+  "description": "What it does", // Optional: Description
+  "cwd": "/path/to/dir",         // Optional: Working directory
+  "env": {                       // Optional: Environment variables
+    "VAR": "value"
+  },
+  "timeout": 5000                // Optional: Timeout in ms
+}
+```
+
+### Variables in Hooks
+
+Use these variables in `args` and `env`:
+
+- `${file}` - File being operated on
+- `${tool}` - Tool being used
+- `${cwd}` - Current working directory
+- `${project}` - Project root directory
+
+### Common Hook Patterns
+
+**1. Auto-format After Edits**
+```json
+{
+  "hooks": {
+    "PostToolUse": {
+      "Write": {
+        "command": "prettier",
+        "args": ["--write", "${file}"]
+      },
+      "StrReplace": {
+        "command": "prettier",
+        "args": ["--write", "${file}"]
+      }
+    }
+  }
+}
+```
+
+**2. Run Tests After Code Changes**
+```json
+{
+  "hooks": {
+    "PostToolUse": {
+      "Write": {
+        "command": "npm",
+        "args": ["test", "--", "${file}.test.ts"],
+        "description": "Run tests for modified files"
+      }
+    }
+  }
+}
+```
+
+**3. Git Auto-commit**
+```json
+{
+  "hooks": {
+    "PostToolUse": {
+      "Write": {
+        "command": "bash",
+        "args": ["-c", "git add ${file} && git commit -m 'Auto: Updated ${file}'"],
+        "description": "Auto-commit changes"
+      }
+    }
+  }
+}
+```
+
+**4. Validation Hooks**
+```json
+{
+  "hooks": {
+    "PostToolUse": {
+      "Write": {
+        "command": "eslint",
+        "args": ["${file}"],
+        "description": "Validate code after write"
+      }
+    }
+  }
+}
+```
+
+**5. Notification Hooks**
+```json
+{
+  "hooks": {
+    "SessionStart": {
+      "command": "notify-send",
+      "args": ["Claude", "Session started"],
+      "description": "Desktop notification"
+    }
+  }
+}
+```
+
+### Managing Hooks
+
+**List configured hooks:**
+```bash
+# Within Claude session
+/hooks list
+```
+
+**Test a hook:**
+```bash
+/hooks test PostToolUse.Write
+```
+
+**Disable hooks temporarily:**
+```json
+{
+  "hooks": {
+    "enabled": false  // Disables all hooks
+  }
+}
+```
+
+### Hook Best Practices
+
+**1. Keep Hooks Fast**
+- Hooks should complete in <1 second
+- Use async operations for slow tasks
+- Set appropriate timeouts
+
+**2. Handle Failures Gracefully**
+- Hooks shouldn't break Claude's workflow
+- Log errors for debugging
+- Use try-catch in scripts
+
+**3. Be Selective**
+- Only hook what you need
+- Too many hooks slow down Claude
+- Consider impact on every operation
+
+**4. Use for Automation**
+- Format code automatically
+- Run linters/validators
+- Sync with external tools
+- Update documentation
+
+**5. Test Thoroughly**
+```bash
+# Test hook execution
+/hooks test PostToolUse.Write
+
+# Check hook logs
+cat ~/.claude/logs/hooks.log
+```
+
+### Security Considerations
+
+- Hooks run with your user permissions
+- Review hook commands carefully
+- Don't use untrusted hook configurations
+- Avoid hooks that execute arbitrary code from files
+
+### Example: Complete Format/Lint/Test Hook
+
+```json
+{
+  "hooks": {
+    "PostToolUse": {
+      "Write": {
+        "command": "bash",
+        "args": [
+          "-c",
+          "prettier --write ${file} && eslint --fix ${file} && npm test -- ${file}"
+        ],
+        "description": "Format, lint, and test after writing files",
+        "timeout": 10000
+      }
+    }
+  }
+}
 ```
 
 ---
 
-## 2.6 VS Code Extension Setup (Beta)
+## 2.7 Plugins System
+
+Plugins are pre-packaged bundles that can include skills, agents, hooks, and MCP servers for specific use cases.
+
+### What Are Plugins?
+
+Plugins bundle multiple Claude Code features:
+- ✅ Skills (domain knowledge)
+- ✅ Agents (specialized assistants)
+- ✅ Hooks (automation)
+- ✅ MCP servers (external integrations)
+- ✅ Configuration (settings)
+
+**Benefits:**
+- One-command installation
+- Curated, tested combinations
+- Community-maintained
+- Easy sharing across teams
+
+### Plugin Marketplace
+
+Browse and install plugins from the official marketplace:
+
+```bash
+# Within Claude session
+/plugin marketplace
+
+# Search plugins
+/plugin search "react"
+/plugin search "security"
+```
+
+**Categories:**
+- Frontend frameworks (React, Vue, Angular)
+- Backend frameworks (Express, FastAPI, Spring)
+- Testing tools (Jest, Pytest, Cypress)
+- Security (OWASP, penetration testing)
+- DevOps (Docker, Kubernetes, Terraform)
+- Data science (Pandas, NumPy, Jupyter)
+
+### Installing Plugins
+
+**From marketplace:**
+```bash
+/plugin install typescript-fullstack
+/plugin install security-audit
+/plugin install react-development
+```
+
+**From URL:**
+```bash
+/plugin install https://github.com/user/custom-plugin
+```
+
+**From local file:**
+```bash
+/plugin install ./my-plugin.zip
+```
+
+### Managing Plugins
+
+**List installed plugins:**
+```bash
+/plugin list
+```
+
+**Example output:**
+```
+Installed Plugins:
+✓ typescript-fullstack (v1.2.0)
+  - Skills: api-generator, test-generator
+  - Agents: security-reviewer
+  - Hooks: auto-format, auto-lint
+
+✓ react-development (v2.0.1)
+  - Skills: component-generator, state-management
+  - Agents: performance-optimizer
+```
+
+**Update plugins:**
+```bash
+/plugin update typescript-fullstack
+/plugin update --all
+```
+
+**Remove plugins:**
+```bash
+/plugin remove typescript-fullstack
+```
+
+**Plugin info:**
+```bash
+/plugin info typescript-fullstack
+# Shows:
+# - Description
+# - Version
+# - Author
+# - What's included
+# - Dependencies
+```
+
+### Enabling/Disabling Plugins
+
+Configure in `settings.json`:
+
+```json
+{
+  "enabledPlugins": [
+    "typescript-fullstack",
+    "react-development",
+    "security-audit"
+  ],
+  "disabledPlugins": [
+    "deprecated-plugin"
+  ]
+}
+```
+
+**Toggle plugin:**
+```bash
+/plugin disable typescript-fullstack
+/plugin enable typescript-fullstack
+```
+
+### Creating Custom Plugins
+
+**Plugin structure:**
+```
+my-plugin/
+├── plugin.json           # Plugin metadata
+├── skills/              # Skills
+│   ├── skill1/
+│   │   └── SKILL.md
+│   └── skill2/
+│       └── SKILL.md
+├── agents/              # Agents
+│   └── agent1/
+│       └── AGENT.md
+├── hooks/               # Hook configurations
+│   └── hooks.json
+├── mcp/                 # MCP server configs
+│   └── servers.json
+├── settings.json        # Default settings
+└── README.md            # Documentation
+```
+
+**Example `plugin.json`:**
+```json
+{
+  "name": "typescript-fullstack",
+  "version": "1.2.0",
+  "description": "Complete TypeScript full-stack development toolkit",
+  "author": "Your Name",
+  "license": "MIT",
+  "homepage": "https://github.com/user/plugin",
+  "keywords": ["typescript", "node", "react"],
+  "requires": {
+    "claude-code": ">=2.0.0"
+  },
+  "provides": {
+    "skills": ["api-generator", "test-generator", "component-generator"],
+    "agents": ["security-reviewer", "performance-optimizer"],
+    "hooks": ["auto-format", "auto-lint"],
+    "mcp": ["github-integration"]
+  }
+}
+```
+
+### Publishing Plugins
+
+**1. Package plugin:**
+```bash
+cd my-plugin/
+zip -r my-plugin-1.0.0.zip .
+```
+
+**2. Test locally:**
+```bash
+claude
+/plugin install ./my-plugin-1.0.0.zip
+/plugin test my-plugin
+```
+
+**3. Submit to marketplace:**
+```bash
+/plugin submit my-plugin-1.0.0.zip
+# Follow prompts for marketplace submission
+```
+
+### Popular Plugins (Examples)
+
+**TypeScript Full-Stack:**
+```bash
+/plugin install typescript-fullstack
+```
+Includes:
+- API endpoint generator
+- Component scaffolder
+- Test generator
+- Auto-formatting hooks
+
+**Security Audit:**
+```bash
+/plugin install security-audit
+```
+Includes:
+- Security review agent
+- OWASP checker skill
+- Vulnerability scanner
+
+**React Development:**
+```bash
+/plugin install react-development
+```
+Includes:
+- Component generator
+- State management patterns
+- Performance optimizer agent
+- Hooks for linting
+
+**Python Data Science:**
+```bash
+/plugin install python-data-science
+```
+Includes:
+- Pandas helper skills
+- Visualization generator
+- Jupyter notebook agent
+
+### Plugin Best Practices
+
+**1. Install only what you need**
+- Too many plugins = slower performance
+- Review plugin contents before installing
+
+**2. Keep plugins updated**
+```bash
+/plugin update --all
+```
+
+**3. Team consistency**
+- Document required plugins in project README
+- Include plugin list in `.claude/settings.json`
+- Version control plugin configuration
+
+**4. Create plugins for teams**
+- Bundle your team's standards
+- Share across projects
+- Maintain internally
+
+**5. Review permissions**
+- Check what tools plugins can access
+- Review hook commands
+- Verify MCP server configurations
+
+### Plugin Configuration
+
+**Project-level plugin settings in `.claude/settings.json`:**
+```json
+{
+  "enabledPlugins": [
+    "typescript-fullstack",
+    "security-audit"
+  ],
+  "pluginSettings": {
+    "typescript-fullstack": {
+      "apiStyle": "express",
+      "testFramework": "jest",
+      "formatting": "prettier"
+    },
+    "security-audit": {
+      "severity": "high",
+      "autoFix": false
+    }
+  }
+}
+```
+
+### Discovering Plugins
+
+**Browse marketplace:**
+```bash
+/plugin marketplace
+```
+
+**Search by keyword:**
+```bash
+/plugin search "testing"
+/plugin search "react"
+/plugin search "security"
+```
+
+**Filter by category:**
+```bash
+/plugin marketplace --category frontend
+/plugin marketplace --category devops
+```
+
+**Check trending:**
+```bash
+/plugin trending
+```
+
+---
+
+## 2.8 VS Code Extension Setup (Beta)
 
 ### Installation
 
@@ -550,7 +1149,7 @@ claude /skills install ../typescript-api.zip
 
 ---
 
-## 2.7 Enterprise Deployment
+## 2.9 Enterprise Deployment
 
 ### AWS Deployment
 
@@ -609,7 +1208,7 @@ gcloud run deploy claude-code \
 
 ---
 
-## 2.8 Setup Verification Checklist
+## 2.10 Setup Verification Checklist
 
 ✅ **Installation:**
 - [ ] Claude CLI installed and in PATH
@@ -623,22 +1222,22 @@ gcloud run deploy claude-code \
 
 ✅ **Project Configuration:**
 - [ ] `CLAUDE.md` created in project root
-- [ ] `.claudeignore` created
-- [ ] `.clauderc` configured (optional)
+- [ ] `.claude/settings.json` configured (optional)
+- [ ] Ignore patterns configured in settings.json (optional)
 
 ✅ **MCP Integration (Optional):**
-- [ ] MCP servers installed
-- [ ] `.claude/mcp_config.json` created
+- [ ] `~/.claude.json` configured for user MCP servers
+- [ ] `.mcp.json` configured for project MCP servers (optional)
 - [ ] MCP connections tested
 
 ✅ **Skills (Optional):**
-- [ ] Anthropic marketplace added
+- [ ] `.claude/skills/` directory created for custom skills
 - [ ] Relevant skills installed
 - [ ] Custom skills created (if needed)
 
 ---
 
-## 2.9 Troubleshooting Setup Issues
+## 2.11 Troubleshooting Setup Issues
 
 ### Issue: CLI not found after installation
 
@@ -715,12 +1314,8 @@ tech_stack: [Node.js, TypeScript]
 Brief description of your project...
 EOF
 
-# 4. Create .claudeignore
-cat > .claudeignore << 'EOF'
-node_modules/
-dist/
-.env
-EOF
+# 4. Claude respects .gitignore by default
+# Optionally configure additional ignore patterns in .claude/settings.json
 
 # 5. Test
 claude "Hello! List the files in this project"

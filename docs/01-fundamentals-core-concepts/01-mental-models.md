@@ -24,7 +24,7 @@ graph TD
     
     Models --> Sonnet45[Claude Sonnet 4.5<br/>Balanced]
     Models --> Haiku45[Claude Haiku 4.5<br/>Fast]
-    Models --> Opus4[Claude Opus 4.1<br/>Most Capable]
+    Models --> Opus45[Claude Opus 4.5<br/>Most Capable]
     
     CLI --> MCP[MCP Servers]
     VSCode --> MCP
@@ -41,13 +41,15 @@ graph TD
 
 ### Active Models (December 2025)
 
-> **Note:** "Claude 4" is the family name, not a specific model. Always specify the complete model name: Claude Opus 4.1, Claude Sonnet 4.5, or Claude Haiku 4.5.
+> **Note:** "Claude 4" is the family name, not a specific model. Always specify the complete model name: Claude Opus 4.5, Claude Sonnet 4.5, or Claude Haiku 4.5.
 
-| Model | Best For | Speed | Cost (Input/Output per MTOK) | Context Window |
-|-------|----------|-------|------------------------------|----------------|
-| **Claude Opus 4.1** | Complex reasoning, architecture | Moderate | $15 / $75 | 200K |
-| **Claude Sonnet 4.5** | **Daily coding (recommended)** | Fast | $3 / $15 | 200K |
-| **Claude Haiku 4.5** | Speed + cost optimization | Fastest | $1 / $5 | 200K |
+| Model | Best For | Speed | Context Window |
+|-------|----------|-------|----------------|
+| **Claude Opus 4.5** | Complex reasoning, architecture | Moderate | 200K |
+| **Claude Sonnet 4.5** | **Daily coding (recommended)** | Fast | 200K |
+| **Claude Haiku 4.5** | Speed + cost optimization | Fastest | 200K |
+
+In Claude Code, the `opus` alias maps to Opus 4.5 ([model configuration](https://code.claude.com/docs/en/model-config)).
 
 **All models support:**
 - ✅ Extended thinking
@@ -57,10 +59,11 @@ graph TD
 - ✅ Prompt caching
 - ✅ Multilingual capabilities
 
-**API Model Identifiers:**
-- Claude Opus 4.1 → `claude-opus-4-1`
-- Claude Sonnet 4.5 → `claude-sonnet-4-5`
-- Claude Haiku 4.5 → `claude-haiku-4-5`
+**API Model Identifiers:** Use the `opus` alias in Claude Code, or see [Model names (Claude API)](https://docs.claude.com/en/docs/about-claude/models/overview#model-names) / [Model configuration](https://code.claude.com/docs/en/model-config) for current Opus 4.5 model IDs.
+- Claude Sonnet 4.5 → `claude-sonnet-4-5-20250929`
+- Claude Haiku 4.5 → `claude-haiku-4-5-20250403`
+
+> **Note:** Model identifiers may include date suffixes. Use the latest available version or the `opus` / `sonnet` / `haiku` aliases in Claude Code for the current flagship models.
 
 ### Model Selection Decision Tree
 
@@ -68,15 +71,15 @@ graph TD
 graph TD
     Start{What's your<br/>primary need?}
     
-    Start -->|Speed + Cost| Haiku[Claude Haiku 4.5<br/>$1/$5 MTOK]
-    Start -->|Balanced| Sonnet[Claude Sonnet 4.5<br/>$3/$15 MTOK]
-    Start -->|Max Intelligence| Opus[Claude Opus 4.1<br/>$15/$75 MTOK]
+    Start -->|Speed + Cost| Haiku[Claude Haiku 4.5<br/>Cost-effective]
+    Start -->|Balanced| Sonnet[Claude Sonnet 4.5<br/>Recommended]
+    Start -->|Max Intelligence| Opus[Claude Opus 4.5<br/>Most Capable]
     
     Start -->|Complex Reasoning| Extended{Need extended<br/>thinking?}
     Extended -->|Yes| SonnetExt[Claude Sonnet 4.5<br/>with 5K-10K budget]
-    Extended -->|Very Complex| OpusExt[Claude Opus 4.1<br/>with 10K-32K budget]
+    Extended -->|Very Complex| OpusExt[Claude Opus 4.5<br/>with 10K-32K budget]
     
-    Start -->|High Volume| Batch[Any Model<br/>with Batch API<br/>50% cost reduction]
+    Start -->|High Volume| Batch[Any Model<br/>with Batch API<br/>Cost optimized]
 ```
 
 ### When to Use Each Model
@@ -87,7 +90,7 @@ graph TD
 - Documentation generation
 - High-volume API calls
 - Real-time chat interactions
-- **Cost:** ~10x cheaper than Opus
+- **Trade-off:** Significantly more cost-effective than Opus
 
 **Claude Sonnet 4.5** - Daily Workhorse (Recommended)
 - Feature development
@@ -95,15 +98,15 @@ graph TD
 - Bug fixes and debugging
 - Test generation
 - API design
-- **Sweet spot:** 4x faster than Opus, nearly as capable
+- **Sweet spot:** Faster than Opus, nearly as capable
 
-**Claude Opus 4.1** - Complex Tasks
+**Claude Opus 4.5** - Complex Tasks
 - System architecture design
 - Complex algorithm implementation
 - Security analysis
 - Multi-step reasoning
 - Research and analysis
-- **Use sparingly:** Most expensive, but most capable
+- **Use strategically:** Most capable for complex reasoning
 
 ---
 
@@ -161,12 +164,45 @@ graph TD
 
 Extended thinking allows Claude to "think through" complex problems before responding, dramatically improving quality for reasoning-heavy tasks.
 
+**Status:** Extended thinking is **enabled by default** with a budget of up to 31,999 tokens.
+
 ### How Extended Thinking Works
 
-1. **User sends request** with `thinking: {type: "enabled", budget_tokens: 5000}`
-2. **Claude reasons internally** (uses budget tokens)
-3. **Thinking process visible** in response (optional: summarized)
+1. **Claude automatically uses thinking** when beneficial (up to 31,999 tokens)
+2. **Claude reasons internally** (transparent in response)
+3. **Thinking process visible** in thinking blocks
 4. **Final answer generated** based on reasoning
+
+### Controlling Extended Thinking
+
+**Toggle in CLI:**
+```bash
+# Toggle with keyboard shortcut
+Option+T (Mac) or Alt+T (Windows/Linux)
+```
+
+**Configure globally:**
+```bash
+# Within Claude session
+/config
+# Set extended thinking preferences
+```
+
+**Environment variable:**
+```bash
+# Set maximum thinking tokens
+export MAX_THINKING_TOKENS=10000
+```
+
+**In settings.json:**
+```json
+{
+  "thinking": {
+    "enabled": true,
+    "maxTokens": 31999
+  }
+}
+```
 
 ### Budget Token Guide
 
@@ -187,12 +223,14 @@ const client = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
 
+// Extended thinking is enabled by default
+// Optionally customize with thinking parameter
 const message = await client.messages.create({
-  model: "claude-sonnet-4-5",
+  model: "claude-sonnet-4-5-20250929",
   max_tokens: 16000,
   thinking: {
-    type: "enabled",
-    budget_tokens: 10000, // Allocate thinking budget
+    type: "enabled",      // Optional: already enabled by default
+    budget_tokens: 10000, // Optional: customize budget (default: 31999)
   },
   messages: [
     {
@@ -206,9 +244,21 @@ const message = await client.messages.create({
 console.log(message.content);
 ```
 
-### When to Use Extended Thinking
+**Disable extended thinking (when not needed):**
+```typescript
+const message = await client.messages.create({
+  model: "claude-sonnet-4-5-20250929",
+  max_tokens: 1024,
+  thinking: {
+    type: "disabled"  // Disable for simple tasks
+  },
+  messages: [{ role: "user", content: "Format this code" }]
+});
+```
 
-✅ **Use extended thinking for:**
+### When Extended Thinking Helps Most
+
+✅ **Extended thinking excels at:**
 - Architecture and system design decisions
 - Complex algorithmic problems
 - Multi-step reasoning tasks
@@ -216,19 +266,22 @@ console.log(message.content);
 - Code refactoring strategies
 - Research and analysis
 
-❌ **Don't use extended thinking for:**
+✅ **Can disable for:**
 - Simple code completions
 - Quick documentation
 - Straightforward refactors
-- High-volume batch operations (adds cost)
-- Real-time chat (adds latency)
+- High-volume batch operations (to reduce cost)
+- Real-time chat (to reduce latency)
+
+> **Note:** Extended thinking is automatic and intelligent. Claude uses thinking when beneficial and skips it for simple tasks.
 
 ### Cost Impact
 
 Extended thinking uses **output tokens** for the thinking process:
-- Thinking tokens are billed as output tokens
-- Example: 5K thinking budget = up to 5K output tokens used for reasoning
-- **Tip:** Start with 2K budget, increase if needed
+- Thinking tokens billed as output tokens
+- Default budget: up to 31,999 tokens
+- Automatically scaled based on task complexity
+- **Tip:** Use `MAX_THINKING_TOKENS` env var to limit if needed
 
 ---
 
@@ -323,18 +376,32 @@ graph LR
 
 ### MCP Configuration Example
 
+**User MCP servers** are configured in `~/.claude.json`:
+
 ```json
-// .claude/mcp_config.json
 {
   "mcpServers": {
     "gdrive": {
-      "command": "mcp-server-gdrive",
-      "args": ["--auth", "${GOOGLE_OAUTH_TOKEN}"]
-    },
-    "jira": {
-      "command": "mcp-server-jira",
-      "args": ["--url", "https://company.atlassian.net"],
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-gdrive"],
       "env": {
+        "GOOGLE_OAUTH_TOKEN": "${GDRIVE_TOKEN}"
+      }
+    }
+  }
+}
+```
+
+**Project MCP servers** are configured in `.mcp.json` (project root):
+
+```json
+{
+  "mcpServers": {
+    "jira": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-jira"],
+      "env": {
+        "JIRA_URL": "https://company.atlassian.net",
         "JIRA_API_TOKEN": "${JIRA_TOKEN}"
       }
     }
@@ -361,9 +428,9 @@ The Skills system provides just-in-time knowledge loading, enabling Claude to ac
 |--------|---------------|-------|
 | **Reusability** | One-time use | Reusable across projects |
 | **Context efficiency** | Always in context | Loaded on-demand |
-| **Distribution** | Copy-paste | Plugin marketplace |
+| **Distribution** | Copy-paste | Git repository / local files |
 | **Versioning** | Manual | Git-based |
-| **Team sharing** | Manual | Automatic (marketplace) |
+| **Team sharing** | Manual | Shared via `.claude/skills/` |
 
 ### Example: Security Review Skill
 
@@ -462,7 +529,7 @@ graph TB
     subgraph Intelligence
         Haiku[Claude Haiku 4.5<br/>Fast/Cheap]
         Sonnet[Claude Sonnet 4.5<br/>Balanced]
-        Opus[Claude Opus 4.1<br/>Max Intelligence]
+        Opus[Claude Opus 4.5<br/>Max Intelligence]
         Extended[Extended Thinking<br/>Deep Reasoning]
     end
     
@@ -493,7 +560,7 @@ graph TB
 ### Key Principles
 
 1. **Choose the right tool:** CLI for automation, API for integration, SDK for agents
-2. **Choose the right model:** Claude Haiku 4.5 for speed, Claude Sonnet 4.5 for balance, Claude Opus 4.1 for complexity
+2. **Choose the right model:** Claude Haiku 4.5 for speed, Claude Sonnet 4.5 for balance, Claude Opus 4.5 for complexity
 3. **Use extended thinking:** For complex reasoning (5K-10K budget typical)
 4. **Leverage prompt caching:** Save 90% on repeated context
 5. **Use MCP:** Connect to external data and tools
@@ -507,7 +574,7 @@ graph TB
 | Scenario | Tool | Model | Features |
 |----------|------|-------|----------|
 | Daily feature development | CLI | Claude Sonnet 4.5 | Standard context |
-| Architecture design | CLI/API | Claude Opus 4.1 | Extended thinking 10K |
+| Architecture design | CLI/API | Claude Opus 4.5 | Extended thinking 10K |
 | High-volume API calls | API | Claude Haiku 4.5 | Batch processing |
 | Screenshot to code | CLI/API | Claude Sonnet 4.5 | Vision |
 | Custom automation | Agent SDK | Claude Sonnet 4.5 | Custom tools |
