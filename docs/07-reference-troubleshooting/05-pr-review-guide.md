@@ -319,4 +319,4 @@ Use this during every AI-generated PR review:
 
 ---
 
-[← Back: Antipatterns](04-antipatterns.md)
+[← Back: Antipatterns](04-antipatterns.md) | [Next: FAQ →](06-faq.md)
