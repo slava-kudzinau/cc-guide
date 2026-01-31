@@ -628,9 +628,8 @@ See the comprehensive [FAQ](docs/07-reference-troubleshooting/06-faq.md) coverin
 - **Twitter**: [@anthropicai](https://twitter.com/anthropicai)
 - **GitHub**: [github.com/anthropics](https://github.com/anthropics)
 
-### This Guide
-- **Version**: 1.0 (December 2025)
-- **License**: MIT
+### This Guide: 2.0 (January 2026)
+- **License**: CC BY 4.0
 - **Contributions**: Welcome via PR
 
 ---
