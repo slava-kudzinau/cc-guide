@@ -7,11 +7,17 @@ permalink: /docs/01-fundamentals-core-concepts/
 
 # Part 1: Fundamentals & Core Concepts
 
+**New to Claude Code?** Complete [Section 00: Introduction](../00-intro/) first for a gentle 15-minute onboarding. Come back here after you've tried Claude Code hands-on.
+
+**Already completed Section 00?** Great! This part dives deeper into the architecture, tools, and workflows that make Claude Code powerful. You'll learn when to use which tool, how to configure your environment, and how to integrate Claude Code into your daily development workflow.
+
+---
+
 This part covers the essential foundations every Claude Code user needs to understand. Whether you're using the CLI, API, or Agent SDK, these concepts form the basis for effective usage.
 
 ## Sections in This Part
 
-### [Section 1: Mental Models & Architecture](01-mental-models.md)
+### [Section 1: Mental Models & Architecture](01-mental-models)
 Understand Claude's ecosystem architecture, model family, tool selection, and core concepts like extended thinking, vision capabilities, MCP integration, and the Skills system.
 
 **Key Topics:**
@@ -23,7 +29,7 @@ Understand Claude's ecosystem architecture, model family, tool selection, and co
 - Skills system fundamentals
 - Context windows and token management
 
-### [Section 2: Environment & Project Setup](02-environment-setup.md)
+### [Section 2: Environment & Project Setup](02-environment-setup)
 Complete installation and configuration guide for all platforms, including CLI, VS Code extension, API authentication, project configuration files, and MCP server setup.
 
 **Key Topics:**
@@ -35,7 +41,7 @@ Complete installation and configuration guide for all platforms, including CLI, 
 - Skills repository setup
 - Enterprise deployment options
 
-### [Section 3: CLAUDE.md - Your Project's Memory](03-claude-md-guide.md)
+### [Section 3: CLAUDE.md - Your Project's Memory](03-claude-md-guide)
 Learn how to create and maintain CLAUDE.md, the most important configuration file for consistent AI-assisted development. Includes templates for minimal, production, and enterprise projects.
 
 **Key Topics:**
@@ -46,7 +52,7 @@ Learn how to create and maintain CLAUDE.md, the most important configuration fil
 - Real-world examples (Express, React, Python, Go)
 - Maintenance and best practices
 
-### [Section 4: Core Workflows](04-core-workflows.md)
+### [Section 4: Core Workflows](04-core-workflows)
 Essential development patterns including the 7-phase feature development workflow, debugging strategies, code navigation, automated task execution, and Git integration.
 
 **Key Topics:**
@@ -57,7 +63,7 @@ Essential development patterns including the 7-phase feature development workflo
 - Test-driven development patterns
 - Git workflow integration
 
-### [Section 5: Day-in-the-Life - Real Developer Workflows](05-daily-workflows.md)
+### [Section 5: Day-in-the-Life - Real Developer Workflows](05-daily-workflows)
 Practical, copy-paste ready workflows for your entire workday. From morning catch-up to end-of-day cleanup, see exactly how to use Claude Code in real scenarios.
 
 **Key Topics:**
@@ -72,11 +78,13 @@ Practical, copy-paste ready workflows for your entire workday. From morning catc
 
 ## Quick Start (45 Minutes)
 
-1. **Read Section 1** (15 min) - Understand the landscape
-2. **Follow Section 2** (10 min) - Install and configure
-3. **Create Section 3** (10 min) - Set up CLAUDE.md for your project
-4. **Try Section 4** (5 min) - Run your first workflow
-5. **Explore Section 5** (5 min) - See daily patterns in action
+**Prerequisites**: Complete [Section 00: Introduction](../00-intro/) (15 min) if you haven't already.
+
+1. **Read Section 01** (15 min) - Understand the landscape and architecture
+2. **Follow Section 02** (10 min) - Complete installation and configuration
+3. **Create Section 03** (10 min) - Set up CLAUDE.md for your project
+4. **Try Section 04** (5 min) - Run your first development workflow
+5. **Explore Section 05** (5 min) - See daily patterns in action
 
 ## Learning Objectives
 
@@ -92,7 +100,7 @@ After completing Part 1, you will:
 
 ---
 
-[← Back to Main Index](../../README.md) | [Next: Mental Models & Architecture →](01-mental-models.md)
+[← Back to Main Index](../../README) | [Next: Mental Models & Architecture →](01-mental-models)
 
 
 

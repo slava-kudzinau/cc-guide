@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls -la \"c:\\\\1\\\\cc-guide\\\\docs\\\\01-fundamentals-core-concepts\"\" 2>&1 || ls -la \"/c/1/cc-guide/docs/01-fundamentals-core-concepts/ \")"
+    ]
+  }
+}

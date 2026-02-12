@@ -1355,7 +1355,7 @@ claude --agent doc-writer "Document all functions in src/utils/"
 
 ---
 
-[← Back: Environment Setup](02-environment-setup.md) | [Next: Daily Workflows →](05-daily-workflows.md)
+[← Back: Environment Setup](02-environment-setup) | [Next: Daily Workflows →](05-daily-workflows)
 
 
 

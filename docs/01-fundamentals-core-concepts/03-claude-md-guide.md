@@ -489,19 +489,19 @@ src/
 ## Real-World Examples
 
 Full CLAUDE.md templates for popular tech stacks:
-- [Express.js REST API](examples/claude-md-express-api.md)
-- [React Frontend](examples/claude-md-react-frontend.md)
-- [Python Data Pipeline](examples/claude-md-python-pipeline.md)
-- [Go Microservice](examples/claude-md-go-microservice.md)
+- [Express.js REST API](examples/claude-md-express-api)
+- [React Frontend](examples/claude-md-react-frontend)
+- [Python Data Pipeline](examples/claude-md-python-pipeline)
+- [Go Microservice](examples/claude-md-go-microservice)
 
 ---
 
 ## Next Steps
 
-- **See It In Action**: [Daily Workflows](05-daily-workflows.md)
-- **Learn Core Workflows**: [Core Workflows](04-core-workflows.md)
+- **See It In Action**: [Daily Workflows](05-daily-workflows)
+- **Learn Core Workflows**: [Core Workflows](04-core-workflows)
 - **Master Prompting**: [Part 5: Prompt & Context Mastery](../../docs/05-prompt-context-mastery)
 
 ---
 
-[← Back: Environment Setup](02-environment-setup.md) | [Next: Core Workflows →](04-core-workflows.md)
+[← Back: Environment Setup](02-environment-setup) | [Next: Core Workflows →](04-core-workflows)

@@ -6,9 +6,15 @@ nav_order: 1
 
 # Section 1: Mental Models & Architecture
 
+**New to Claude Code?** Complete [Section 00: Introduction](../00-intro/) first to get hands-on experience before diving into architecture details.
+
+**Already tried Claude Code?** Perfect! You've seen it work. Now let's understand HOW it works under the hood so you can make informed decisions about which tools and models to use for different tasks.
+
+---
+
 ## Understanding Claude's Ecosystem
 
-Claude offers multiple tools and interfaces for different use cases. Understanding the architecture helps you choose the right tool for each task.
+You've run commands and seen results. Now let's explore the architecture that makes it all work. Claude offers multiple tools and interfaces for different use cases - understanding the ecosystem helps you choose the right tool for each task.
 
 ```mermaid
 graph TD
@@ -586,7 +592,7 @@ graph TB
 
 ---
 
-[← Back to Part 1 Index](README.md) | [Next: Environment & Project Setup →](02-environment-setup.md)
+[← Back to Part 1 Index](README) | [Next: Environment & Project Setup →](02-environment-setup)
 
 
 

@@ -116,7 +116,7 @@ $env:ANTHROPIC_API_KEY = "sk-ant-api03-..."
 claude "Hello, are you working?"
 ```
 
-###AWS Bedrock Authentication
+### AWS Bedrock Authentication
 
 **Prerequisites:**
 - AWS account with Bedrock access
@@ -1327,7 +1327,7 @@ claude "Hello! List the files in this project"
 
 ---
 
-[← Back: Mental Models](01-mental-models.md) | [Next: CLAUDE.md Guide →](03-claude-md-guide.md)
+[← Back: Mental Models](01-mental-models) | [Next: CLAUDE.md Guide →](03-claude-md-guide)
 
 
 

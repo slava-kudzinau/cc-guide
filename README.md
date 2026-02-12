@@ -6,10 +6,10 @@ nav_order: 1
 # Claude Code: Complete Technical Guide for Senior Developers
 ## Master Index & Navigation
 
-**Author**: AI-Generated Technical Guide  
+**Author**: AI-Generated Technical Guide
 **Maintainer**: [Viachaslau Kudzinau](mailto:viachaslau_kudzinau@epam.com)
-**Version**: 2.0  
-**Last Updated**: January 2026  
+**Version**: 2.1
+**Last Updated**: February 2026
 **Based on**: Latest Claude Code, API, and Agent SDK documentation
 
 [![GitHub](https://img.shields.io/badge/GitHub-cc--guide-181717?logo=github)](https://github.com/slava-kudzinau/cc-guide)  
@@ -33,98 +33,35 @@ This comprehensive guide covers everything senior developers need to master Clau
 - ✅ Advanced prompt engineering & context optimization
 - ✅ Real-world workflows and templates
 
-**⚠️ Important Note:**  
+**⚠️ Important Note:**
 This guide covers **Claude Code** (CLI + official VS Code extension by Anthropic). This is NOT a Cursor IDE guide - Cursor is a separate product with its own documentation.
 
 ---
 
-## 🚀 Get Your First Win in 5 Minutes
+## 🎯 Start Here
 
-**New to Claude Code? Start here.** Copy-paste these commands for immediate productivity gains:
+**Choose your starting point:**
 
-### 1. Review Your Code Changes
+### Option 1: New to Claude Code? (Recommended)
+Complete [Section 00: Introduction](docs/00-intro/) - 15 minutes
+- Understand what Claude Code is
+- Install and run your first commands
+- See why it matters for your workflow
+- Get clear navigation for what's next
 
-```bash
-git diff | claude "review for bugs, security issues, and best practices"
-```
+### Option 2: Already Installed? Quick Reference
+Jump to these commands to get immediate value:
+- **Code review**: `git diff | claude "review"`
+- **Write tests**: `claude "write tests for [file]"`
+- **Debug failures**: `npm test 2>&1 | claude "explain"`
 
-**What it does**: Analyzes your uncommitted changes and flags potential issues  
-**Time**: 30-60 seconds  
-**Use when**: Before every commit
+[Full command library in Section 00-02](docs/00-intro/02-first-win.md)
 
-### 2. Write Tests Automatically
-
-```bash
-claude "write jest tests for src/auth.ts with happy path and 3 error cases"
-```
-
-**What it does**: Generates comprehensive test coverage  
-**Time**: 1-2 minutes  
-**Use when**: After writing new functions or fixing bugs
-
-### 3. Debug Test Failures
-
-```bash
-npm test 2>&1 | claude "explain these test failures and suggest fixes"
-```
-
-**What it does**: Analyzes test output and provides actionable fixes  
-**Time**: 30 seconds  
-**Use when**: Tests fail and error messages are cryptic
-
-### 4. Generate Documentation
-
-```bash
-claude "update README.md with API endpoints from src/routes/ - include examples"
-```
-
-**What it does**: Creates or updates documentation based on your code  
-**Time**: 1-2 minutes  
-**Use when**: After adding new features or APIs
-
-### 5. Refactor Legacy Code
-
-```bash
-claude "refactor src/utils/format.ts to modern ES6 patterns - preserve behavior"
-```
-
-**What it does**: Modernizes code while maintaining functionality  
-**Time**: 2-3 minutes  
-**Use when**: Cleaning up technical debt
-
-### 6. Analyze Performance Issues
-
-```bash
-git diff main | claude "identify performance bottlenecks - suggest optimizations"
-```
-
-**What it does**: Spots N+1 queries, inefficient algorithms, memory leaks  
-**Time**: 1-2 minutes  
-**Use when**: Before merging performance-critical changes
-
-### 7. Generate Commit Messages
-
-```bash
-git diff --cached | claude "write a conventional commit message for these changes"
-```
-
-**What it does**: Creates clear, semantic commit messages  
-**Time**: 10 seconds  
-**Use when**: Before every commit
-
----
-
-## 💡 Key Concepts to Master
-
-**Context Windows**: Claude has 200K-2M token context windows - use them! Don't be afraid to attach multiple files for better understanding.
-
-**CLAUDE.md**: Create this file in your project root for automatic context caching and 90% cost reduction. See [CLAUDE.md Guide](docs/01-fundamentals-core-concepts/03-claude-md-guide.md).
-
-**Model Selection**: Use Haiku for speed, Sonnet for daily work, Opus for complex reasoning. See [Mental Models](docs/01-fundamentals-core-concepts/01-mental-models.md) for the complete decision matrix.
-
-**Cost Optimization**: Enable prompt caching, choose the right model, and minimize context size. Full strategies in [Optimization Guide](docs/05-prompt-context-mastery/02-optimization-guide.md).
-
-**Context7 for Latest Docs**: When working with rapidly evolving frameworks, use Context7 MCP to access current documentation. Especially useful for frameworks with recent releases.
+### Option 3: Deep Dive Learning Paths
+See [Pick Your Path](#-start-here-pick-your-path) below for structured learning:
+- Path 1: Get Results in 15 Minutes
+- Path 2: Master Claude Code in 4 Hours
+- Path 3: Enable Your Team
 
 ---
 
@@ -144,10 +81,24 @@ git diff --cached | claude "write a conventional commit message for these change
 
 ## 🗂️ Guide Structure
 
+### [Section 00: Introduction - Getting Started](docs/00-intro/)
+**Start here if you're new to Claude Code** (15 minutes)
+
+**What you'll learn:**
+- What Claude Code is (and what it's not)
+- Your first hands-on win in 5 minutes
+- Why it matters for your workflow
+- Navigation map for the rest of the guide
+
+**New users:** Complete this section before diving into Part 1. It provides essential context and hands-on validation.
+
+---
+
 ### [Part 1: Fundamentals & Core Concepts](docs/01-fundamentals-core-concepts/)
 **Essential foundations for all users**
 
 **Sections Covered:**
+0. **Introduction - Getting Started** - Gentle onboarding for first-time users
 1. **Mental Models & Architecture** - Understanding Claude's ecosystem
    - Model family (Claude 4 family: Opus 4.5, Sonnet 4/4.5, Haiku 4.5, plus legacy Sonnet 3.7)
    - Tool selection matrix (CLI vs API vs Agent SDK vs VS Code)
@@ -435,53 +386,16 @@ git diff --cached | claude "write a conventional commit message for these change
 ---
 
 ### Path 1: "Get Results in 15 Minutes" ⚡
-**Goal**: First win TODAY  
-**Time**: 15 minutes  
-**For**: Everyone (first-time users)
+**Goal**: First win TODAY
+**Time**: 15 minutes
+**For**: First-time users
 
-**Steps**:
+**Complete [Section 00: Introduction](docs/00-intro/)**
 
-1. **Install** (2 minutes):
+You'll go from "What is this?" to "I just used it successfully!" with hands-on practice.
 
-   ```bash
-   # macOS/Linux/WSL (Recommended)
-   curl -fsSL https://claude.ai/install.sh | bash
-
-   # Windows PowerShell
-   irm https://claude.ai/install.ps1 | iex
-
-   # Homebrew (macOS)
-   brew install --cask claude-code
-
-   # WinGet (Windows)
-   winget install Anthropic.ClaudeCode
-
-   # OR install VS Code extension: search "Claude Code" in Extensions
-   ```
-
-2. **Setup API key** (1 minute):
-
-   ```bash
-   export ANTHROPIC_API_KEY="your-key-here"
-   # Get key from: https://console.anthropic.com/
-   ```
-
-3. **Run these 3 commands** (5 minutes):
-
-   ```bash
-   # Review your code
-   git diff | claude "review my changes for bugs and best practices"
-
-   # Write a test
-   claude "write jest test for src/utils.ts with edge cases"
-
-   # Debug failure
-   npm test 2>&1 | claude "explain failures and suggest fixes"
-   ```
-
-4. **✅ Success Check**: You've used Claude to review, test, and debug real code
-
-**Next step**: Scroll up to "Get Your First Win in 5 Minutes" for more quick wins, or continue to Path 2 for depth.
+**✅ Success**: You ran Claude Code commands with your own code
+**Next**: Section 00-04 provides your customized learning path
 
 ---
 
@@ -491,8 +405,8 @@ git diff --cached | claude "write a conventional commit message for these change
 **For**: Individual developers wanting comprehensive knowledge
 
 **Hour 1: Foundations** (60 min)
-- [Part 1, Sections 1-3](docs/01-fundamentals-core-concepts/): Mental models, setup, core workflows
-- 🛠️ Workshop: Complete "First 10 Minutes with Claude Code"
+- [Section 00: Introduction](docs/00-intro/): Getting started (if not completed)
+- [Part 1, Sections 01-03](docs/01-fundamentals-core-concepts/): Mental models, setup, workflows
 - **Checkpoint**: Can explain when to use CLI vs Extension vs API
 
 **Hour 2: Tools & Automation** (60 min)
@@ -628,7 +542,7 @@ See the comprehensive [FAQ](docs/07-reference-troubleshooting/06-faq.md) coverin
 - **Twitter**: [@anthropicai](https://twitter.com/anthropicai)
 - **GitHub**: [github.com/anthropics](https://github.com/anthropics)
 
-### This Guide: 2.0 (January 2026)
+### This Guide: 2.1 (February 2026)
 - **License**: CC BY 4.0
 - **Contributions**: Welcome via PR
 
@@ -639,6 +553,7 @@ See the comprehensive [FAQ](docs/07-reference-troubleshooting/06-faq.md) coverin
 **Start reading:** [Part 1: Fundamentals & Core Concepts →](docs/01-fundamentals-core-concepts/)
 
 **All parts:**
+0. [Introduction - Getting Started](docs/00-intro/) ← **Start here if new to Claude Code**
 1. [Fundamentals & Core Concepts](docs/01-fundamentals-core-concepts/)
 2. [Tools Mastery (CLI & VS Code Extension)](docs/02-tools-mastery/)
 3. [Advanced API & Agent Development](docs/03-advanced-api-agent-development/)
@@ -650,6 +565,16 @@ See the comprehensive [FAQ](docs/07-reference-troubleshooting/06-faq.md) coverin
 ---
 
 ## 📝 Version History
+
+**v2.1 (February 2026) - Introduction Section Update:**
+- ✨ NEW: Section 00 - Introduction & Getting Started (15-minute gentle onboarding)
+- ✨ NEW: "What Is Claude Code?" - Clear positioning and differentiation
+- ✨ NEW: "Your First Win in 5 Minutes" - Hands-on quick start
+- ✨ NEW: "Why Claude Code Matters" - Benefits and productivity gains
+- ✨ NEW: "Reading Map" - Clear navigation paths based on user goals
+- 🔄 UPDATED: README learning paths to reference Section 00
+- 🔄 UPDATED: Guide structure to include Section 00 as entry point
+- 📝 Addresses feedback about overwhelming complexity for first-time users
 
 **v1.1 (December 2025) - Productivity & Workflow Update:**
 - ✨ NEW: "Get Your First Win in 5 Minutes" section with 7 quick-start commands
@@ -676,7 +601,7 @@ See the comprehensive [FAQ](docs/07-reference-troubleshooting/06-faq.md) coverin
 
 *This guide is built from the latest Anthropic documentation via Context7 MCP. Bookmark and share!*
 
-**Master Index** | [Begin with Part 1 →](docs/01-fundamentals-core-concepts/)
+**Master Index** | [New to Claude Code? Start with Section 00 →](docs/00-intro/) | [Continue to Part 1 →](docs/01-fundamentals-core-concepts/)
 
 
 
