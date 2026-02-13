@@ -956,16 +956,115 @@ Claude Code provides several built-in slash commands and utilities for common ta
 ### Configuration Commands
 
 **`/mcp` - Manage MCP Servers**
+
+MCP (Model Context Protocol) servers connect Claude to external data sources like Google Drive, Jira, GitHub, Figma, and Slack.
+
+**CLI Commands (Outside Claude Session):**
+
 ```bash
-# List MCP servers
-/mcp list
+# Add servers by transport type
+claude mcp add --transport http github https://api.githubcopilot.com/mcp/
+claude mcp add --transport http sentry https://mcp.sentry.dev/mcp
 
-# Test MCP server
-/mcp test google-drive
+claude mcp add --transport stdio jira \
+  --env JIRA_TOKEN="${JIRA_TOKEN}" \
+  -- npx -y @modelcontextprotocol/server-jira
 
-# Reload MCP configuration
-/mcp reload
+# With scope management
+claude mcp add --scope user gdrive \
+  -- npx -y @modelcontextprotocol/server-gdrive
+
+claude mcp add --scope project --transport http notion \
+  https://mcp.notion.com/mcp
+
+# Manage servers
+claude mcp list              # List all configured servers
+claude mcp get <name>        # Show server configuration
+claude mcp remove <name>     # Remove a server
+claude mcp test <name>       # Test connection
+
+# Advanced commands
+claude mcp reset-project-choices           # Reset .mcp.json approvals
+claude mcp add-from-claude-desktop         # Import from Claude Desktop
+claude mcp add-json <name> '{"type":...}'  # Add from JSON
 ```
+
+**In-Session Commands:**
+
+```bash
+# Within a Claude Code session
+/mcp list         # List servers with status
+/mcp test <name>  # Test specific server connection
+/mcp reload       # Reload MCP configuration
+```
+
+**Common MCP Workflow:**
+
+```bash
+# 1. Project setup with team servers
+cd your-project
+claude mcp add --scope project --transport stdio jira \
+  --env JIRA_URL="https://company.atlassian.net" \
+  --env JIRA_TOKEN="${JIRA_TOKEN}" \
+  -- npx -y @modelcontextprotocol/server-jira
+
+claude mcp add --scope project --transport http github \
+  https://api.githubcopilot.com/mcp/
+
+# 2. Test connections
+claude mcp test jira && claude mcp test github
+
+# 3. Commit team configuration
+git add .mcp.json
+git commit -m "Add MCP servers for Jira and GitHub"
+
+# 4. Usage in Claude session
+claude
+> "Create a Jira ticket for the auth bug in user.ts:42"
+> "List recent GitHub PRs for this repository"
+> "Search Jira for open tickets in the AUTH project"
+```
+
+**Personal Productivity Tools:**
+
+```bash
+# Add personal tools (user scope - available across all projects)
+claude mcp add --scope user --transport stdio slack \
+  --env SLACK_TOKEN="${SLACK_TOKEN}" \
+  -- npx -y @modelcontextprotocol/server-slack
+
+claude mcp add --scope user --transport stdio gdrive \
+  --env GOOGLE_TOKEN="${GDRIVE_TOKEN}" \
+  -- npx -y @modelcontextprotocol/server-gdrive
+
+# Usage
+claude "Search Slack for discussions about API authentication"
+claude "List files in my 'Product Specs' Google Drive folder"
+```
+
+**Troubleshooting MCP:**
+
+```bash
+# Check server status
+claude mcp list
+
+# Test with verbose output
+claude mcp test github --verbose
+
+# In Claude session, run diagnostics
+claude
+> /doctor
+# Checks authentication, MCP connections, environment variables
+
+# Check specific server config
+claude mcp get github
+
+# Re-add server if needed
+claude mcp remove github
+claude mcp add --transport http github https://api.githubcopilot.com/mcp/
+```
+
+See [Section 2.4: MCP Server Configuration](../01-fundamentals-core-concepts/02-environment-setup#24-mcp-server-configuration) for complete documentation on transport types, scope management, environment variables, and security best practices.
 
 **`/agents` - Configure Subagents**
 ```bash

@@ -587,21 +587,361 @@ export ANTHROPIC_API_KEY="sk-ant-your-key"
 claude "test"
 ```
 
-### MCP Server Authentication Fails
+### MCP Configuration Issues
+
+MCP (Model Context Protocol) server issues are common but usually easy to diagnose and fix.
+
+#### Problem: Authentication Failures
+
+**Symptoms:** "MCP server authentication failed", "401 Unauthorized", "403 Forbidden"
+
+**Diagnosis:**
 ```bash
-# Check MCP config (user-level)
-cat ~/.claude.json
+# Check environment variables are set
+echo $GITHUB_TOKEN  # macOS/Linux
+echo $env:GITHUB_TOKEN  # Windows PowerShell
 
-# Check project MCP config
-cat .mcp.json
+# Verify variable in config
+claude mcp get github | grep TOKEN
 
-# Verify environment variables
-env | grep GOOGLE
-env | grep JIRA
-
-# Test MCP server directly
-npx @anthropics/mcp-server-gdrive --test
+# Check MCP config files
+cat ~/.claude.json      # User-level config
+cat .mcp.json          # Project-level config
 ```
+
+**Solution:**
+```bash
+# Ensure environment variable is set
+export GITHUB_TOKEN="ghp_your_token"  # macOS/Linux
+$env:GITHUB_TOKEN = "ghp_your_token"  # Windows
+
+# Re-add server with correct token
+claude mcp remove github
+claude mcp add --transport http github https://api.githubcopilot.com/mcp/ \
+  --env GITHUB_TOKEN="${GITHUB_TOKEN}"
+
+# Test connection
+claude mcp test github
+```
+
+#### Problem: Transport-Specific Issues
+
+**HTTP Transport Issues:**
+
+```bash
+# Timeout errors - check URL is reachable
+curl https://api.example.com/mcp/
+# Should return MCP server metadata
+
+# 401/403 errors - verify authentication
+claude mcp get <name> | grep -i auth
+# Check headers and tokens are correct
+
+# SSL certificate errors
+# MCP validates HTTPS certificates by default
+# If using self-signed certs, contact your admin
+```
+
+**Stdio Transport Issues:**
+
+```bash
+# "Command not found" - verify npx/node is in PATH
+which npx  # macOS/Linux
+where npx  # Windows
+
+# Process crashes - check server logs
+claude mcp test <name> --verbose
+# Shows full error output
+
+# Common issue: Missing dependencies
+npm install -g npx  # Ensure npx is available
+```
+
+**Windows Stdio Issues:**
+
+```powershell
+# Windows requires cmd /c wrapper
+# Incorrect (will fail):
+claude mcp add --transport stdio gdrive -- npx -y @mcp/server-gdrive
+
+# Correct (with cmd /c):
+claude mcp add --transport stdio gdrive -- cmd /c npx -y @mcp/server-gdrive
+
+# Verify Node.js is in PATH
+where.exe node
+where.exe npx
+```
+
+#### Problem: Scope Conflicts
+
+**Symptoms:** Server not available in some projects, "MCP server not found"
+
+**Diagnosis:**
+```bash
+# Check which scope the server is in
+claude mcp list
+# Shows: Name | Transport | Scope | Status
+
+# Verify server exists
+claude mcp get <server-name>
+# Shows full configuration including scope
+```
+
+**Solution:**
+```bash
+# Add to correct scope for your use case
+
+# Local scope - personal, this project only
+claude mcp add --scope local custom-api ...
+
+# Project scope - team-shared, in .mcp.json
+claude mcp add --scope project jira ...
+git add .mcp.json  # Commit for team
+
+# User scope - personal, all projects
+claude mcp add --scope user gdrive ...
+
+# Check servers available in current project
+cd /path/to/project
+claude mcp list
+```
+
+**Scope Hierarchy (highest to lowest priority):**
+1. Local (`~/.claude.json` in project dir)
+2. Project (`.mcp.json` in project root)
+3. User (`~/.claude.json` in home dir)
+4. Managed (system-wide paths)
+
+#### Problem: Environment Variable Expansion Not Working
+
+**Symptoms:** "Environment variable not set", credentials not loading
+
+**Diagnosis:**
+```bash
+# Check if variable is set
+echo $MY_TOKEN  # macOS/Linux
+echo $env:MY_TOKEN  # Windows
+
+# Check configuration syntax
+claude mcp get <name>
+# Look for ${VAR} syntax
+```
+
+**Common Mistakes:**
+
+```bash
+# Incorrect: Variable not set
+claude mcp add --env TOKEN="${UNDEFINED_VAR}"
+# Error: "Environment variable UNDEFINED_VAR not set"
+
+# Incorrect: Wrong syntax (no $ or braces)
+claude mcp add --env TOKEN="GITHUB_TOKEN"
+# Treats literal string "GITHUB_TOKEN" as value
+
+# Incorrect: Single quotes prevent expansion in shell
+export TOKEN='${GITHUB_TOKEN}'  # Wrong
+```
+
+**Correct Usage:**
+
+```bash
+# Set variable first
+export MY_TOKEN="actual_token_value"
+
+# Reference in config
+claude mcp add --env TOKEN="${MY_TOKEN}"
+
+# Use default value if variable might not be set
+claude mcp add --env TOKEN="${MY_TOKEN:-default_value}"
+
+# Use required variable (fails if not set)
+claude mcp add --env TOKEN="${MY_TOKEN}"
+```
+
+**Environment Variable Expansion Syntax:**
+- `${VAR}` - Required variable (fails if not set)
+- `${VAR:-default}` - Optional variable with default value
+
+#### Problem: Windows-Specific Issues
+
+**Path Separator Errors:**
+
+```powershell
+# Incorrect: Backslashes in URLs
+claude mcp add --transport http api https:\\api.example.com\mcp
+
+# Correct: Always use forward slashes in URLs
+claude mcp add --transport http api https://api.example.com/mcp
+
+# File paths: Forward slashes work on Windows too
+--cwd C:/Users/name/project  # Recommended
+--cwd C:\Users\name\project  # Also works but escape backslashes
+```
+
+**npx Not Found:**
+
+```powershell
+# Check if Node.js/npx is installed
+where.exe node
+where.exe npx
+
+# If not found, install Node.js, then verify
+node --version
+npx --version
+
+# After installing, use cmd /c wrapper
+claude mcp add --transport stdio server -- cmd /c npx -y package
+```
+
+**Permission Denied:**
+
+```powershell
+# Solution 1: Run PowerShell as Administrator
+# Right-click PowerShell → "Run as Administrator"
+
+# Solution 2: Check execution policy
+Get-ExecutionPolicy
+# If "Restricted", set to RemoteSigned:
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+
+**Environment Variables in PowerShell:**
+
+```powershell
+# Temporary (current session only)
+$env:GITHUB_TOKEN = "ghp_token"
+
+# Permanent (user level)
+[System.Environment]::SetEnvironmentVariable(
+    'GITHUB_TOKEN',
+    'ghp_token',
+    'User'
+)
+
+# Verify variable is set
+echo $env:GITHUB_TOKEN
+```
+
+#### Diagnostic Commands
+
+```bash
+# Check MCP server status
+claude mcp list
+# Shows all servers with status (Connected/Error)
+
+# Test specific server with verbose output
+claude mcp test <server-name> --verbose
+# Shows detailed connection info, errors, timing
+
+# Get server configuration
+claude mcp get <server-name>
+# Shows command, args, env, transport, scope
+
+# Within Claude session, run full diagnostics
+claude
+> /doctor
+# Checks:
+# - Authentication status
+# - MCP server connections
+# - Environment variables
+# - Configuration validation
+# - Common issues
+```
+
+#### Quick Fixes Reference
+
+| Problem | Quick Fix |
+|---------|-----------|
+| **Auth fails** | Check `echo $ENV_VAR` is set, re-add server with `claude mcp remove` then `claude mcp add` |
+| **Server not found** | Check scope with `claude mcp list`, ensure correct scope for your use case |
+| **Windows npx error** | Use `-- cmd /c npx -y package` wrapper for stdio servers |
+| **Connection timeout** | Verify URL is reachable with `curl <url>`, check network/firewall |
+| **Variable not expanding** | Use `${VAR:-default}` syntax, verify variable is exported |
+| **Permission denied** | Run PowerShell as Administrator, check file permissions |
+| **Stdio server crashes** | Run `claude mcp test <name> --verbose` to see error details |
+| **Wrong scope** | Add server with `--scope user\|project\|local` flag |
+
+#### Advanced MCP Troubleshooting
+
+**Enable Debug Logging:**
+
+```bash
+# Set debug environment variable
+export CLAUDE_DEBUG=1  # macOS/Linux
+$env:CLAUDE_DEBUG = "1"  # Windows
+
+# Run command with debug output
+claude mcp test <name>
+```
+
+**Check MCP Server Logs:**
+
+```bash
+# Server logs location (varies by transport)
+# Stdio servers: Check terminal output
+claude mcp test <name> --verbose
+
+# HTTP servers: Check server-side logs
+curl -v https://api.example.com/mcp/
+```
+
+**Test MCP Server Directly:**
+
+```bash
+# Test stdio server outside of Claude
+npx -y @modelcontextprotocol/server-gdrive
+
+# Test HTTP server with curl
+curl -H "Authorization: Bearer $TOKEN" https://api.example.com/mcp/
+
+# Verify server responds with MCP protocol
+```
+
+**Reset MCP Configuration:**
+
+```bash
+# Remove all local-scope servers
+rm ~/.claude.json  # Backup first!
+
+# Reset project MCP choices
+claude mcp reset-project-choices
+
+# Re-add servers one by one
+claude mcp add --scope user gdrive ...
+```
+
+#### Getting Help
+
+If issues persist after troubleshooting:
+
+1. **Check Configuration:**
+   ```bash
+   claude mcp list
+   claude mcp get <problem-server>
+   ```
+
+2. **Test Connections:**
+   ```bash
+   claude mcp test <server-name> --verbose
+   ```
+
+3. **Run Diagnostics:**
+   ```bash
+   claude
+   > /doctor
+   ```
+
+4. **Gather Information:**
+   - MCP server name and transport type
+   - Error messages (exact text)
+   - Output of `claude mcp get <name>`
+   - Operating system and version
+   - Claude Code version (`claude --version`)
+
+5. **Report Issue:**
+   - Visit: https://github.com/anthropics/claude-code/issues
+   - Include diagnostic information
+   - Attach error logs (remove sensitive data)
 
 ## Extended Thinking Issues
 

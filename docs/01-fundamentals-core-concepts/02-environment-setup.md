@@ -342,16 +342,269 @@ coverage/
 
 ## 2.4 MCP Server Configuration
 
-MCP (Model Context Protocol) servers enable Claude to access external datasources.
+MCP (Model Context Protocol) servers enable Claude to access external data sources like Google Drive, Jira, GitHub, Figma, Slack, and custom APIs. This dramatically expands Claude's capabilities beyond local file analysis.
 
-### MCP Installation Scopes
+### Quick Start
 
-**User MCP servers:** `~/.claude.json` (available across all projects)
-**Project MCP servers:** `.mcp.json` (project-specific, in project root)
+Add your first MCP server using the CLI:
 
-### User MCP Configuration
+```bash
+# Add HTTP server (cloud services - recommended)
+claude mcp add --transport http github https://api.githubcopilot.com/mcp/
 
-**Example `~/.claude.json`:**
+# Add stdio server (local processes)
+claude mcp add --transport stdio gdrive \
+  --env GOOGLE_TOKEN="${GDRIVE_TOKEN}" \
+  -- npx -y @modelcontextprotocol/server-gdrive
+
+# Test connection
+claude mcp test github
+```
+
+### MCP CLI Commands
+
+The `claude mcp` command provides full server management capabilities.
+
+#### Adding Servers
+
+**HTTP Transport (Recommended for Cloud Services):**
+
+```bash
+# Basic HTTP server
+claude mcp add --transport http github https://api.githubcopilot.com/mcp/
+
+# With authentication
+claude mcp add --transport http sentry https://mcp.sentry.dev/mcp \
+  --header "Authorization: Bearer ${SENTRY_TOKEN}"
+
+# With custom headers
+claude mcp add --transport http notion https://mcp.notion.com/mcp \
+  --header "Notion-Version: 2022-06-28" \
+  --header "Authorization: Bearer ${NOTION_TOKEN}"
+```
+
+**Stdio Transport (Local Processes):**
+
+```bash
+# Node.js MCP server via npx
+claude mcp add --transport stdio jira \
+  --env JIRA_TOKEN="${JIRA_TOKEN}" \
+  --env JIRA_URL="https://company.atlassian.net" \
+  -- npx -y @modelcontextprotocol/server-jira
+
+# Python MCP server
+claude mcp add --transport stdio database \
+  --env DB_URL="postgresql://localhost/mydb" \
+  -- python -m mcp_server_database
+
+# With working directory
+claude mcp add --transport stdio custom \
+  --cwd /path/to/server \
+  -- node server.js
+```
+
+**Windows-Specific Stdio Requirement:**
+
+Windows requires the `cmd /c` wrapper for stdio servers:
+
+```powershell
+# Windows: Use cmd /c before npx
+claude mcp add --transport stdio gdrive \
+  -- cmd /c npx -y @modelcontextprotocol/server-gdrive
+```
+
+**SSE Transport (Deprecated):**
+
+```bash
+# Server-Sent Events (legacy support only)
+claude mcp add --transport sse asana https://mcp.asana.com/sse \
+  --header "X-API-Key: ${ASANA_KEY}"
+```
+
+#### Managing Servers
+
+```bash
+# List all configured servers
+claude mcp list
+
+# Get details for a specific server
+claude mcp get github
+
+# Remove a server
+claude mcp remove github
+
+# Reset project approval choices
+claude mcp reset-project-choices
+
+# Import servers from Claude Desktop
+claude mcp add-from-claude-desktop
+
+# Add server from JSON configuration
+claude mcp add-json weather '{"type":"http","url":"https://api.weather.com/mcp"}'
+```
+
+#### Testing Servers
+
+```bash
+# Test specific server connection
+claude mcp test github
+
+# Test with verbose output
+claude mcp test github --verbose
+
+# Within Claude session - check all MCP servers
+/mcp
+
+# Test server functionality
+/mcp test github
+```
+
+### Transport Types Explained
+
+MCP supports three transport types for connecting to servers.
+
+#### HTTP Transport (Recommended)
+
+**Use for:** Cloud-based MCP servers, production deployments, services with HTTP APIs
+
+**Characteristics:**
+- Stateless request/response model
+- Uses standard HTTP/HTTPS protocols
+- Authentication via headers or URL parameters
+- Built-in retry and timeout handling
+- Best for remote services
+
+**Example Configuration:**
+```json
+{
+  "type": "http",
+  "url": "https://mcp.example.com/api",
+  "headers": {
+    "Authorization": "Bearer ${API_TOKEN}"
+  }
+}
+```
+
+**Pros:**
+- Simple, widely supported protocol
+- Works through firewalls and proxies
+- Easy to debug with curl/Postman
+- Scalable for production use
+
+**Cons:**
+- Requires internet connectivity
+- Additional network latency
+
+#### Stdio Transport (Local Processes)
+
+**Use for:** Local MCP servers, development/testing, Node.js/Python scripts via npx/pip
+
+**Characteristics:**
+- Spawns subprocess and communicates via stdin/stdout
+- No network required
+- Process lifecycle managed by Claude
+- Full access to local environment
+
+**Example Configuration:**
+```json
+{
+  "command": "npx",
+  "args": ["-y", "@modelcontextprotocol/server-gdrive"],
+  "env": {
+    "GOOGLE_TOKEN": "${GDRIVE_TOKEN}"
+  }
+}
+```
+
+**Pros:**
+- Fast (no network overhead)
+- Works offline
+- Full local system access
+- Great for development
+
+**Cons:**
+- Windows requires `cmd /c` wrapper
+- Process management complexity
+- Platform-specific paths
+
+#### SSE Transport (Deprecated)
+
+**Use for:** Legacy systems only (not recommended for new deployments)
+
+**Characteristics:**
+- Server-Sent Events protocol
+- Unidirectional server→client streaming
+- Deprecated in favor of HTTP
+
+**Note:** SSE is maintained for backward compatibility only. Use HTTP transport for new servers.
+
+### Scope Management
+
+MCP servers can be configured at different scopes, creating a hierarchy for availability and precedence.
+
+#### Scope Hierarchy
+
+| Scope | Location | Priority | Use Case |
+|-------|----------|----------|----------|
+| **Local** | `~/.claude.json` in project directory | Highest | Personal, project-specific overrides |
+| **Project** | `.mcp.json` in project root | High | Team-shared, committed to git |
+| **User** | `~/.claude.json` in home directory | Medium | Personal tools, all projects |
+| **Managed** | System-wide paths | Lowest | IT administrator, organization-wide |
+
+**Managed scope locations:**
+- macOS: `/Library/Application Support/ClaudeCode/managed-mcp.json`
+- Linux/WSL: `/etc/claude-code/managed-mcp.json`
+- Windows: `C:\Program Files\ClaudeCode\managed-mcp.json`
+
+#### Selecting Scope with CLI
+
+```bash
+# Local scope (default - personal, this project only)
+claude mcp add --scope local custom https://api.company.com/mcp
+
+# Project scope (team-shared, in .mcp.json)
+claude mcp add --scope project jira \
+  -- npx -y @modelcontextprotocol/server-jira
+
+# User scope (personal, all projects)
+claude mcp add --scope user gdrive \
+  -- npx -y @modelcontextprotocol/server-gdrive
+```
+
+#### Best Practices by Scope
+
+**Local Scope:**
+- Experimental servers
+- Personal API keys
+- Project-specific overrides
+- Temporary testing
+
+**Project Scope:**
+- Team-shared services (Jira, GitHub)
+- Project-required integrations
+- Commit `.mcp.json` to version control
+- Document in project README
+
+**User Scope:**
+- Personal productivity tools
+- Cross-project utilities
+- Development tools
+- Personal API credentials
+
+**Managed Scope:**
+- Organization-wide policies
+- Enterprise integrations
+- Compliance requirements
+- Requires admin privileges to configure
+
+### Understanding Configuration Files
+
+While the CLI is recommended for most use cases, understanding the JSON structure is useful for debugging and advanced scenarios.
+
+#### User Configuration (`~/.claude.json`)
+
+Located in your home directory for user-wide and local-scoped servers:
+
 ```json
 {
   "mcpServers": {
@@ -373,9 +626,10 @@ MCP (Model Context Protocol) servers enable Claude to access external datasource
 }
 ```
 
-### Project MCP Configuration
+#### Project Configuration (`.mcp.json`)
 
-**Example `.mcp.json` (in project root):**
+Located in project root for team-shared servers:
+
 ```json
 {
   "mcpServers": {
@@ -400,30 +654,488 @@ MCP (Model Context Protocol) servers enable Claude to access external datasource
 }
 ```
 
-### Installing MCP Servers
+#### Environment Variable Expansion
 
-MCP servers are automatically installed on first use via `npx`. No global installation required.
+MCP supports environment variable expansion in configuration:
 
-```bash
-# List configured MCP servers
-claude /mcp list
+**Syntax:**
+- `${VAR}` - Required variable (fails if not set)
+- `${VAR:-default}` - Optional variable with default value
 
-# Test MCP server connection
-claude /mcp test google-drive
+**Example:**
+```json
+{
+  "env": {
+    "API_KEY": "${MY_API_KEY}",
+    "TIMEOUT": "${REQUEST_TIMEOUT:-5000}",
+    "ENDPOINT": "${API_ENDPOINT:-https://api.example.com}"
+  }
+}
 ```
 
-### Testing MCP Connection
+**When to manually edit JSON:**
+- Complex environment variable logic
+- Debugging MCP server configuration
+- Copying configuration between machines
+- Understanding what CLI commands generate
+
+### Common Patterns
+
+#### 1. Google Drive for Design Docs
+
+Access design documents, specifications, and team files:
 
 ```bash
-# Test Google Drive access
-claude "List files in my Drive folder 'Design Docs'"
+# Add Google Drive MCP server
+claude mcp add --scope user --transport stdio gdrive \
+  --env GOOGLE_OAUTH_TOKEN="${GDRIVE_TOKEN}" \
+  -- npx -y @modelcontextprotocol/server-gdrive
 
-# Test Jira access
-claude "Show me open tickets in project ABC"
-
-# Test Slack access
-claude "Search Slack for discussions about authentication"
+# Usage
+claude "List all files in my 'Product Specs' folder"
+claude "Show me the latest design doc about authentication"
 ```
+
+#### 2. Jira for Issue Tracking
+
+Create, update, and query Jira tickets:
+
+```bash
+# Add Jira MCP server (project scope for team)
+claude mcp add --scope project --transport stdio jira \
+  --env JIRA_URL="https://company.atlassian.net" \
+  --env JIRA_EMAIL="${JIRA_EMAIL}" \
+  --env JIRA_API_TOKEN="${JIRA_TOKEN}" \
+  -- npx -y @modelcontextprotocol/server-jira
+
+# Usage
+claude "Create a bug ticket for the login timeout issue in auth.ts"
+claude "Show me all open tickets in the AUTH project"
+claude "Update ticket AUTH-123 to in-progress"
+```
+
+#### 3. GitHub Organization Access
+
+Access organization repositories, PRs, and issues:
+
+```bash
+# Add GitHub MCP server
+claude mcp add --scope project --transport http github \
+  https://api.githubcopilot.com/mcp/ \
+  --env GITHUB_TOKEN="${GITHUB_TOKEN}"
+
+# Usage
+claude "List recent PRs in our org repositories"
+claude "Show me issues labeled 'security' across all repos"
+claude "Get the file tree for company/backend-api"
+```
+
+#### 4. Figma Design Integration
+
+Access design files and components:
+
+```bash
+# Add Figma MCP server
+claude mcp add --scope user --transport stdio figma \
+  --env FIGMA_TOKEN="${FIGMA_TOKEN}" \
+  -- npx -y @modelcontextprotocol/server-figma
+
+# Usage
+claude "Show me all components in the Design System file"
+claude "Get the latest mockups for the dashboard feature"
+```
+
+#### 5. Slack Knowledge Base
+
+Search conversations and find tribal knowledge:
+
+```bash
+# Add Slack MCP server
+claude mcp add --scope user --transport stdio slack \
+  --env SLACK_BOT_TOKEN="${SLACK_TOKEN}" \
+  --env SLACK_TEAM_ID="${SLACK_TEAM}" \
+  -- npx -y @modelcontextprotocol/server-slack
+
+# Usage
+claude "Search Slack for discussions about API authentication"
+claude "Find messages about the deployment process in #engineering"
+```
+
+#### 6. Custom Internal API
+
+Connect to company-specific APIs:
+
+```bash
+# Add custom HTTP MCP server with authentication
+claude mcp add --scope project --transport http internal \
+  https://internal-api.company.com/mcp \
+  --header "Authorization: Bearer ${INTERNAL_API_KEY}" \
+  --header "X-Company-ID: ${COMPANY_ID}"
+
+# Usage
+claude "Query our internal knowledge base about the auth service"
+claude "Get the latest deployment status from our CI/CD API"
+```
+
+#### 7. PostgreSQL Database Access
+
+Query databases for analysis and reporting:
+
+```bash
+# Add database MCP server
+claude mcp add --scope local --transport stdio postgres \
+  --env DATABASE_URL="postgresql://user:pass@localhost:5432/mydb" \
+  -- npx -y @modelcontextprotocol/server-postgres
+
+# Usage
+claude "Show me the schema for the users table"
+claude "How many active users do we have this month?"
+claude "Query for users who signed up in the last 7 days"
+```
+
+### Management Commands Reference
+
+```bash
+# List servers with status and scope
+claude mcp list
+# Output shows: Name | Transport | Scope | Status
+
+# Get full configuration for a server
+claude mcp get github
+# Shows: command, args, env, transport, scope
+
+# Test server connection
+claude mcp test github
+# Returns: Connection status, available tools, any errors
+
+# Test with verbose output
+claude mcp test github --verbose
+# Shows: Full request/response details, timing, debug info
+
+# Remove a server
+claude mcp remove github
+# Removes from appropriate config file based on scope
+
+# Reset project MCP approvals
+claude mcp reset-project-choices
+# Clears saved approval decisions for .mcp.json servers
+
+# Import from Claude Desktop
+claude mcp add-from-claude-desktop
+# Migrates MCP servers from Claude Desktop config
+
+# Add from JSON string
+claude mcp add-json myserver '{"type":"http","url":"https://example.com"}'
+# Directly add server from JSON config
+```
+
+### Best Practices
+
+1. **Use appropriate scopes**
+   - Project scope for team-shared services
+   - User scope for personal productivity tools
+   - Local scope for experiments and overrides
+
+2. **Secure credentials properly**
+   - Always use environment variables for secrets
+   - Never commit credentials to `.mcp.json`
+   - Use `${VAR}` syntax in configuration files
+   - Add `.env` files to `.gitignore`
+
+3. **Test connections early**
+   - Run `claude mcp test <server>` after adding
+   - Verify environment variables are set
+   - Check server logs for errors
+
+4. **Prefer HTTP for production**
+   - More stable and scalable
+   - Easier to debug and monitor
+   - Works through corporate proxies
+   - Better error handling
+
+5. **Document team servers**
+   - Add setup instructions to project README
+   - Document required environment variables
+   - Include example `.env.template` file
+   - List server dependencies
+
+6. **Monitor connection health**
+   - Regularly test server connections
+   - Check for API rate limits
+   - Monitor server logs
+   - Set up alerts for failures
+
+7. **Use descriptive server names**
+   - Name servers by purpose: `company-jira`, `prod-database`
+   - Avoid generic names: `server1`, `api`
+   - Include environment if needed: `staging-api`, `prod-api`
+
+8. **Version pin production servers**
+   - Use specific package versions for stdio: `npx -y package@1.2.3`
+   - Document version requirements
+   - Test upgrades in development first
+
+### Windows-Specific Considerations
+
+Windows has unique requirements for MCP server configuration.
+
+#### Stdio Server Wrapper
+
+Windows requires the `cmd /c` wrapper for all stdio servers:
+
+```powershell
+# Windows: Correct (with cmd /c)
+claude mcp add --transport stdio gdrive \
+  -- cmd /c npx -y @modelcontextprotocol/server-gdrive
+
+# This will fail on Windows:
+claude mcp add --transport stdio gdrive \
+  -- npx -y @modelcontextprotocol/server-gdrive
+```
+
+#### PowerShell Environment Variables
+
+```powershell
+# Set environment variable (temporary)
+$env:GITHUB_TOKEN = "ghp_xxxx"
+
+# Set environment variable (permanent - user level)
+[System.Environment]::SetEnvironmentVariable(
+    'GITHUB_TOKEN',
+    'ghp_xxxx',
+    'User'
+)
+
+# Verify variable is set
+echo $env:GITHUB_TOKEN
+```
+
+#### Path Separators
+
+Use forward slashes in URLs even on Windows:
+
+```powershell
+# Correct
+claude mcp add --transport http api https://example.com/mcp/endpoint
+
+# Works on Windows too
+--cwd C:/Users/name/project  # Forward slashes OK
+```
+
+#### Common Windows Issues
+
+**Issue: "npx not found"**
+```powershell
+# Solution: Verify Node.js is in PATH
+where.exe npx
+
+# Add to PATH if missing, then use cmd /c wrapper
+claude mcp add --transport stdio server -- cmd /c npx -y package
+```
+
+**Issue: Permission denied**
+```powershell
+# Solution: Run PowerShell as Administrator
+# Right-click PowerShell → "Run as Administrator"
+```
+
+### Security Considerations
+
+#### Credential Management
+
+**Never commit credentials:**
+```bash
+# Bad: Hardcoded in .mcp.json
+{
+  "env": {
+    "API_KEY": "sk-secret-key-here"  // Never do this!
+  }
+}
+
+# Good: Environment variable reference
+{
+  "env": {
+    "API_KEY": "${MY_API_KEY}"  // Reference only
+  }
+}
+```
+
+**Use environment variable files:**
+```bash
+# Create .env file (add to .gitignore)
+GITHUB_TOKEN=ghp_xxxx
+JIRA_TOKEN=xxx
+
+# Load in shell
+source .env  # Linux/macOS
+# Or use direnv, dotenv, etc.
+```
+
+#### Scope Security Implications
+
+- **Local scope:** Most secure (not shared, not committed)
+- **Project scope:** Shared with team (commit `.mcp.json`, not credentials)
+- **User scope:** Personal but accessible to all projects
+- **Managed scope:** Organization-wide (requires admin approval)
+
+#### Transport Security
+
+```bash
+# Always use HTTPS for HTTP transport
+claude mcp add --transport http api https://api.example.com  # Good
+claude mcp add --transport http api http://api.example.com   # Bad (unencrypted!)
+
+# Validate server certificates
+# MCP validates HTTPS certificates by default
+```
+
+#### Access Control
+
+**Principle of least privilege:**
+- Grant servers minimal required permissions
+- Use read-only tokens when possible
+- Scope API keys to specific resources
+- Regularly rotate credentials
+
+**Audit server access:**
+```bash
+# Review configured servers
+claude mcp list
+
+# Check what each server can access
+claude mcp get <server-name>
+
+# Remove unused servers
+claude mcp remove <server-name>
+```
+
+#### Secret Storage Best Practices
+
+1. Use system keychain/credential manager
+2. Consider secret management tools (1Password, Vault)
+3. Rotate credentials regularly
+4. Use separate keys per environment (dev/staging/prod)
+5. Monitor for credential exposure in logs
+
+### Complete Example: Team Setup
+
+Here's a complete end-to-end example of setting up MCP servers for a development team.
+
+#### Step 1: User-Level Personal Tools
+
+```bash
+# Personal Google Drive access (user scope)
+export GDRIVE_TOKEN="your-token"
+claude mcp add --scope user --transport stdio gdrive \
+  --env GOOGLE_TOKEN="${GDRIVE_TOKEN}" \
+  -- npx -y @modelcontextprotocol/server-gdrive
+
+# Personal Slack access (user scope)
+export SLACK_TOKEN="xoxb-your-token"
+claude mcp add --scope user --transport stdio slack \
+  --env SLACK_BOT_TOKEN="${SLACK_TOKEN}" \
+  -- npx -y @modelcontextprotocol/server-slack
+```
+
+#### Step 2: Project-Level Team Services
+
+```bash
+# Navigate to project
+cd /path/to/project
+
+# Add Jira (project scope - team shared)
+claude mcp add --scope project --transport stdio jira \
+  --env JIRA_URL="https://company.atlassian.net" \
+  --env JIRA_EMAIL="${JIRA_EMAIL}" \
+  --env JIRA_API_TOKEN="${JIRA_TOKEN}" \
+  -- npx -y @modelcontextprotocol/server-jira
+
+# Add GitHub (project scope - team shared)
+claude mcp add --scope project --transport http github \
+  https://api.githubcopilot.com/mcp/ \
+  --env GITHUB_TOKEN="${GITHUB_TOKEN}"
+
+# Commit .mcp.json to version control
+git add .mcp.json
+git commit -m "Add team MCP servers for Jira and GitHub"
+```
+
+#### Step 3: Create .env.template for Team
+
+```bash
+# Create .env.template (commit this)
+cat > .env.template << 'EOF'
+# Required for MCP servers
+JIRA_EMAIL=your.email@company.com
+JIRA_TOKEN=your-jira-api-token
+GITHUB_TOKEN=ghp_your_github_token
+EOF
+
+# Add .env to .gitignore (don't commit actual credentials)
+echo ".env" >> .gitignore
+```
+
+#### Step 4: Document in README
+
+```markdown
+# Add to project README.md
+
+## MCP Server Setup
+
+This project uses MCP servers for Jira and GitHub integration.
+
+### Prerequisites
+- Node.js 18+ installed
+- Jira API token (get from https://id.atlassian.com/manage/api-tokens)
+- GitHub personal access token (get from https://github.com/settings/tokens)
+
+### Setup
+1. Copy environment template:
+   ```bash
+   cp .env.template .env
+   ```
+
+2. Fill in your credentials in `.env`
+
+3. Load environment:
+   ```bash
+   source .env  # macOS/Linux
+   ```
+
+4. Test MCP connections:
+   ```bash
+   claude mcp test jira
+   claude mcp test github
+   ```
+
+### Usage
+```bash
+# Create Jira ticket
+claude "Create a bug ticket for the login issue"
+
+# Check GitHub PRs
+claude "List open PRs for this repo"
+```
+```
+
+#### Step 5: Verify Setup
+
+```bash
+# List all configured servers
+claude mcp list
+
+# Test each server
+claude mcp test jira
+claude mcp test github
+claude mcp test gdrive
+claude mcp test slack
+
+# Verify with actual usage
+claude "List my open Jira tickets"
+claude "Show recent GitHub commits in this repo"
+```
+
+**Result:** Team members can clone the repo, set up their personal credentials, and immediately access shared MCP servers.
 
 ---
 

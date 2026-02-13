@@ -43,7 +43,7 @@ This guide covers **Claude Code** (CLI + official VS Code extension by Anthropic
 **Choose your starting point:**
 
 ### Option 1: New to Claude Code? (Recommended)
-Complete [Section 00: Introduction](docs/00-intro/) - 15 minutes
+Complete [Part 0: Introduction](docs/00-intro/) - 15 minutes
 - Understand what Claude Code is
 - Install and run your first commands
 - See why it matters for your workflow
@@ -55,7 +55,7 @@ Jump to these commands to get immediate value:
 - **Write tests**: `claude "write tests for [file]"`
 - **Debug failures**: `npm test 2>&1 | claude "explain"`
 
-[Full command library in Section 00-02](docs/00-intro/02-first-win.md)
+[Full command library in Part 0-02](docs/00-intro/02-first-win.md)
 
 ### Option 3: Deep Dive Learning Paths
 See [Pick Your Path](#-start-here-pick-your-path) below for structured learning:
@@ -81,7 +81,7 @@ See [Pick Your Path](#-start-here-pick-your-path) below for structured learning:
 
 ## 🗂️ Guide Structure
 
-### [Section 00: Introduction - Getting Started](docs/00-intro/)
+### [Part 0: Introduction - Getting Started](docs/00-intro/)
 **Start here if you're new to Claude Code** (15 minutes)
 
 **What you'll learn:**
@@ -390,12 +390,12 @@ See [Pick Your Path](#-start-here-pick-your-path) below for structured learning:
 **Time**: 15 minutes
 **For**: First-time users
 
-**Complete [Section 00: Introduction](docs/00-intro/)**
+**Complete [Part 0: Introduction](docs/00-intro/)**
 
 You'll go from "What is this?" to "I just used it successfully!" with hands-on practice.
 
 **✅ Success**: You ran Claude Code commands with your own code
-**Next**: Section 00-04 provides your customized learning path
+**Next**: Part 0-04 provides your customized learning path
 
 ---
 
@@ -405,7 +405,7 @@ You'll go from "What is this?" to "I just used it successfully!" with hands-on p
 **For**: Individual developers wanting comprehensive knowledge
 
 **Hour 1: Foundations** (60 min)
-- [Section 00: Introduction](docs/00-intro/): Getting started (if not completed)
+- [Part 0: Introduction](docs/00-intro/): Getting started (if not completed)
 - [Part 1, Sections 01-03](docs/01-fundamentals-core-concepts/): Mental models, setup, workflows
 - **Checkpoint**: Can explain when to use CLI vs Extension vs API
 
@@ -567,13 +567,13 @@ See the comprehensive [FAQ](docs/07-reference-troubleshooting/06-faq.md) coverin
 ## 📝 Version History
 
 **v2.1 (February 2026) - Introduction Section Update:**
-- ✨ NEW: Section 00 - Introduction & Getting Started (15-minute gentle onboarding)
+- ✨ NEW: Part 0 - Introduction & Getting Started (15-minute gentle onboarding)
 - ✨ NEW: "What Is Claude Code?" - Clear positioning and differentiation
 - ✨ NEW: "Your First Win in 5 Minutes" - Hands-on quick start
 - ✨ NEW: "Why Claude Code Matters" - Benefits and productivity gains
 - ✨ NEW: "Reading Map" - Clear navigation paths based on user goals
-- 🔄 UPDATED: README learning paths to reference Section 00
-- 🔄 UPDATED: Guide structure to include Section 00 as entry point
+- 🔄 UPDATED: README learning paths to reference Part 0
+- 🔄 UPDATED: Guide structure to include Part 0 as entry point
 - 📝 Addresses feedback about overwhelming complexity for first-time users
 
 **v1.1 (December 2025) - Productivity & Workflow Update:**
@@ -601,7 +601,7 @@ See the comprehensive [FAQ](docs/07-reference-troubleshooting/06-faq.md) coverin
 
 *This guide is built from the latest Anthropic documentation via Context7 MCP. Bookmark and share!*
 
-**Master Index** | [New to Claude Code? Start with Section 00 →](docs/00-intro/) | [Continue to Part 1 →](docs/01-fundamentals-core-concepts/)
+**Master Index** | [New to Claude Code? Start with Part 0 →](docs/00-intro/) | [Continue to Part 1 →](docs/01-fundamentals-core-concepts/)
 
 
 
