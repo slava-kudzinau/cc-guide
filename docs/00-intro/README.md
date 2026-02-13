@@ -1,11 +1,10 @@
 ---
-title: "Section 00: Introduction - Getting Started"
+title: "Part 0: Introduction - Getting Started"
 nav_order: 0
-parent: Home
 has_children: true
 ---
 
-# Section 00: Introduction - Getting Started
+# Part 0: Introduction - Getting Started
 
 **Time to Complete**: 15 minutes
 **Prerequisites**: None

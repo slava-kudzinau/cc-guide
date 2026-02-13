@@ -7,9 +7,9 @@ permalink: /docs/01-fundamentals-core-concepts/
 
 # Part 1: Fundamentals & Core Concepts
 
-**New to Claude Code?** Complete [Section 00: Introduction](../00-intro/) first for a gentle 15-minute onboarding. Come back here after you've tried Claude Code hands-on.
+**New to Claude Code?** Complete [Part 0: Introduction](../00-intro/) first for a gentle 15-minute onboarding. Come back here after you've tried Claude Code hands-on.
 
-**Already completed Section 00?** Great! This part dives deeper into the architecture, tools, and workflows that make Claude Code powerful. You'll learn when to use which tool, how to configure your environment, and how to integrate Claude Code into your daily development workflow.
+**Already completed Part 0?** Great! This part dives deeper into the architecture, tools, and workflows that make Claude Code powerful. You'll learn when to use which tool, how to configure your environment, and how to integrate Claude Code into your daily development workflow.
 
 ---
 
@@ -78,7 +78,7 @@ Practical, copy-paste ready workflows for your entire workday. From morning catc
 
 ## Quick Start (45 Minutes)
 
-**Prerequisites**: Complete [Section 00: Introduction](../00-intro/) (15 min) if you haven't already.
+**Prerequisites**: Complete [Part 0: Introduction](../00-intro/) (15 min) if you haven't already.
 
 1. **Read Section 01** (15 min) - Understand the landscape and architecture
 2. **Follow Section 02** (10 min) - Complete installation and configuration

@@ -1,6 +1,6 @@
 ---
 title: "Your First Win in 5 Minutes"
-parent: "Section 00: Introduction - Getting Started"
+parent: "Part 0: Introduction - Getting Started"
 nav_order: 2
 ---
 

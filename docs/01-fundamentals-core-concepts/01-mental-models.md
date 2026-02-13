@@ -6,7 +6,7 @@ nav_order: 1
 
 # Section 1: Mental Models & Architecture
 
-**New to Claude Code?** Complete [Section 00: Introduction](../00-intro/) first to get hands-on experience before diving into architecture details.
+**New to Claude Code?** Complete [Part 0: Introduction](../00-intro/) first to get hands-on experience before diving into architecture details.
 
 **Already tried Claude Code?** Perfect! You've seen it work. Now let's understand HOW it works under the hood so you can make informed decisions about which tools and models to use for different tasks.
 

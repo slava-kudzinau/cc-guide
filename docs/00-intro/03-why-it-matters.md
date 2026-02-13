@@ -1,6 +1,6 @@
 ---
 title: "Why Claude Code Matters"
-parent: "Section 00: Introduction - Getting Started"
+parent: "Part 0: Introduction - Getting Started"
 nav_order: 3
 ---
 

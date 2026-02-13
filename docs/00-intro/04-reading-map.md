@@ -1,6 +1,6 @@
 ---
 title: "Reading Map - Where to Go Next"
-parent: "Section 00: Introduction - Getting Started"
+parent: "Part 0: Introduction - Getting Started"
 nav_order: 4
 ---
 
@@ -293,7 +293,7 @@ Before moving on, quick self-check:
 
 Based on where you are:
 
-**If you just finished Section 00:**
+**If you just finished Part 0:**
 → Go to **[Section 01: Mental Models](../01-fundamentals-core-concepts/01-mental-models.md)** to understand tools and models
 
 **If you want more hands-on practice:**
