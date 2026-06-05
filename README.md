@@ -43,7 +43,7 @@ This guide covers **Claude Code** (CLI + official VS Code extension by Anthropic
 **Choose your starting point:**
 
 ### Option 1: New to Claude Code? (Recommended)
-Complete [Part 0: Introduction](docs/00-intro/) - 15 minutes
+Complete [Part 0: Introduction](docs/00-intro/01-what-is-claude-code.md) - 15 minutes
 - Understand what Claude Code is
 - Install and run your first commands
 - See why it matters for your workflow
